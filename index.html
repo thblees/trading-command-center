@@ -1,0 +1,1317 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Trading Command Center</title>
+  <style>
+    /* ===== RESET & BASE ===== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg-primary:    #0d1117;
+      --bg-secondary:  #161b22;
+      --bg-card:       #1c2230;
+      --bg-card-hover: #232d3f;
+      --border:        #30363d;
+      --border-accent: #3d4f6b;
+      --text-primary:  #e6edf3;
+      --text-secondary:#8b949e;
+      --text-muted:    #6e7681;
+      --accent-blue:   #58a6ff;
+      --accent-green:  #3fb950;
+      --accent-yellow: #d29922;
+      --accent-orange: #f0883e;
+      --accent-red:    #f85149;
+      --accent-purple: #bc8cff;
+      --accent-teal:   #39d353;
+      --accent-cyan:   #79c0ff;
+      --glow-blue:     rgba(88,166,255,0.15);
+      --glow-green:    rgba(63,185,80,0.15);
+      --glow-yellow:   rgba(210,153,34,0.15);
+      --glow-orange:   rgba(240,136,62,0.15);
+      --glow-purple:   rgba(188,140,255,0.15);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      min-height: 100vh;
+      line-height: 1.5;
+    }
+
+    /* ===== HEADER ===== */
+    header {
+      background: var(--bg-secondary);
+      border-bottom: 1px solid var(--border);
+      padding: 0 2rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 60px;
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .logo {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--accent-blue);
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .logo span {
+      color: var(--text-secondary);
+      font-weight: 400;
+    }
+
+    .header-time {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      font-family: 'Courier New', monospace;
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .market-pill {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 0.25rem 0.75rem;
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+    }
+
+    .market-pill .dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--accent-green);
+      box-shadow: 0 0 6px var(--accent-green);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+
+    /* ===== NAV TABS ===== */
+    nav {
+      background: var(--bg-secondary);
+      border-bottom: 1px solid var(--border);
+      padding: 0 2rem;
+      display: flex;
+      gap: 0;
+      overflow-x: auto;
+    }
+
+    nav a {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.75rem 1.25rem;
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      text-decoration: none;
+      border-bottom: 2px solid transparent;
+      white-space: nowrap;
+      transition: all 0.2s;
+    }
+
+    nav a:hover, nav a.active {
+      color: var(--text-primary);
+      border-bottom-color: var(--accent-blue);
+    }
+
+    nav a .nav-icon { font-size: 1rem; }
+
+    /* ===== MAIN LAYOUT ===== */
+    main {
+      max-width: 1600px;
+      margin: 0 auto;
+      padding: 1.5rem 2rem 3rem;
+    }
+
+    /* ===== SECTION ===== */
+    .section {
+      margin-bottom: 2.5rem;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .section-icon {
+      font-size: 1.3rem;
+    }
+
+    .section-title {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+    }
+
+    .section-badge {
+      font-size: 0.7rem;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      padding: 0.15rem 0.5rem;
+      border-radius: 10px;
+    }
+
+    /* ===== CARD GRID ===== */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1rem;
+    }
+
+    .card-grid.wide {
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    }
+
+    /* ===== CARD ===== */
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.25rem;
+      text-decoration: none;
+      color: inherit;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+      transition: all 0.2s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: var(--card-accent, var(--accent-blue));
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+
+    .card:hover {
+      background: var(--bg-card-hover);
+      border-color: var(--border-accent);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+    }
+
+    .card:hover::before {
+      opacity: 1;
+    }
+
+    .card-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 0.5rem;
+    }
+
+    .card-icon {
+      font-size: 1.5rem;
+      line-height: 1;
+    }
+
+    .card-tag {
+      font-size: 0.65rem;
+      padding: 0.2rem 0.5rem;
+      border-radius: 6px;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .tag-extern   { background: rgba(88,166,255,0.15);  color: var(--accent-blue);   border: 1px solid rgba(88,166,255,0.3); }
+    .tag-tool     { background: rgba(63,185,80,0.15);   color: var(--accent-green);  border: 1px solid rgba(63,185,80,0.3); }
+    .tag-manus    { background: rgba(188,140,255,0.15); color: var(--accent-purple); border: 1px solid rgba(188,140,255,0.3); }
+    .tag-live     { background: rgba(57,211,83,0.15);   color: var(--accent-teal);   border: 1px solid rgba(57,211,83,0.3); }
+    .tag-news     { background: rgba(210,153,34,0.15);  color: var(--accent-yellow); border: 1px solid rgba(210,153,34,0.3); }
+    .tag-premium  { background: rgba(240,136,62,0.15);  color: var(--accent-orange); border: 1px solid rgba(240,136,62,0.3); }
+
+    .card-title {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .card-desc {
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+
+    .card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 0.25rem;
+      padding-top: 0.75rem;
+      border-top: 1px solid var(--border);
+    }
+
+    .card-url {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      font-family: 'Courier New', monospace;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      max-width: 200px;
+    }
+
+    .card-arrow {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      transition: transform 0.2s, color 0.2s;
+    }
+
+    .card:hover .card-arrow {
+      transform: translateX(3px);
+      color: var(--accent-blue);
+    }
+
+    /* ===== OWN TOOLS – larger highlight cards ===== */
+    .card.highlight {
+      border-color: var(--border-accent);
+      background: linear-gradient(135deg, var(--bg-card) 0%, rgba(88,166,255,0.05) 100%);
+    }
+
+    .card.highlight-green {
+      border-color: rgba(63,185,80,0.4);
+      background: linear-gradient(135deg, var(--bg-card) 0%, rgba(63,185,80,0.05) 100%);
+      --card-accent: var(--accent-green);
+    }
+
+    .card.highlight-purple {
+      border-color: rgba(188,140,255,0.4);
+      background: linear-gradient(135deg, var(--bg-card) 0%, rgba(188,140,255,0.05) 100%);
+      --card-accent: var(--accent-purple);
+    }
+
+    .card.highlight-orange {
+      border-color: rgba(240,136,62,0.4);
+      background: linear-gradient(135deg, var(--bg-card) 0%, rgba(240,136,62,0.05) 100%);
+      --card-accent: var(--accent-orange);
+    }
+
+    .card.highlight-yellow {
+      border-color: rgba(210,153,34,0.4);
+      background: linear-gradient(135deg, var(--bg-card) 0%, rgba(210,153,34,0.05) 100%);
+      --card-accent: var(--accent-yellow);
+    }
+
+    /* ===== QUICK ACCESS BAR ===== */
+    .quick-bar {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1rem 1.5rem;
+      margin-bottom: 2rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .quick-bar-label {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      white-space: nowrap;
+    }
+
+    .quick-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 0.4rem 0.9rem;
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      text-decoration: none;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+
+    .quick-btn:hover {
+      background: var(--bg-card-hover);
+      border-color: var(--accent-blue);
+      color: var(--accent-blue);
+    }
+
+    .quick-btn.primary {
+      background: rgba(88,166,255,0.1);
+      border-color: rgba(88,166,255,0.4);
+      color: var(--accent-blue);
+    }
+
+    .quick-btn.primary:hover {
+      background: rgba(88,166,255,0.2);
+    }
+
+    /* ===== MORNING BRIEFING WIDGET ===== */
+    .briefing-widget {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 2rem;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 1rem;
+      align-items: center;
+    }
+
+    .briefing-title {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 0.4rem;
+    }
+
+    .briefing-text {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+    }
+
+    .briefing-text strong {
+      color: var(--text-primary);
+    }
+
+    .briefing-date {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--accent-blue);
+      font-family: 'Courier New', monospace;
+      text-align: right;
+    }
+
+    .briefing-weekday {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      text-align: right;
+    }
+
+    /* ===== NOTES SECTION ===== */
+    .notes-area {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1rem;
+      width: 100%;
+      min-height: 100px;
+      color: var(--text-primary);
+      font-size: 0.85rem;
+      font-family: inherit;
+      resize: vertical;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .notes-area:focus {
+      border-color: var(--accent-blue);
+    }
+
+    .notes-area::placeholder {
+      color: var(--text-muted);
+    }
+
+    .notes-save-btn {
+      margin-top: 0.5rem;
+      background: rgba(88,166,255,0.1);
+      border: 1px solid rgba(88,166,255,0.3);
+      color: var(--accent-blue);
+      padding: 0.4rem 1rem;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .notes-save-btn:hover {
+      background: rgba(88,166,255,0.2);
+    }
+
+    .notes-saved-msg {
+      font-size: 0.75rem;
+      color: var(--accent-green);
+      margin-left: 0.75rem;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    /* ===== WATCHLIST ===== */
+    .watchlist-input-row {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .watchlist-input {
+      flex: 1;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 0.4rem 0.75rem;
+      color: var(--text-primary);
+      font-size: 0.85rem;
+      outline: none;
+    }
+
+    .watchlist-input:focus { border-color: var(--accent-blue); }
+
+    .watchlist-add-btn {
+      background: rgba(63,185,80,0.1);
+      border: 1px solid rgba(63,185,80,0.3);
+      color: var(--accent-green);
+      padding: 0.4rem 1rem;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .watchlist-add-btn:hover { background: rgba(63,185,80,0.2); }
+
+    .watchlist-items {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .watchlist-item {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 0.25rem 0.75rem;
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+    }
+
+    .watchlist-item button {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 0.9rem;
+      line-height: 1;
+      padding: 0;
+      transition: color 0.2s;
+    }
+
+    .watchlist-item button:hover { color: var(--accent-red); }
+
+    /* ===== SCROLLABLE SECTION ===== */
+    section[id] {
+      scroll-margin-top: 120px;
+    }
+
+    /* ===== FOOTER ===== */
+    footer {
+      text-align: center;
+      padding: 2rem;
+      color: var(--text-muted);
+      font-size: 0.75rem;
+      border-top: 1px solid var(--border);
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 768px) {
+      header { padding: 0 1rem; }
+      nav { padding: 0 1rem; }
+      main { padding: 1rem; }
+      .card-grid { grid-template-columns: 1fr; }
+      .briefing-widget { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ===== HEADER ===== -->
+<header>
+  <div class="header-left">
+    <div class="logo">Trading <span>Command Center</span></div>
+    <div class="header-time" id="headerTime"></div>
+  </div>
+  <div class="header-right">
+    <div class="market-pill">
+      <span class="dot"></span>
+      <span id="marketStatus">Markt lädt...</span>
+    </div>
+    <a href="https://www.interactivebrokers.com/en/trading/tws.php" target="_blank" class="quick-btn primary">
+      🖥️ TWS starten
+    </a>
+  </div>
+</header>
+
+<!-- ===== NAV ===== -->
+<nav>
+  <a href="#morning" class="active"><span class="nav-icon">☀️</span> Morning</a>
+  <a href="#eigene-tools"><span class="nav-icon">🛠️</span> Eigene Tools</a>
+  <a href="#aktien-etf"><span class="nav-icon">📈</span> Aktien &amp; ETFs</a>
+  <a href="#optionen"><span class="nav-icon">⚙️</span> Optionen</a>
+  <a href="#futures-cot"><span class="nav-icon">📦</span> Futures &amp; COT</a>
+  <a href="#makro"><span class="nav-icon">🌍</span> Makro</a>
+  <a href="#news-research"><span class="nav-icon">📰</span> News &amp; Research</a>
+  <a href="#watchlist"><span class="nav-icon">👁️</span> Watchlist</a>
+  <a href="#notizen"><span class="nav-icon">📝</span> Notizen</a>
+</nav>
+
+<!-- ===== MAIN ===== -->
+<main>
+
+  <!-- MORNING BRIEFING -->
+  <section id="morning">
+    <div class="briefing-widget">
+      <div>
+        <div class="briefing-title">☀️ Morning Briefing</div>
+        <div class="briefing-text" id="briefingText">
+          Willkommen im Trading Command Center. Wähle einen Bereich und starte deine Analyse.
+        </div>
+      </div>
+      <div>
+        <div class="briefing-date" id="briefingDate"></div>
+        <div class="briefing-weekday" id="briefingWeekday"></div>
+      </div>
+    </div>
+
+    <!-- QUICK ACCESS BAR -->
+    <div class="quick-bar">
+      <span class="quick-bar-label">⚡ Schnellzugriff</span>
+      <a href="https://www.interactivebrokers.com/en/trading/tws.php" target="_blank" class="quick-btn primary">🖥️ TWS</a>
+      <a href="https://de.tradingview.com" target="_blank" class="quick-btn">📊 TradingView</a>
+      <a href="https://stockcharts.com/acp/" target="_blank" class="quick-btn">📉 StockCharts</a>
+      <a href="https://www.menthorq.com" target="_blank" class="quick-btn">🎯 MenthorQ</a>
+      <a href="https://app.realvision.com" target="_blank" class="quick-btn">🌐 Real Vision</a>
+      <a href="https://www.42macro.com" target="_blank" class="quick-btn">🔭 42Macro</a>
+      <a href="https://oquants.com/home" target="_blank" class="quick-btn">⚙️ OQuants</a>
+      <a href="https://www.optionstrat.com" target="_blank" class="quick-btn">📐 OptionStrat</a>
+    </div>
+  </section>
+
+  <!-- ===== EIGENE TOOLS ===== -->
+  <section id="eigene-tools" class="section">
+    <div class="section-header">
+      <span class="section-icon">🛠️</span>
+      <span class="section-title">Eigene Tools &amp; Dashboards</span>
+      <span class="section-badge">Deine persönlichen Analysetools</span>
+    </div>
+    <div class="card-grid wide">
+
+      <a href="http://www.meine-geldseite.de/momentum" target="_blank" class="card highlight-green">
+        <div class="card-top">
+          <span class="card-icon">🚀</span>
+          <span class="card-tag tag-live">Live Tool</span>
+        </div>
+        <div class="card-title">ETF Momentum Ranking</div>
+        <div class="card-desc">Rangliste der ETFs nach Momentum-Performance über 1 Woche, 4 Wochen und 3 Monate. Identifiziert die stärksten Trends für Sektor-Rotation.</div>
+        <div class="card-footer">
+          <span class="card-url">meine-geldseite.de/momentum</span>
+          <span class="card-arrow">→</span>
+        </div>
+      </a>
+
+      <a href="http://www.meine-geldseite.de/z-score" target="_blank" class="card highlight-purple">
+        <div class="card-top">
+          <span class="card-icon">📊</span>
+          <span class="card-tag tag-live">Live Tool</span>
+        </div>
+        <div class="card-title">Z-Score Dashboard</div>
+        <div class="card-desc">Signale bei Z-Score ≤ −2 (überverkauft) und ≥ +2 (überkauft) für ausgewählte ETFs. Mean-Reversion-Setups auf einen Blick.</div>
+        <div class="card-footer">
+          <span class="card-url">meine-geldseite.de/z-score</span>
+          <span class="card-arrow">→</span>
+        </div>
+      </a>
+
+      <a href="http://www.meine-geldseite.de/probability-cone" target="_blank" class="card highlight-orange">
+        <div class="card-top">
+          <span class="card-icon">🔮</span>
+          <span class="card-tag tag-live">Live Tool</span>
+        </div>
+        <div class="card-title">Probability Cone</div>
+        <div class="card-desc">Wahrscheinlichkeitsbasierte Preisprojektion für Basiswerte. Zeigt statistische Kurszielkorridore für Options-Strategien und Positionsplanung.</div>
+        <div class="card-footer">
+          <span class="card-url">meine-geldseite.de/probability-cone</span>
+          <span class="card-arrow">→</span>
+        </div>
+      </a>
+
+      <a href="https://thblees.github.io/makro-dashboard/" target="_blank" class="card highlight">
+        <div class="card-top">
+          <span class="card-icon">🌍</span>
+          <span class="card-tag tag-live">Live Tool</span>
+        </div>
+        <div class="card-title">Makro Dashboard</div>
+        <div class="card-desc">Persönliches Makro-Analyse-Dashboard mit Wirtschaftsindikatoren, Zentralbankdaten und Marktübersicht für die USA, Eurozone und Japan.</div>
+        <div class="card-footer">
+          <span class="card-url">thblees.github.io/makro-dashboard</span>
+          <span class="card-arrow">→</span>
+        </div>
+      </a>
+
+      <a href="https://thblees.github.io/var_rechner/" target="_blank" class="card highlight-yellow">
+        <div class="card-top">
+          <span class="card-icon">⚠️</span>
+          <span class="card-tag tag-live">Live Tool</span>
+        </div>
+        <div class="card-title">VaR Rechner</div>
+        <div class="card-desc">Value-at-Risk Berechnung für Aktien und ETFs. Zeigt Verlustgrenzen bei 90%, 95%, 99% Konfidenz für 1 Tag, 1 Woche, 1 Monat und 1 Jahr.</div>
+        <div class="card-footer">
+          <span class="card-url">thblees.github.io/var_rechner</span>
+          <span class="card-arrow">→</span>
+        </div>
+      </a>
+
+      <a href="https://thblees.github.io/cc-rechner/" target="_blank" class="card highlight">
+        <div class="card-top">
+          <span class="card-icon">🧮</span>
+          <span class="card-tag tag-live">Live Tool</span>
+        </div>
+        <div class="card-title">CC Rechner</div>
+        <div class="card-desc">Covered Call Rechner zur Berechnung von Prämien, Break-Even-Punkten und Renditen für Covered-Call-Strategien auf Aktien und ETFs.</div>
+        <div class="card-footer">
+          <span class="card-url">thblees.github.io/cc-rechner</span>
+          <span class="card-arrow">→</span>
+        </div>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- ===== AKTIEN & ETFs ===== -->
+  <section id="aktien-etf" class="section">
+    <div class="section-header">
+      <span class="section-icon">📈</span>
+      <span class="section-title">Aktien &amp; ETFs</span>
+      <span class="section-badge">Screening, Charts, Relative Stärke</span>
+    </div>
+    <div class="card-grid">
+
+      <a href="https://stockcharts.com/freecharts/marketsummary.html" target="_blank" class="card">
+        <div class="card-top">
+          <span class="card-icon">📋</span>
+          <span class="card-tag tag-extern">Extern</span>
+        </div>
+        <div class="card-title">StockCharts Market Summary</div>
+        <div class="card-desc">Tagesübersicht aller wichtigen US-Indizes, Sektoren und Marktbreite. Ideal für den schnellen Marktüberblick am Morgen.</div>
+        <div class="card-footer">
+          <span class="card-url">stockcharts.com</span>
+          <span class="card-arrow">→</span>
+        </div>
+      </a>
+
+      <a href="https://stockcharts.com/freecharts/rrg/?" target="_blank" class="card">
+        <div class="card-top">
+          <span class="card-icon">🔄</span>
+          <span class="card-tag tag-extern">Extern</span>
+        </div>
+        <div class="card-title">Relative Rotation Graph (RRG)</div>
+        <div class="card-desc">Visualisiert Sektor-Rotation im Vergleich zum Benchmark. Zeigt welche Sektoren Leading, Weakening, Lagging oder Improving sind.</div>
+        <div class="card-footer">
+          <span class="card-url">stockcharts.com/rrg</span>
+          <span class="card-arrow">→</span>
+        </div>
+      </a>
+
+      <a href="https://stockcharts.com/acp/?s=AAPL" target="_blank" class="card">
+        <div class="card-top">
+          <span class="card-icon">📉</span>
+          <span class="card-tag tag-extern">Extern</span>
+        </div>
+        <div class="card-title">StockCharts Advanced Charts</div>
+        <div class="card-desc">Professionelle Chart-Analyse mit Ichimoku, Volumen-Breakout-Screener und technischen Indikatoren. Dein persönlicher Breakout-Scanner.</div>
+        <div class="card-footer">
+          <span class="card-url">stockcharts.com/acp</span>
+          <span class="card-arrow">→</span>
+        </div>
+      </a>
+
+      <a href="https://www.stockcharts.com" target="_blank" class="card">
+        <div class="card-top">
+          <span class="card-icon">🔍</span>
+          <span class="card-tag tag-extern">Extern</span>
+        </div>
+        <div class="card-title">StockCharts Screener</div>
+        <div class="card-desc">Breakout-Screener bei hohem Volumen. Filtere nach Volumen-Ausbrüchen, technischen Mustern und Momentum-Signalen.</div>
+        <div class="card-footer">
+          <span class="card-url">stockcharts.com</span>
+          <span class="card-arrow">→</span>
+        </div>
+      </a>
+
+      <a href="https://de.tradingview.com" target="_blank" class="card">
+        <div class="card-top">
+          <span class="card-icon">📊</span>
+          <span class="card-tag tag-extern">Extern</span>
+        </div>
+        <div class="card-title">TradingView Charts</div>
+        <div class="card-desc">Ichimoku Breakout Analyse, COT-Daten, technische Indikatoren und Screener. Direkt mit TWS verbindbar für schnelle Orderausführung.</div>
+        <div class="card-footer">
+          <span class="card-url">tradingview.com</span>
+          <span class="card-arrow">→</span>
+        </div>
+      </a>
+
+      <a href="https://my-iw.insider-week.com" target="_blank" class="card">
+        <div class="card-top">
+          <span class="card-icon">🏢</span>
+          <span class="card-tag tag-premium">Premium</span>
+        </div>
+        <div class="card-title">Insider Week</div>
+        <div class="card-desc">Insider-Transaktionen, institutionelle Käufe und Smart-Money-Signale. Verfolge, was Unternehmensinsider und große Institutionen kaufen.</div>
+        <div class="card-footer">
+          <span class="card-url">my-iw.insider-week.com</span>
+          <span class="card-arrow">→</span>
+        </div>
+      </a>
+
+      <a href="https://www.investors.com" target="_blank" class="card">
+        <div class="card-top">
+          <span class="card-icon">📰</span>
+          <span class="card-tag tag-news">News</span>
+        </div>
+        <div class="card-title">Investor's Business Daily</div>
+        <div class="card-desc">IBD Marktanalyse, CAN SLIM Methode, Top-Aktien-Screener und tägliche Markteinschätzung für Growth-Investoren.</div>
+        <div class="card-footer">
+          <span class="card-url">investors.com</span>
+          <span class="card-arrow">→</span>
+        </div>
+      </a>
+
+      <a href="https://www.forecaster.biz" target="_blank" class="card">
+        <div class="card-top">
+          <span class="card-icon">🔭</span>
+          <span class="card-tag tag-tool">Tool</span>
+        </div>
+        <div class="card-title">Forecaster.biz</div>
+        <div class="card-desc">Saisonale Muster, historische Preisanalysen und Forecasting-Modelle für Aktien, ETFs und Rohstoffe.</div>
+        <div class="card-footer">
+          <span class="card-url">forecaster.biz</span>
+          <span class="card-arrow">→</span>
+        </div>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- ===== OPTIONEN ===== -->
+  <section id="optionen" class="section">
+    <div class="section-header">
+      <span class="section-icon">⚙️</span>
+      <span class="section-title">Optionen &amp; Derivate</span>
+      <span class="section-badge">Greeks, Strategien, Gamma</span>
+    </div>
+    <div class="card-grid">
+
+      <a href="https://oquants.com/home" target="_blank" class="card">
+        <div class="card-top">
+          <span class="card-icon">🤖</span>
+          <span class="card-tag tag-premium">Premium</span>
+        </div>
+        <div class="card-title">OQuants (Option Quant)</div>
+        <div class="card-desc">Quantitative Options-Analyse, Backtesting von Options-Strategien, statistische Edge-Berechnung und systematische Options-Setups.</div>
+        <div class="card-footer">
+          <span class="card-url">oquants.com</span>
+          <span class="card-arrow">→</span>
+        </div>
+      </a>
+
+      <a href="https://www.menthorq.com" target="_blank" class="card">
+        <div class="card-top">
+          <span class="card-icon">🎯</span>
+          <span class="card-tag tag-premium">Premium</span>
+        </div>
+        <div class="card-title">MenthorQ – Gamma Daten</div>
+        <div class="card-desc">Gamma-Exposure, Dealer-Positionierung, GEX-Levels und Gamma-Flip-Punkte. Identifiziert magnetische Preisniveaus für Options-Händler.</div>
+        <div class="card-footer">
+          <span class="card-url">menthorq.com</span>
+          <span class="card-arrow">→</span>
+        </div>
+      </a>
+
+      <a href="https://www.optionstrat.com" target="_blank" class="card">
+        <div class="card-top">
+          <span class="card-icon">📐</span>
+          <span class="card-tag tag-tool">Tool</span>
+        </div>
+        <div class="card-title">OptionStrat</div>
+        <div class="card-desc">Visualisierung von Options-Strategien, P&amp;L-Diagramme, Greeks-Analyse und Strategy Builder für Spreads, Condors und komplexe Strukturen.</div>
+        <div class="card-footer">
+          <span class="card-url">optionstrat.com</span>
+          <span class="card-arrow">→</span>
+        </div>
+      </a>
+
+      <a href="http://www.meine-geldseite.de/probability-cone" target="_blank" class="card">
+        <div class="card-top">
+          <span class="card-icon">🔮</span>
+          <span class="card-tag tag-live">Live Tool</span>
+        </div>
+        <div class="card-title">Probability Cone (eigenes Tool)</div>
+        <div class="card-desc">Statistische Wahrscheinlichkeitskorridore für Strike-Auswahl bei Options-Strategien. Basiert auf historischer Volatilität.</div>
+        <div class="card-footer">
+          <span class="card-url">meine-geldseite.de/probability-cone</span>
+          <span class="card-arrow">→</span>
+        </div>
+      </a>
+
+      <a href="https://thblees.github.io/cc-rechner/" target="_blank" class="card">
+        <div class="card-top">
+          <span class="card-icon">🧮</span>
+          <span class="card-tag tag-live">Live Tool</span>
+        </div>
+        <div class="card-title">Covered Call Rechner</div>
+        <div class="card-desc">Berechne Prämienrendite, Break-Even und annualisierte Rendite für Covered-Call-Strategien auf deine Positionen.</div>
+        <div class="card-footer">
+          <span class="card-url">thblees.github.io/cc-rechner</span>
+          <span class="card-arrow">→</span>
+        </div>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- ===== FUTURES & COT ===== -->
+  <section id="futures-cot" class="section">
+    <div class="section-header">
+      <span class="section-icon">📦</span>
+      <span class="section-title">Futures &amp; COT Daten</span>
+      <span class="section-badge">Commitment of Traders, Rohstoffe, Indizes</span>
+    </div>
+    <div class="card-grid">
+
+      <a href="https://de.tradingview.com" target="_blank" class="card">
+        <div class="card-top">
+          <span class="card-icon">📊</span>
+          <span class="card-tag tag-extern">Extern</span>
+        </div>
+        <div class="card-title">TradingView – COT Analyse</div>
+        <div class="card-desc">COT-Daten direkt in TradingView Charts. Analysiere Positionierungen von Commercials und Large Speculators für Futures-Setups.</div>
+        <div class="card-footer">
+          <span class="card-url">tradingview.com</span>
+          <span class="card-arrow">→</span>
+        </div>
+      </a>
+
+      <a href="https://en.macromicro.me" target="_blank" class="card">
+        <div class="card-top">
+          <span class="card-icon">🔬</span>
+          <span class="card-tag tag-tool">Tool</span>
+        </div>
+        <div class="card-title">MacroMicro</div>
+        <div class="card-desc">Umfangreiche Datenbank für Makro- und Marktdaten. COT-Daten, Rohstoffzyklen, Wirtschaftsindikatoren und Korrelationsanalysen.</div>
+        <div class="card-footer">
+          <span class="card-url">macromicro.me</span>
+          <span class="card-arrow">→</span>
+        </div>
+      </a>
+
+      <a href="https://www.forecaster.biz" target="_blank" class="card">
+        <div class="card-top">
+          <span class="card-icon">📅</span>
+          <span class="card-tag tag-tool">Tool</span>
+        </div>
+        <div class="card-title">Forecaster.biz – Saisonalität</div>
+        <div class="card-desc">Saisonale Muster für Futures und Rohstoffe. Historische Performance-Analyse für Energie, Metalle, Agrar und Finanz-Futures.</div>
+        <div class="card-footer">
+          <span class="card-url">forecaster.biz</span>
+          <span class="card-arrow">→</span>
+        </div>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- ===== MAKRO ===== -->
+  <section id="makro" class="section">
+    <div class="section-header">
+      <span class="section-icon">🌍</span>
+      <span class="section-title">Makro &amp; Wirtschaftszyklen</span>
+      <span class="section-badge">Zentralbanken, Indikatoren, Thesen</span>
+    </div>
+    <div class="card-grid">
+
+      <a href="https://thblees.github.io/makro-dashboard/" target="_blank" class="card highlight">
+        <div class="card-top">
+          <span class="card-icon">🌍</span>
+          <span class="card-tag tag-live">Live Tool</span>
+        </div>
+        <div class="card-title">Makro Dashboard (eigenes Tool)</div>
+        <div class="card-desc">Persönliches Makro-Dashboard mit US, Eurozone und Japan Indikatoren, Wirtschaftszyklusanalyse und Asset-Allokations-Signalen.</div>
+        <div class="card-footer">
+          <span class="card-url">thblees.github.io/makro-dashboard</span>
+          <span class="card-arrow">→</span>
+        </div>
+      </a>
+
+      <a href="https://app.realvision.com" target="_blank" class="card">
+        <div class="card-top">
+          <span class="card-icon">🎥</span>
+          <span class="card-tag tag-premium">Premium</span>
+        </div>
+        <div class="card-title">Real Vision</div>
+        <div class="card-desc">Tiefgehende Makro-Analysen, Interviews mit Top-Investoren und Investment-Thesen von führenden Makro-Denkern weltweit.</div>
+        <div class="card-footer">
+          <span class="card-url">app.realvision.com</span>
+          <span class="card-arrow">→</span>
+        </div>
+      </a>
+
+      <a href="https://www.42macro.com" target="_blank" class="card">
+        <div class="card-top">
+          <span class="card-icon">🔭</span>
+          <span class="card-tag tag-premium">Premium</span>
+        </div>
+        <div class="card-title">42Macro</div>
+        <div class="card-desc">Quantitatives Makro-Research, Regime-Erkennung und systematische Asset-Allokation basierend auf Wirtschaftszyklen und Zentralbankpolitik.</div>
+        <div class="card-footer">
+          <span class="card-url">42macro.com</span>
+          <span class="card-arrow">→</span>
+        </div>
+      </a>
+
+      <a href="https://en.macromicro.me" target="_blank" class="card">
+        <div class="card-top">
+          <span class="card-icon">🔬</span>
+          <span class="card-tag tag-tool">Tool</span>
+        </div>
+        <div class="card-title">MacroMicro</div>
+        <div class="card-desc">Interaktive Makro-Charts, Wirtschaftsindikatoren, Zentralbank-Bilanzen, Inflationsdaten und globale Kapitalflüsse in einer Plattform.</div>
+        <div class="card-footer">
+          <span class="card-url">macromicro.me</span>
+          <span class="card-arrow">→</span>
+        </div>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- ===== NEWS & RESEARCH ===== -->
+  <section id="news-research" class="section">
+    <div class="section-header">
+      <span class="section-icon">📰</span>
+      <span class="section-title">News &amp; Research</span>
+      <span class="section-badge">Nachrichten, Analysen, Daten</span>
+    </div>
+    <div class="card-grid">
+
+      <a href="https://www.wsj.com" target="_blank" class="card">
+        <div class="card-top">
+          <span class="card-icon">📰</span>
+          <span class="card-tag tag-news">News</span>
+        </div>
+        <div class="card-title">Wall Street Journal</div>
+        <div class="card-desc">Führende Finanzzeitung für Markt-News, Unternehmensberichte, Wirtschaftspolitik und internationale Finanzthemen.</div>
+        <div class="card-footer">
+          <span class="card-url">wsj.com</span>
+          <span class="card-arrow">→</span>
+        </div>
+      </a>
+
+      <a href="https://www.investors.com" target="_blank" class="card">
+        <div class="card-top">
+          <span class="card-icon">📈</span>
+          <span class="card-tag tag-news">News</span>
+        </div>
+        <div class="card-title">Investor's Business Daily</div>
+        <div class="card-desc">IBD Marktanalyse, Big Picture Kolumne, tägliche Markteinschätzung und Growth-Stock-Research nach der CAN SLIM Methode.</div>
+        <div class="card-footer">
+          <span class="card-url">investors.com</span>
+          <span class="card-arrow">→</span>
+        </div>
+      </a>
+
+      <a href="https://my-iw.insider-week.com" target="_blank" class="card">
+        <div class="card-top">
+          <span class="card-icon">🏢</span>
+          <span class="card-tag tag-premium">Premium</span>
+        </div>
+        <div class="card-title">Insider Week</div>
+        <div class="card-desc">Insider-Transaktionen und institutionelle Positionsveränderungen. Smart-Money-Tracking für informierte Investitionsentscheidungen.</div>
+        <div class="card-footer">
+          <span class="card-url">my-iw.insider-week.com</span>
+          <span class="card-arrow">→</span>
+        </div>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- ===== WATCHLIST ===== -->
+  <section id="watchlist" class="section">
+    <div class="section-header">
+      <span class="section-icon">👁️</span>
+      <span class="section-title">Watchlist</span>
+      <span class="section-badge">Persönliche Beobachtungsliste</span>
+    </div>
+    <div style="background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px; padding: 1.25rem;">
+      <div class="watchlist-input-row">
+        <input type="text" class="watchlist-input" id="watchlistInput" placeholder="Symbol eingeben, z.B. SPY, AAPL, GLD..." />
+        <button class="watchlist-add-btn" onclick="addWatchlistItem()">+ Hinzufügen</button>
+      </div>
+      <div class="watchlist-items" id="watchlistItems"></div>
+      <div style="margin-top: 0.75rem; font-size: 0.75rem; color: var(--text-muted);">
+        Klick auf ein Symbol öffnet den TradingView Chart. Einträge werden lokal gespeichert.
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== NOTIZEN ===== -->
+  <section id="notizen" class="section">
+    <div class="section-header">
+      <span class="section-icon">📝</span>
+      <span class="section-title">Trading Notizen</span>
+      <span class="section-badge">Tagesnotizen, Ideen, Setups</span>
+    </div>
+    <div style="background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px; padding: 1.25rem;">
+      <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.5rem;" id="notesDate"></div>
+      <textarea class="notes-area" id="notesArea" placeholder="Notiere hier deine Trading-Ideen, Setups, Marktbeobachtungen und Gedanken für heute..."></textarea>
+      <div style="display: flex; align-items: center; margin-top: 0.5rem;">
+        <button class="notes-save-btn" onclick="saveNotes()">💾 Speichern</button>
+        <span class="notes-saved-msg" id="notesSavedMsg">✓ Gespeichert</span>
+      </div>
+      <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border);">
+        <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.5rem;">Gestern:</div>
+        <div style="font-size: 0.8rem; color: var(--text-secondary); font-style: italic;" id="yesterdayNotes">Keine Notizen vom Vortag.</div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  Trading Command Center · thblees · Alle externen Links öffnen in neuem Tab · Keine Anlageberatung
+</footer>
+
+<!-- ===== JAVASCRIPT ===== -->
+<script>
+  // ===== TIME & DATE =====
+  function updateTime() {
+    const now = new Date();
+    const timeStr = now.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+    const dateStr = now.toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' });
+    const weekday = now.toLocaleDateString('de-DE', { weekday: 'long' });
+
+    document.getElementById('headerTime').textContent = dateStr + ' · ' + timeStr;
+    document.getElementById('briefingDate').textContent = dateStr;
+    document.getElementById('briefingWeekday').textContent = weekday;
+    document.getElementById('notesDate').textContent = 'Notizen für ' + weekday + ', ' + dateStr;
+  }
+
+  updateTime();
+  setInterval(updateTime, 1000);
+
+  // ===== MARKET STATUS =====
+  function updateMarketStatus() {
+    const now = new Date();
+    const day = now.getDay(); // 0=Sun, 6=Sat
+    const hour = now.getUTCHours();
+    const minute = now.getUTCMinutes();
+    const totalMinutes = hour * 60 + minute;
+
+    // NYSE: 14:30–21:00 UTC, Mon–Fri
+    const isWeekday = day >= 1 && day <= 5;
+    const isMarketHours = totalMinutes >= 870 && totalMinutes < 1260; // 14:30–21:00
+
+    const statusEl = document.getElementById('marketStatus');
+    const dotEl = document.querySelector('.market-pill .dot');
+
+    if (isWeekday && isMarketHours) {
+      statusEl.textContent = 'NYSE offen';
+      dotEl.style.background = 'var(--accent-green)';
+      dotEl.style.boxShadow = '0 0 6px var(--accent-green)';
+    } else if (isWeekday && totalMinutes >= 840 && totalMinutes < 870) {
+      statusEl.textContent = 'Pre-Market';
+      dotEl.style.background = 'var(--accent-yellow)';
+      dotEl.style.boxShadow = '0 0 6px var(--accent-yellow)';
+    } else if (isWeekday && totalMinutes >= 1260 && totalMinutes < 1320) {
+      statusEl.textContent = 'After-Hours';
+      dotEl.style.background = 'var(--accent-orange)';
+      dotEl.style.boxShadow = '0 0 6px var(--accent-orange)';
+    } else {
+      statusEl.textContent = 'Markt geschlossen';
+      dotEl.style.background = 'var(--accent-red)';
+      dotEl.style.boxShadow = '0 0 6px var(--accent-red)';
+    }
+  }
+
+  updateMarketStatus();
+  setInterval(updateMarketStatus, 60000);
+
+  // ===== MORNING BRIEFING TEXT =====
+  function updateBriefing() {
+    const now = new Date();
+    const hour = now.getHours();
+    const day = now.getDay();
+    const weekdays = ['Sonntag', 'Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag'];
+
+    let greeting = hour < 12 ? 'Guten Morgen' : hour < 18 ? 'Guten Tag' : 'Guten Abend';
+    let dayNote = '';
+
+    if (day === 1) dayNote = ' · <strong>Wochenbeginn:</strong> Momentum-Ranking und Makro-Lage prüfen.';
+    else if (day === 5) dayNote = ' · <strong>Freitag:</strong> Positionen vor dem Wochenende überprüfen.';
+    else if (day === 0 || day === 6) dayNote = ' · <strong>Wochenende:</strong> Ruhiger Tag für Research und Planung.';
+
+    document.getElementById('briefingText').innerHTML =
+      greeting + ', <strong>thblees</strong>! ' + weekdays[day] + dayNote +
+      ' Starte mit deinen <strong>eigenen Tools</strong> oder wähle einen Analysebereich.';
+  }
+
+  updateBriefing();
+
+  // ===== ACTIVE NAV =====
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('nav a');
+
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(section => {
+      const sectionTop = section.offsetTop - 130;
+      if (window.scrollY >= sectionTop) {
+        current = section.getAttribute('id');
+      }
+    });
+    navLinks.forEach(link => {
+      link.classList.remove('active');
+      if (link.getAttribute('href') === '#' + current) {
+        link.classList.add('active');
+      }
+    });
+  });
+
+  // ===== WATCHLIST =====
+  function loadWatchlist() {
+    const items = JSON.parse(localStorage.getItem('tcc_watchlist') || '[]');
+    renderWatchlist(items);
+  }
+
+  function renderWatchlist(items) {
+    const container = document.getElementById('watchlistItems');
+    container.innerHTML = '';
+    if (items.length === 0) {
+      container.innerHTML = '<span style="font-size:0.8rem;color:var(--text-muted)">Noch keine Einträge. Füge Symbole hinzu.</span>';
+      return;
+    }
+    items.forEach((item, idx) => {
+      const el = document.createElement('div');
+      el.className = 'watchlist-item';
+      el.innerHTML = `
+        <a href="https://de.tradingview.com/chart/?symbol=${encodeURIComponent(item)}" target="_blank"
+           style="color:var(--accent-blue);text-decoration:none;font-weight:600;">${item}</a>
+        <button onclick="removeWatchlistItem(${idx})" title="Entfernen">×</button>
+      `;
+      container.appendChild(el);
+    });
+  }
+
+  function addWatchlistItem() {
+    const input = document.getElementById('watchlistInput');
+    const val = input.value.trim().toUpperCase();
+    if (!val) return;
+    const items = JSON.parse(localStorage.getItem('tcc_watchlist') || '[]');
+    if (!items.includes(val)) {
+      items.push(val);
+      localStorage.setItem('tcc_watchlist', JSON.stringify(items));
+    }
+    input.value = '';
+    renderWatchlist(items);
+  }
+
+  function removeWatchlistItem(idx) {
+    const items = JSON.parse(localStorage.getItem('tcc_watchlist') || '[]');
+    items.splice(idx, 1);
+    localStorage.setItem('tcc_watchlist', JSON.stringify(items));
+    renderWatchlist(items);
+  }
+
+  document.getElementById('watchlistInput').addEventListener('keydown', e => {
+    if (e.key === 'Enter') addWatchlistItem();
+  });
+
+  loadWatchlist();
+
+  // ===== NOTES =====
+  function getTodayKey() {
+    return 'tcc_notes_' + new Date().toISOString().slice(0, 10);
+  }
+
+  function getYesterdayKey() {
+    const d = new Date();
+    d.setDate(d.getDate() - 1);
+    return 'tcc_notes_' + d.toISOString().slice(0, 10);
+  }
+
+  function loadNotes() {
+    const todayNotes = localStorage.getItem(getTodayKey()) || '';
+    document.getElementById('notesArea').value = todayNotes;
+
+    const yesterdayNotes = localStorage.getItem(getYesterdayKey());
+    if (yesterdayNotes) {
+      document.getElementById('yesterdayNotes').textContent = yesterdayNotes;
+    }
+  }
+
+  function saveNotes() {
+    const val = document.getElementById('notesArea').value;
+    localStorage.setItem(getTodayKey(), val);
+    const msg = document.getElementById('notesSavedMsg');
+    msg.style.opacity = '1';
+    setTimeout(() => { msg.style.opacity = '0'; }, 2000);
+  }
+
+  // Auto-save every 30 seconds
+  setInterval(() => {
+    const val = document.getElementById('notesArea').value;
+    if (val) localStorage.setItem(getTodayKey(), val);
+  }, 30000);
+
+  loadNotes();
+</script>
+
+</body>
+</html>
