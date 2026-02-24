@@ -7,6 +7,35 @@
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
+    /* ===== DARK MODE ===== */
+    body.dark {
+      --bg-primary:    #0f1117;
+      --bg-secondary:  #1a1d27;
+      --bg-card:       #1a1d27;
+      --bg-card-hover: #222536;
+      --border:        #2d3148;
+      --border-accent: #3d4468;
+      --text-primary:  #e8eaf0;
+      --text-secondary:#a0a8c0;
+      --text-muted:    #606880;
+      --accent-blue:   #4d8ef0;
+      --accent-blue-light: #1a2340;
+      --accent-green:  #34d399;
+      --accent-green-light: #0d2318;
+      --accent-yellow: #fbbf24;
+      --accent-yellow-light: #2a1f08;
+      --accent-orange: #fb923c;
+      --accent-orange-light: #2a1508;
+      --accent-red:    #f87171;
+      --accent-purple: #a78bfa;
+      --accent-purple-light: #1e1535;
+      --accent-teal:   #22d3ee;
+      --accent-teal-light: #0a2030;
+      --shadow-sm:     0 1px 3px rgba(0,0,0,0.4), 0 1px 2px rgba(0,0,0,0.3);
+      --shadow-md:     0 4px 12px rgba(0,0,0,0.4), 0 2px 4px rgba(0,0,0,0.3);
+      --shadow-lg:     0 10px 28px rgba(0,0,0,0.5), 0 4px 8px rgba(0,0,0,0.3);
+    }
+
     :root {
       --bg-primary:    #f4f6fb;
       --bg-secondary:  #ffffff;
@@ -518,28 +547,32 @@
     <div class="logo">Trading <span>Command Center</span></div>
     <div class="header-time" id="headerTime"></div>
   </div>
-  <div class="header-right">
+  <div class="header-right" style="display:flex;align-items:center;gap:0.75rem;">
     <div class="market-pill">
       <span class="dot" id="marketDot"></span>
       <span id="marketStatus">Lädt...</span>
     </div>
+    <!-- DARK MODE TOGGLE -->
+    <button id="themeToggle" onclick="toggleTheme()" title="Hell/Dunkel wechseln" style="background:var(--bg-primary);border:1px solid var(--border);border-radius:20px;padding:0.3rem 0.75rem;cursor:pointer;font-size:0.82rem;font-weight:600;color:var(--text-secondary);display:flex;align-items:center;gap:0.4rem;transition:all 0.2s;">
+      <span id="themeIcon">🌙</span><span id="themeLabel">Dunkel</span>
+    </button>
   </div>
 </header>
 
 <!-- NAV -->
 <nav>
   <a href="#morning">☀️ Morning</a>
+  <a href="#news-research">📰 News &amp; Research</a>
   <a href="#marktuebersicht">🌐 Marktübersicht</a>
   <a href="#barchart-news">📰 Börsen-News</a>
   <a href="#aktien-etf">📈 Aktien &amp; ETFs</a>
   <a href="#optionen">⚙️ Optionen</a>
   <a href="#futures-cot">📦 Futures &amp; COT</a>
   <a href="#makro">🌍 Makro</a>
-  <a href="#news-research">📰 News &amp; Research</a>
-  <a href="#watchlist">👁️ Watchlist</a>
-  <a href="#notizen">📝 Notizen</a>
   <a href="#eigene-tools-bottom">🛠️ Eigene Tools</a>
   <a href="#manus-skills-bottom">🤖 Manus Skills</a>
+  <a href="#watchlist">👁️ Watchlist</a>
+  <a href="#notizen">📝 Notizen</a>
 </nav>
 
 <main>
@@ -579,6 +612,39 @@
       <a href="https://terminal.forecaster.biz" target="_blank" class="quick-btn">📅 Forecaster</a>
       <a href="https://traderfox.com" target="_blank" class="quick-btn">🦊 TraderFox</a>
       <a href="https://www.barchart.com/news" target="_blank" class="quick-btn primary">📰 Barchart News</a>
+    </div>
+  </section>
+
+  <!-- ===== NEWS & RESEARCH ===== -->
+  <section id="news-research" class="section">
+    <div class="section-header">
+      <span class="section-icon">📰</span>
+      <span class="section-title">News &amp; Research</span>
+      <span class="section-badge">Nachrichten, Analysen, Daten</span>
+    </div>
+    <div class="card-grid">
+
+      <a href="https://www.wsj.com" target="_blank" class="card hl-yellow">
+        <div class="card-top"><span class="card-icon">📰</span><span class="card-tag tag-news">News</span></div>
+        <div class="card-title">Wall Street Journal</div>
+        <div class="card-desc">Führende Finanzzeitung für Markt-News, Unternehmensberichte, Wirtschaftspolitik und internationale Finanzthemen.</div>
+        <div class="card-footer"><span class="card-url">wsj.com</span><span class="card-arrow">→</span></div>
+      </a>
+
+      <a href="https://www.investors.com" target="_blank" class="card hl-yellow">
+        <div class="card-top"><span class="card-icon">📈</span><span class="card-tag tag-news">News</span></div>
+        <div class="card-title">Investor's Business Daily</div>
+        <div class="card-desc">IBD Marktanalyse, Big Picture Kolumne, tägliche Markteinschätzung und Growth-Stock-Research nach der CAN SLIM Methode.</div>
+        <div class="card-footer"><span class="card-url">investors.com</span><span class="card-arrow">→</span></div>
+      </a>
+
+      <a href="https://aktienmagazin.de" target="_blank" class="card hl-blue">
+        <div class="card-top"><span class="card-icon">📖</span><span class="card-tag tag-news">News</span></div>
+        <div class="card-title">Aktienmagazin</div>
+        <div class="card-desc">Deutschsprachiges Aktienmagazin mit Analysen, Kommentaren und Hintergrundberichten zu Börse, Unternehmen und Investment-Themen.</div>
+        <div class="card-footer"><span class="card-url">aktienmagazin.de</span><span class="card-arrow">→</span></div>
+      </a>
+
     </div>
   </section>
 
@@ -1050,79 +1116,6 @@
     </div>
   </section>
 
-  <!-- ===== NEWS & RESEARCH ===== -->
-  <section id="news-research" class="section">
-    <div class="section-header">
-      <span class="section-icon">📰</span>
-      <span class="section-title">News &amp; Research</span>
-      <span class="section-badge">Nachrichten, Analysen, Daten</span>
-    </div>
-    <div class="card-grid">
-
-      <a href="https://www.wsj.com" target="_blank" class="card hl-yellow">
-        <div class="card-top"><span class="card-icon">📰</span><span class="card-tag tag-news">News</span></div>
-        <div class="card-title">Wall Street Journal</div>
-        <div class="card-desc">Führende Finanzzeitung für Markt-News, Unternehmensberichte, Wirtschaftspolitik und internationale Finanzthemen.</div>
-        <div class="card-footer"><span class="card-url">wsj.com</span><span class="card-arrow">→</span></div>
-      </a>
-
-      <a href="https://www.investors.com" target="_blank" class="card hl-yellow">
-        <div class="card-top"><span class="card-icon">📈</span><span class="card-tag tag-news">News</span></div>
-        <div class="card-title">Investor's Business Daily</div>
-        <div class="card-desc">IBD Marktanalyse, Big Picture Kolumne, tägliche Markteinschätzung und Growth-Stock-Research nach der CAN SLIM Methode.</div>
-        <div class="card-footer"><span class="card-url">investors.com</span><span class="card-arrow">→</span></div>
-      </a>
-
-      <a href="https://aktienmagazin.de" target="_blank" class="card hl-blue">
-        <div class="card-top"><span class="card-icon">📖</span><span class="card-tag tag-news">News</span></div>
-        <div class="card-title">Aktienmagazin</div>
-        <div class="card-desc">Deutschsprachiges Aktienmagazin mit Analysen, Kommentaren und Hintergrundberichten zu Börse, Unternehmen und Investment-Themen.</div>
-        <div class="card-footer"><span class="card-url">aktienmagazin.de</span><span class="card-arrow">→</span></div>
-      </a>
-
-    </div>
-  </section>
-
-  <!-- ===== WATCHLIST ===== -->
-  <section id="watchlist" class="section">
-    <div class="section-header">
-      <span class="section-icon">👁️</span>
-      <span class="section-title">Watchlist</span>
-      <span class="section-badge">Persönliche Beobachtungsliste</span>
-    </div>
-    <div style="background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 12px; padding: 1.25rem; box-shadow: var(--shadow-sm);">
-      <div class="watchlist-input-row">
-        <input type="text" class="watchlist-input" id="watchlistInput" placeholder="Symbol eingeben, z.B. SPY, AAPL, GLD..." />
-        <button class="watchlist-add-btn" onclick="addWatchlistItem()">+ Hinzufügen</button>
-      </div>
-      <div class="watchlist-items" id="watchlistItems"></div>
-      <div style="margin-top: 0.75rem; font-size: 0.73rem; color: var(--text-muted);">
-        Klick auf ein Symbol öffnet den TradingView Chart. Einträge werden lokal im Browser gespeichert.
-      </div>
-    </div>
-  </section>
-
-  <!-- ===== NOTIZEN ===== -->
-  <section id="notizen" class="section">
-    <div class="section-header">
-      <span class="section-icon">📝</span>
-      <span class="section-title">Trading Notizen</span>
-      <span class="section-badge">Tagesnotizen, Ideen, Setups</span>
-    </div>
-    <div style="background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 12px; padding: 1.25rem; box-shadow: var(--shadow-sm);">
-      <div style="font-size: 0.78rem; color: var(--text-muted); margin-bottom: 0.5rem; font-weight: 500;" id="notesDate"></div>
-      <textarea class="notes-area" id="notesArea" placeholder="Notiere hier deine Trading-Ideen, Setups, Marktbeobachtungen und Gedanken für heute..."></textarea>
-      <div style="display: flex; align-items: center; margin-top: 0.5rem;">
-        <button class="notes-save-btn" onclick="saveNotes()">💾 Speichern</button>
-        <span class="notes-saved-msg" id="notesSavedMsg">✓ Gespeichert</span>
-      </div>
-      <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border);">
-        <div style="font-size: 0.73rem; color: var(--text-muted); margin-bottom: 0.4rem; font-weight: 600;">Notizen vom Vortag:</div>
-        <div style="font-size: 0.82rem; color: var(--text-secondary); font-style: italic; background: var(--bg-primary); padding: 0.75rem; border-radius: 8px; border: 1px solid var(--border);" id="yesterdayNotes">Keine Notizen vom Vortag.</div>
-      </div>
-    </div>
-  </section>
-
   <!-- ===== EIGENE TOOLS (unten) ===== -->
   <section id="eigene-tools-bottom" class="section">
     <div class="section-header">
@@ -1270,6 +1263,47 @@
         <a href="https://manus.im/app?prompt=Starte+den+Index+Momentum+Trader+Skill+und+erstelle+ein+aktuelles+Index+Momentum+Ranking" target="_blank" class="skill-btn">🚀 Index Ranking</a>
       </div>
 
+    </div>
+  </section>
+
+
+  <!-- ===== WATCHLIST ===== -->
+  <section id="watchlist" class="section">
+    <div class="section-header">
+      <span class="section-icon">👁️</span>
+      <span class="section-title">Watchlist</span>
+      <span class="section-badge">Persönliche Beobachtungsliste</span>
+    </div>
+    <div style="background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 12px; padding: 1.25rem; box-shadow: var(--shadow-sm);">
+      <div class="watchlist-input-row">
+        <input type="text" class="watchlist-input" id="watchlistInput" placeholder="Symbol eingeben, z.B. SPY, AAPL, GLD..." />
+        <button class="watchlist-add-btn" onclick="addWatchlistItem()">+ Hinzufügen</button>
+      </div>
+      <div class="watchlist-items" id="watchlistItems"></div>
+      <div style="margin-top: 0.75rem; font-size: 0.73rem; color: var(--text-muted);">
+        Klick auf ein Symbol öffnet den TradingView Chart. Einträge werden lokal im Browser gespeichert.
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== NOTIZEN ===== -->
+  <section id="notizen" class="section">
+    <div class="section-header">
+      <span class="section-icon">📝</span>
+      <span class="section-title">Trading Notizen</span>
+      <span class="section-badge">Tagesnotizen, Ideen, Setups</span>
+    </div>
+    <div style="background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 12px; padding: 1.25rem; box-shadow: var(--shadow-sm);">
+      <div style="font-size: 0.78rem; color: var(--text-muted); margin-bottom: 0.5rem; font-weight: 500;" id="notesDate"></div>
+      <textarea class="notes-area" id="notesArea" placeholder="Notiere hier deine Trading-Ideen, Setups, Marktbeobachtungen und Gedanken für heute..."></textarea>
+      <div style="display: flex; align-items: center; margin-top: 0.5rem;">
+        <button class="notes-save-btn" onclick="saveNotes()">💾 Speichern</button>
+        <span class="notes-saved-msg" id="notesSavedMsg">✓ Gespeichert</span>
+      </div>
+      <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border);">
+        <div style="font-size: 0.73rem; color: var(--text-muted); margin-bottom: 0.4rem; font-weight: 600;">Notizen vom Vortag:</div>
+        <div style="font-size: 0.82rem; color: var(--text-secondary); font-style: italic; background: var(--bg-primary); padding: 0.75rem; border-radius: 8px; border: 1px solid var(--border);" id="yesterdayNotes">Keine Notizen vom Vortag.</div>
+      </div>
     </div>
   </section>
 
@@ -1542,6 +1576,23 @@
   // Load on startup, refresh every 15 minutes
   loadAllNews();
   setInterval(loadAllNews, 15 * 60 * 1000);
+
+  // ===== DARK MODE TOGGLE =====
+  function toggleTheme() {
+    const isDark = document.body.classList.toggle('dark');
+    localStorage.setItem('tcc_theme', isDark ? 'dark' : 'light');
+    document.getElementById('themeIcon').textContent = isDark ? '☀️' : '🌙';
+    document.getElementById('themeLabel').textContent = isDark ? 'Hell' : 'Dunkel';
+  }
+  // Load saved theme on startup
+  (function() {
+    const saved = localStorage.getItem('tcc_theme');
+    if (saved === 'dark') {
+      document.body.classList.add('dark');
+      document.getElementById('themeIcon').textContent = '☀️';
+      document.getElementById('themeLabel').textContent = 'Hell';
+    }
+  })();
 
 </script>
 </body>
