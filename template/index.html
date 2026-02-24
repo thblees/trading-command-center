@@ -1,0 +1,873 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trading Command Center – Dein Name</title>
+  <style>
+    /* =====================================================
+       TRADING COMMAND CENTER – HTML TEMPLATE
+       Erstellt von: thblees / meine-geldseite.de
+       Version: 1.0
+       
+       ANLEITUNG ZUM ANPASSEN:
+       1. Suche nach "DEIN_NAME" und ersetze es durch deinen Namen
+       2. Suche nach "DEINE_URL" und ersetze durch deine Links
+       3. Füge eigene Sektionen nach dem Muster der vorhandenen hinzu
+       4. Lade die Datei auf GitHub Pages hoch (kostenlos)
+       ===================================================== */
+
+    :root {
+      --bg-primary: #f8fafc;
+      --bg-secondary: #ffffff;
+      --bg-card: #ffffff;
+      --text-primary: #1e293b;
+      --text-secondary: #64748b;
+      --text-muted: #94a3b8;
+      --border: #e2e8f0;
+      --accent-blue: #3b82f6;
+      --accent-green: #22c55e;
+      --accent-orange: #f97316;
+      --accent-purple: #a855f7;
+      --accent-red: #ef4444;
+      --accent-teal: #14b8a6;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+      --shadow-md: 0 4px 12px rgba(0,0,0,0.1);
+      --radius: 14px;
+    }
+
+    [data-theme="dark"] {
+      --bg-primary: #0f172a;
+      --bg-secondary: #1e293b;
+      --bg-card: #1e293b;
+      --text-primary: #f1f5f9;
+      --text-secondary: #94a3b8;
+      --text-muted: #64748b;
+      --border: #334155;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.3);
+      --shadow-md: 0 4px 12px rgba(0,0,0,0.4);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      min-height: 100vh;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    /* ===== HEADER ===== */
+    header {
+      background: var(--bg-secondary);
+      border-bottom: 1px solid var(--border);
+      padding: 0.75rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .header-left { display: flex; align-items: center; gap: 0.75rem; }
+    .header-logo { font-size: 1.4rem; }
+    .header-title { font-size: 1rem; font-weight: 700; color: var(--text-primary); }
+    .header-subtitle { font-size: 0.72rem; color: var(--text-secondary); }
+
+    .header-right { display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap; }
+
+    .market-badge {
+      padding: 0.3rem 0.75rem;
+      border-radius: 20px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      background: #dcfce7;
+      color: #166534;
+    }
+    .market-badge.closed { background: #fee2e2; color: #991b1b; }
+    .market-badge.pre { background: #fef9c3; color: #854d0e; }
+
+    .theme-toggle {
+      background: var(--bg-primary);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.35rem 0.75rem;
+      cursor: pointer;
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      transition: all 0.2s;
+    }
+    .theme-toggle:hover { background: var(--accent-blue); color: white; border-color: var(--accent-blue); }
+
+    /* ===== NAV ===== */
+    nav {
+      background: var(--bg-secondary);
+      border-bottom: 1px solid var(--border);
+      padding: 0 1.5rem;
+      display: flex;
+      gap: 0;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    nav::-webkit-scrollbar { display: none; }
+    nav a {
+      padding: 0.65rem 1rem;
+      font-size: 0.78rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      text-decoration: none;
+      white-space: nowrap;
+      border-bottom: 2px solid transparent;
+      transition: all 0.2s;
+    }
+    nav a:hover, nav a.active { color: var(--accent-blue); border-bottom-color: var(--accent-blue); }
+
+    /* ===== MAIN ===== */
+    main { max-width: 1400px; margin: 0 auto; padding: 1.5rem; }
+
+    /* ===== MORNING BRIEFING ===== */
+    .morning-card {
+      background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 50%, #e0e7ff 100%);
+      border: 1px solid #bfdbfe;
+      border-radius: var(--radius);
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    [data-theme="dark"] .morning-card {
+      background: linear-gradient(135deg, #1e3a5f 0%, #1e2d4f 50%, #2d1b69 100%);
+      border-color: #3b5998;
+    }
+    .morning-left { display: flex; align-items: center; gap: 1rem; }
+    .morning-icon { font-size: 2rem; }
+    .morning-time { font-size: 1.5rem; font-weight: 800; color: #1e40af; }
+    [data-theme="dark"] .morning-time { color: #93c5fd; }
+    .morning-date { font-size: 0.8rem; color: #3b82f6; font-weight: 500; }
+    .morning-text { font-size: 0.85rem; color: #1e40af; max-width: 600px; }
+    [data-theme="dark"] .morning-text { color: #93c5fd; }
+
+    /* ===== SECTIONS ===== */
+    .section { margin-bottom: 2rem; }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid var(--border);
+    }
+    .section-icon { font-size: 1.2rem; }
+    .section-title { font-size: 1rem; font-weight: 700; color: var(--text-primary); }
+    .section-badge {
+      font-size: 0.7rem;
+      background: var(--bg-primary);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 0.2rem 0.6rem;
+      color: var(--text-muted);
+      margin-left: auto;
+    }
+
+    /* ===== CARD GRID ===== */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 1rem;
+    }
+    .card-grid.wide {
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    }
+
+    /* ===== CARDS ===== */
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1rem 1.1rem;
+      text-decoration: none;
+      color: var(--text-primary);
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      transition: all 0.2s;
+      box-shadow: var(--shadow-sm);
+      border-left: 3px solid transparent;
+    }
+    .card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+
+    /* Highlight-Farben für Karten */
+    .hl-blue { border-left-color: #3b82f6; }
+    .hl-blue:hover { background: #eff6ff; }
+    [data-theme="dark"] .hl-blue:hover { background: #1e3a5f; }
+
+    .hl-green { border-left-color: #22c55e; }
+    .hl-green:hover { background: #f0fdf4; }
+    [data-theme="dark"] .hl-green:hover { background: #14532d; }
+
+    .hl-orange { border-left-color: #f97316; }
+    .hl-orange:hover { background: #fff7ed; }
+    [data-theme="dark"] .hl-orange:hover { background: #431407; }
+
+    .hl-purple { border-left-color: #a855f7; }
+    .hl-purple:hover { background: #faf5ff; }
+    [data-theme="dark"] .hl-purple:hover { background: #3b0764; }
+
+    .hl-red { border-left-color: #ef4444; }
+    .hl-red:hover { background: #fef2f2; }
+    [data-theme="dark"] .hl-red:hover { background: #450a0a; }
+
+    .hl-teal { border-left-color: #14b8a6; }
+    .hl-teal:hover { background: #f0fdfa; }
+    [data-theme="dark"] .hl-teal:hover { background: #042f2e; }
+
+    .hl-yellow { border-left-color: #eab308; }
+    .hl-yellow:hover { background: #fefce8; }
+    [data-theme="dark"] .hl-yellow:hover { background: #422006; }
+
+    .card-top { display: flex; align-items: center; gap: 0.5rem; }
+    .card-icon { font-size: 1.1rem; }
+    .card-tag {
+      font-size: 0.65rem;
+      font-weight: 600;
+      padding: 0.15rem 0.5rem;
+      border-radius: 10px;
+      margin-left: auto;
+    }
+    .tag-tool { background: #dbeafe; color: #1d4ed8; }
+    .tag-news { background: #dcfce7; color: #166534; }
+    .tag-premium { background: #fef9c3; color: #854d0e; }
+    .tag-live { background: #d1fae5; color: #065f46; }
+    .tag-manus { background: #f3e8ff; color: #7e22ce; }
+
+    .card-title { font-size: 0.88rem; font-weight: 700; color: var(--text-primary); }
+    .card-desc { font-size: 0.75rem; color: var(--text-secondary); line-height: 1.4; flex: 1; }
+    .card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 0.25rem;
+    }
+    .card-url { font-size: 0.68rem; color: var(--text-muted); font-family: monospace; }
+    .card-arrow { font-size: 0.8rem; color: var(--text-muted); }
+
+    /* ===== SKILL CARDS ===== */
+    .skill-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1rem 1.1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      box-shadow: var(--shadow-sm);
+      border-left: 3px solid #a855f7;
+    }
+    .skill-card.hl-orange { border-left-color: #f97316; }
+    .skill-btn {
+      display: inline-block;
+      background: linear-gradient(135deg, #7c3aed, #a855f7);
+      color: white;
+      border-radius: 8px;
+      padding: 0.5rem 1rem;
+      font-size: 0.78rem;
+      font-weight: 600;
+      text-decoration: none;
+      text-align: center;
+      margin-top: 0.25rem;
+      transition: all 0.2s;
+    }
+    .skill-card.hl-orange .skill-btn {
+      background: linear-gradient(135deg, #ea580c, #f97316);
+    }
+    .skill-btn:hover { opacity: 0.9; transform: translateY(-1px); }
+
+    /* ===== WATCHLIST ===== */
+    .watchlist-input-row {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+    .watchlist-input {
+      flex: 1;
+      padding: 0.6rem 0.9rem;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--bg-secondary);
+      color: var(--text-primary);
+      font-size: 0.85rem;
+    }
+    .watchlist-input:focus { outline: none; border-color: var(--accent-blue); }
+    .btn-add {
+      padding: 0.6rem 1.2rem;
+      background: var(--accent-blue);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+    .watchlist-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    .watchlist-item {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.4rem 0.75rem;
+      font-size: 0.82rem;
+      font-weight: 600;
+    }
+    .watchlist-item a { color: var(--accent-blue); text-decoration: none; }
+    .watchlist-item button {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--text-muted);
+      font-size: 0.75rem;
+      padding: 0;
+    }
+
+    /* ===== NOTIZEN ===== */
+    .notes-area {
+      width: 100%;
+      min-height: 120px;
+      padding: 0.75rem 1rem;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--bg-secondary);
+      color: var(--text-primary);
+      font-size: 0.85rem;
+      font-family: inherit;
+      resize: vertical;
+      line-height: 1.5;
+    }
+    .notes-area:focus { outline: none; border-color: var(--accent-blue); }
+    .notes-meta { font-size: 0.72rem; color: var(--text-muted); margin-top: 0.4rem; }
+
+    /* ===== QUICK BAR ===== */
+    .quick-bar {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      margin-bottom: 1.5rem;
+    }
+    .quick-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.45rem 0.9rem;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 0.78rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      text-decoration: none;
+      transition: all 0.2s;
+      cursor: pointer;
+    }
+    .quick-btn:hover { background: var(--accent-blue); color: white; border-color: var(--accent-blue); }
+
+    @media (max-width: 768px) {
+      main { padding: 1rem; }
+      .card-grid { grid-template-columns: 1fr; }
+      .morning-card { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- =====================================================
+     ANLEITUNG:
+     1. Ersetze "DEIN_NAME" durch deinen Namen/Handle
+     2. Ersetze alle "DEINE_URL" durch deine Links
+     3. Passe Beschreibungen an
+     4. Füge/entferne Kacheln nach Bedarf
+     5. Lade auf GitHub Pages hoch: github.com/DEIN_GITHUB_NAME/trading-dashboard
+     ===================================================== -->
+
+<!-- ===== HEADER ===== -->
+<header>
+  <div class="header-left">
+    <span class="header-logo">📊</span>
+    <div>
+      <!-- ANPASSEN: Deinen Namen eintragen -->
+      <div class="header-title">Trading Command Center</div>
+      <div class="header-subtitle">DEIN_NAME · Persönliches Trading Dashboard</div>
+    </div>
+  </div>
+  <div class="header-right">
+    <span id="marketStatus" class="market-badge">Markt lädt...</span>
+    <span id="clockDisplay" style="font-size:0.8rem;font-weight:600;color:var(--text-secondary);"></span>
+    <button class="theme-toggle" onclick="toggleTheme()" id="themeBtn">🌙 Dark</button>
+  </div>
+</header>
+
+<!-- ===== NAVIGATION ===== -->
+<!-- ANPASSEN: Füge/entferne Nav-Links passend zu deinen Sektionen hinzu -->
+<nav id="mainNav">
+  <a href="#morning">☀️ Morning</a>
+  <a href="#news">📰 News</a>
+  <a href="#aktien">📈 Aktien & ETFs</a>
+  <a href="#optionen">⚙️ Optionen</a>
+  <a href="#futures">📦 Futures & COT</a>
+  <a href="#makro">🌍 Makro</a>
+  <a href="#eigene-tools">🛠️ Eigene Tools</a>
+  <a href="#manus-skills">🤖 Manus Skills</a>
+  <a href="#watchlist">👁️ Watchlist</a>
+  <a href="#notizen">📝 Notizen</a>
+</nav>
+
+<main>
+
+  <!-- ===== MORNING BRIEFING ===== -->
+  <section id="morning">
+    <div class="morning-card">
+      <div class="morning-left">
+        <span class="morning-icon">☀️</span>
+        <div>
+          <div class="morning-time" id="timeDisplay">--:--</div>
+          <div class="morning-date" id="dateDisplay">Datum lädt...</div>
+        </div>
+      </div>
+      <div class="morning-text" id="briefingText">
+        Guten Morgen! Dein Trading-Tag beginnt.
+      </div>
+    </div>
+
+    <!-- SCHNELLZUGRIFF: Passe diese Links auf deine wichtigsten Tools an -->
+    <div class="quick-bar">
+      <a href="DEINE_URL" target="_blank" class="quick-btn">📈 TradingView</a>
+      <a href="DEINE_URL" target="_blank" class="quick-btn">📊 StockCharts</a>
+      <a href="DEINE_URL" target="_blank" class="quick-btn">🌍 Makro Dashboard</a>
+      <a href="DEINE_URL" target="_blank" class="quick-btn">⚙️ Optionen Tool</a>
+      <!-- Weitere Quick-Buttons hier einfügen -->
+    </div>
+  </section>
+
+  <!-- ===== NEWS & RESEARCH ===== -->
+  <!-- ANPASSEN: Deine bevorzugten Nachrichtenquellen eintragen -->
+  <section id="news" class="section">
+    <div class="section-header">
+      <span class="section-icon">📰</span>
+      <span class="section-title">News & Research</span>
+      <span class="section-badge">Nachrichten & Analysen</span>
+    </div>
+    <div class="card-grid">
+
+      <!-- BEISPIEL-KACHEL – Dupliziere diesen Block für weitere Kacheln -->
+      <a href="https://www.barchart.com/news" target="_blank" class="card hl-blue">
+        <div class="card-top"><span class="card-icon">📈</span><span class="card-tag tag-news">News</span></div>
+        <div class="card-title">Barchart News</div>
+        <div class="card-desc">Professionelle Börsennachrichten, Marktkommentare und Trading-relevante Meldungen.</div>
+        <div class="card-footer"><span class="card-url">barchart.com/news</span><span class="card-arrow">→</span></div>
+      </a>
+
+      <a href="DEINE_URL" target="_blank" class="card hl-yellow">
+        <div class="card-top"><span class="card-icon">📰</span><span class="card-tag tag-news">News</span></div>
+        <div class="card-title">Nachrichtenquelle 2</div>
+        <div class="card-desc">Beschreibung dieser Nachrichtenquelle. Was findest du hier?</div>
+        <div class="card-footer"><span class="card-url">deine-url.com</span><span class="card-arrow">→</span></div>
+      </a>
+
+      <a href="DEINE_URL" target="_blank" class="card hl-blue">
+        <div class="card-top"><span class="card-icon">📖</span><span class="card-tag tag-news">News</span></div>
+        <div class="card-title">Nachrichtenquelle 3</div>
+        <div class="card-desc">Beschreibung dieser Nachrichtenquelle. Was findest du hier?</div>
+        <div class="card-footer"><span class="card-url">deine-url.com</span><span class="card-arrow">→</span></div>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- ===== AKTIEN & ETFs ===== -->
+  <!-- ANPASSEN: Deine Aktien/ETF-Tools eintragen -->
+  <section id="aktien" class="section">
+    <div class="section-header">
+      <span class="section-icon">📈</span>
+      <span class="section-title">Aktien & ETFs</span>
+      <span class="section-badge">Charts, Screener, Analyse</span>
+    </div>
+    <div class="card-grid">
+
+      <a href="https://de.tradingview.com" target="_blank" class="card hl-blue">
+        <div class="card-top"><span class="card-icon">📊</span><span class="card-tag tag-tool">Tool</span></div>
+        <div class="card-title">TradingView</div>
+        <div class="card-desc">Charts, technische Analyse, Screener und Community-Ideen für Aktien, ETFs und mehr.</div>
+        <div class="card-footer"><span class="card-url">tradingview.com</span><span class="card-arrow">→</span></div>
+      </a>
+
+      <a href="https://stockcharts.com/freecharts/rrg/" target="_blank" class="card hl-orange">
+        <div class="card-top"><span class="card-icon">🔄</span><span class="card-tag tag-tool">Tool</span></div>
+        <div class="card-title">StockCharts RRG</div>
+        <div class="card-desc">Relative Rotation Graph – visualisiert Sektor-Rotation und relative Stärke verschiedener Märkte.</div>
+        <div class="card-footer"><span class="card-url">stockcharts.com/rrg</span><span class="card-arrow">→</span></div>
+      </a>
+
+      <a href="DEINE_URL" target="_blank" class="card hl-green">
+        <div class="card-top"><span class="card-icon">🔍</span><span class="card-tag tag-tool">Screener</span></div>
+        <div class="card-title">Dein Screener</div>
+        <div class="card-desc">Beschreibe deinen Screener hier. Welche Setups suchst du?</div>
+        <div class="card-footer"><span class="card-url">deine-url.com</span><span class="card-arrow">→</span></div>
+      </a>
+
+      <!-- Weitere Kacheln hier einfügen -->
+
+    </div>
+  </section>
+
+  <!-- ===== OPTIONEN ===== -->
+  <!-- ANPASSEN: Deine Options-Tools eintragen -->
+  <section id="optionen" class="section">
+    <div class="section-header">
+      <span class="section-icon">⚙️</span>
+      <span class="section-title">Optionen</span>
+      <span class="section-badge">Strategien, Greeks, Gamma</span>
+    </div>
+    <div class="card-grid">
+
+      <a href="https://www.optionstrat.com" target="_blank" class="card hl-purple">
+        <div class="card-top"><span class="card-icon">⚙️</span><span class="card-tag tag-tool">Tool</span></div>
+        <div class="card-title">OptionStrat</div>
+        <div class="card-desc">Optionsstrategie-Visualisierung, P&L-Diagramme und Risikoprofile für alle gängigen Strategien.</div>
+        <div class="card-footer"><span class="card-url">optionstrat.com</span><span class="card-arrow">→</span></div>
+      </a>
+
+      <a href="DEINE_URL" target="_blank" class="card hl-orange">
+        <div class="card-top"><span class="card-icon">🎯</span><span class="card-tag tag-tool">Tool</span></div>
+        <div class="card-title">Dein Options-Tool</div>
+        <div class="card-desc">Beschreibe dein Options-Tool hier.</div>
+        <div class="card-footer"><span class="card-url">deine-url.com</span><span class="card-arrow">→</span></div>
+      </a>
+
+      <!-- Weitere Kacheln hier einfügen -->
+
+    </div>
+  </section>
+
+  <!-- ===== FUTURES & COT ===== -->
+  <!-- ANPASSEN: Deine Futures/COT-Tools eintragen -->
+  <section id="futures" class="section">
+    <div class="section-header">
+      <span class="section-icon">📦</span>
+      <span class="section-title">Futures & COT Daten</span>
+      <span class="section-badge">Rohstoffe, Währungen, Positionierung</span>
+    </div>
+    <div class="card-grid">
+
+      <a href="https://de.tradingview.com" target="_blank" class="card hl-teal">
+        <div class="card-top"><span class="card-icon">📦</span><span class="card-tag tag-tool">Tool</span></div>
+        <div class="card-title">TradingView COT</div>
+        <div class="card-desc">COT-Daten direkt in TradingView visualisieren. Zeigt Positionierungen von Commercials, Large Specs und Small Specs.</div>
+        <div class="card-footer"><span class="card-url">tradingview.com</span><span class="card-arrow">→</span></div>
+      </a>
+
+      <a href="https://en.macromicro.me" target="_blank" class="card hl-teal">
+        <div class="card-top"><span class="card-icon">🔬</span><span class="card-tag tag-tool">Tool</span></div>
+        <div class="card-title">MacroMicro</div>
+        <div class="card-desc">Interaktive Makro-Charts, Wirtschaftsindikatoren und globale Kapitalflüsse.</div>
+        <div class="card-footer"><span class="card-url">macromicro.me</span><span class="card-arrow">→</span></div>
+      </a>
+
+      <!-- Weitere Kacheln hier einfügen -->
+
+    </div>
+  </section>
+
+  <!-- ===== MAKRO ===== -->
+  <!-- ANPASSEN: Deine Makro-Quellen eintragen -->
+  <section id="makro" class="section">
+    <div class="section-header">
+      <span class="section-icon">🌍</span>
+      <span class="section-title">Makro</span>
+      <span class="section-badge">Zentralbanken, Indikatoren, Thesen</span>
+    </div>
+    <div class="card-grid">
+
+      <a href="https://app.realvision.com" target="_blank" class="card hl-purple">
+        <div class="card-top"><span class="card-icon">🎥</span><span class="card-tag tag-premium">Premium</span></div>
+        <div class="card-title">Real Vision</div>
+        <div class="card-desc">Tiefgehende Makro-Analysen und Interviews mit Top-Investoren weltweit.</div>
+        <div class="card-footer"><span class="card-url">app.realvision.com</span><span class="card-arrow">→</span></div>
+      </a>
+
+      <a href="DEINE_URL" target="_blank" class="card hl-teal">
+        <div class="card-top"><span class="card-icon">🌍</span><span class="card-tag tag-tool">Tool</span></div>
+        <div class="card-title">Dein Makro-Tool</div>
+        <div class="card-desc">Beschreibe dein Makro-Tool hier.</div>
+        <div class="card-footer"><span class="card-url">deine-url.com</span><span class="card-arrow">→</span></div>
+      </a>
+
+      <!-- Weitere Kacheln hier einfügen -->
+
+    </div>
+  </section>
+
+  <!-- ===== EIGENE TOOLS ===== -->
+  <!-- ANPASSEN: Deine selbst erstellten Tools/Dashboards eintragen -->
+  <section id="eigene-tools" class="section">
+    <div class="section-header">
+      <span class="section-icon">🛠️</span>
+      <span class="section-title">Eigene Tools & Dashboards</span>
+      <span class="section-badge">Persönliche Analysetools</span>
+    </div>
+    <div class="card-grid wide">
+
+      <a href="DEINE_URL" target="_blank" class="card hl-green">
+        <div class="card-top"><span class="card-icon">🚀</span><span class="card-tag tag-live">Live Tool</span></div>
+        <div class="card-title">Eigenes Tool 1</div>
+        <div class="card-desc">Beschreibe dein eigenes Tool hier. Was analysiert es?</div>
+        <div class="card-footer"><span class="card-url">deine-url.com/tool1</span><span class="card-arrow">→</span></div>
+      </a>
+
+      <a href="DEINE_URL" target="_blank" class="card hl-blue">
+        <div class="card-top"><span class="card-icon">📊</span><span class="card-tag tag-live">Live Tool</span></div>
+        <div class="card-title">Eigenes Tool 2</div>
+        <div class="card-desc">Beschreibe dein eigenes Tool hier. Was analysiert es?</div>
+        <div class="card-footer"><span class="card-url">deine-url.com/tool2</span><span class="card-arrow">→</span></div>
+      </a>
+
+      <!-- Weitere eigene Tools hier einfügen -->
+
+    </div>
+  </section>
+
+  <!-- ===== MANUS SKILLS ===== -->
+  <!-- ANPASSEN: Wähle die Manus Skills die du nutzen möchtest -->
+  <section id="manus-skills" class="section">
+    <div class="section-header">
+      <span class="section-icon">🤖</span>
+      <span class="section-title">Manus Skills – KI-Analysen auf Knopfdruck</span>
+      <span class="section-badge">Direkt in Manus starten</span>
+    </div>
+    <div class="card-grid wide">
+
+      <div class="skill-card hl-purple">
+        <div class="card-top"><span class="card-icon">📦</span><span class="card-tag tag-manus">Manus Skill</span></div>
+        <div class="card-title">COT Analyse</div>
+        <div class="card-desc">Analysiert Commitment-of-Traders-Daten auf extreme Positionierungen. Identifiziert Futures-Setups mit historischen Erfolgsquoten.</div>
+        <a href="https://manus.im/app?prompt=Starte+den+COT+Analyzer+Skill+und+analysiere+aktuelle+COT+Daten+auf+extreme+Positionierungen+und+Trading+Setups" target="_blank" class="skill-btn">🚀 COT Analyse starten</a>
+      </div>
+
+      <div class="skill-card hl-purple">
+        <div class="card-top"><span class="card-icon">💡</span><span class="card-tag tag-manus">Manus Skill</span></div>
+        <div class="card-title">Investment Thesen Finder</div>
+        <div class="card-desc">Sucht systematisch nach handlungsfähigen Investment-Thesen basierend auf Makro-Trends, Sektoren und regionalen Themen.</div>
+        <a href="https://manus.im/app?prompt=Starte+den+Investment+Thesis+Finder+Skill+und+suche+nach+aktuellen+Investment+Thesen+und+Ideen" target="_blank" class="skill-btn">🚀 Thesen suchen</a>
+      </div>
+
+      <div class="skill-card hl-purple">
+        <div class="card-top"><span class="card-icon">🚀</span><span class="card-tag tag-manus">Manus Skill</span></div>
+        <div class="card-title">ETF Momentum Analyse</div>
+        <div class="card-desc">Analysiert und rankt globale Markt-ETFs nach Momentum-Performance über 1 Woche, 4 Wochen und 3 Monate.</div>
+        <a href="https://manus.im/app?prompt=Starte+den+ETF+Momentum+Trader+Skill+und+erstelle+ein+aktuelles+Momentum+Ranking+der+wichtigsten+ETFs" target="_blank" class="skill-btn">🚀 Momentum Ranking</a>
+      </div>
+
+      <div class="skill-card hl-purple">
+        <div class="card-top"><span class="card-icon">🌍</span><span class="card-tag tag-manus">Manus Skill</span></div>
+        <div class="card-title">Makro Zyklusanalyse</div>
+        <div class="card-desc">Umfassende makroökonomische Analyse für USA, Eurozone und Japan. Bestimmt Wirtschaftszyklusphase und generiert Asset-Allokations-Empfehlungen.</div>
+        <a href="https://manus.im/app?prompt=Starte+den+Macro+Cycle+Analyst+Skill+und+erstelle+eine+aktuelle+Makroanalyse+mit+Asset+Allokations+Empfehlungen" target="_blank" class="skill-btn">🚀 Makro Analyse</a>
+      </div>
+
+      <div class="skill-card hl-purple">
+        <div class="card-top"><span class="card-icon">⚙️</span><span class="card-tag tag-manus">Manus Skill</span></div>
+        <div class="card-title">Optionsexperte</div>
+        <div class="card-desc">Options-Strategie-Empfehlungen mit Market-Maker-Expertise. Analysiert Greeks, IV-Metriken und empfiehlt optimale Strategien.</div>
+        <a href="https://manus.im/app?prompt=Starte+den+Optionsexperte+Skill+und+analysiere+aktuelle+Options+Setups+und+Strategien" target="_blank" class="skill-btn">🚀 Options Analyse</a>
+      </div>
+
+      <div class="skill-card hl-purple">
+        <div class="card-top"><span class="card-icon">🔄</span><span class="card-tag tag-manus">Manus Skill</span></div>
+        <div class="card-title">Sektor Rotation Detector</div>
+        <div class="card-desc">Erkennt Sektor-Rotations-Signale durch Analyse makroökonomischer Indikatoren. Identifiziert welche Sektoren outperformen werden.</div>
+        <a href="https://manus.im/app?prompt=Starte+den+Sector+Rotation+Detector+Skill+und+analysiere+aktuelle+Sektor+Rotations+Signale" target="_blank" class="skill-btn">🚀 Sektor Rotation</a>
+      </div>
+
+      <div class="skill-card hl-purple">
+        <div class="card-top"><span class="card-icon">⚠️</span><span class="card-tag tag-manus">Manus Skill</span></div>
+        <div class="card-title">Risikomanager</div>
+        <div class="card-desc">Professionelle Risikoanalyse nach Hedgefonds-Standard. Prüft Investmentthesen auf makroökonomische Risiken und agiert als Devil's Advocate.</div>
+        <a href="https://manus.im/app?prompt=Starte+den+Risikomanager+Skill+und+analysiere+die+Risiken+meiner+aktuellen+Investmentthese" target="_blank" class="skill-btn">🚀 Risikoanalyse</a>
+      </div>
+
+      <div class="skill-card hl-purple">
+        <div class="card-top"><span class="card-icon">📊</span><span class="card-tag tag-manus">Manus Skill</span></div>
+        <div class="card-title">Investment Entscheider</div>
+        <div class="card-desc">Systematischer Entscheidungsrahmen für Long-, Short- oder Neutral-Positionen. Analysiert Makro, Trend, technische Struktur und Saisonalität.</div>
+        <a href="https://manus.im/app?prompt=Starte+den+Investment+Entscheider+Skill+und+hilf+mir+bei+einer+Investment+Entscheidung" target="_blank" class="skill-btn">🚀 Entscheidung treffen</a>
+      </div>
+
+      <!-- Weitere Skill-Kacheln hier einfügen -->
+
+    </div>
+  </section>
+
+  <!-- ===== WATCHLIST ===== -->
+  <section id="watchlist" class="section">
+    <div class="section-header">
+      <span class="section-icon">👁️</span>
+      <span class="section-title">Watchlist</span>
+      <span class="section-badge">Persönliche Beobachtungsliste</span>
+    </div>
+    <div class="watchlist-input-row">
+      <input type="text" id="watchlistInput" class="watchlist-input" placeholder="Symbol eingeben (z.B. AAPL, SPY, GLD)..." onkeydown="if(event.key==='Enter')addToWatchlist()">
+      <button class="btn-add" onclick="addToWatchlist()">+ Hinzufügen</button>
+    </div>
+    <div class="watchlist-grid" id="watchlistGrid"></div>
+  </section>
+
+  <!-- ===== NOTIZEN ===== -->
+  <section id="notizen" class="section">
+    <div class="section-header">
+      <span class="section-icon">📝</span>
+      <span class="section-title">Trading Notizen</span>
+      <span class="section-badge">Werden automatisch gespeichert</span>
+    </div>
+    <textarea class="notes-area" id="notesArea" placeholder="Deine Trading-Ideen, Beobachtungen und Pläne für heute..."></textarea>
+    <div class="notes-meta" id="notesMeta">Noch keine Notizen gespeichert.</div>
+  </section>
+
+</main>
+
+<script>
+  // ===== UHRZEIT & DATUM =====
+  function updateClock() {
+    const now = new Date();
+    const timeEl = document.getElementById('timeDisplay');
+    const dateEl = document.getElementById('dateDisplay');
+    const clockEl = document.getElementById('clockDisplay');
+    if (timeEl) timeEl.textContent = now.toLocaleTimeString('de-DE', {hour:'2-digit',minute:'2-digit'});
+    if (clockEl) clockEl.textContent = now.toLocaleTimeString('de-DE', {hour:'2-digit',minute:'2-digit',second:'2-digit'});
+    const days = ['Sonntag','Montag','Dienstag','Mittwoch','Donnerstag','Freitag','Samstag'];
+    const months = ['Januar','Februar','März','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember'];
+    if (dateEl) dateEl.textContent = `${days[now.getDay()]}, ${now.getDate()}. ${months[now.getMonth()]} ${now.getFullYear()}`;
+  }
+  setInterval(updateClock, 1000);
+  updateClock();
+
+  // ===== MARKT-STATUS =====
+  function updateMarketStatus() {
+    const now = new Date();
+    const nyTime = new Date(now.toLocaleString('en-US', {timeZone: 'America/New_York'}));
+    const h = nyTime.getHours(), m = nyTime.getMinutes(), d = nyTime.getDay();
+    const badge = document.getElementById('marketStatus');
+    if (!badge) return;
+    const mins = h * 60 + m;
+    if (d === 0 || d === 6) { badge.textContent = '🔴 Wochenende'; badge.className = 'market-badge closed'; }
+    else if (mins >= 570 && mins < 930) { badge.textContent = '🟢 NYSE offen'; badge.className = 'market-badge'; }
+    else if (mins >= 540 && mins < 570) { badge.textContent = '🟡 Pre-Market'; badge.className = 'market-badge pre'; }
+    else if (mins >= 930 && mins < 1200) { badge.textContent = '🟡 After-Hours'; badge.className = 'market-badge pre'; }
+    else { badge.textContent = '🔴 NYSE geschlossen'; badge.className = 'market-badge closed'; }
+  }
+  setInterval(updateMarketStatus, 60000);
+  updateMarketStatus();
+
+  // ===== MORNING BRIEFING =====
+  function updateBriefing() {
+    const now = new Date();
+    const h = now.getHours();
+    const day = now.getDay();
+    const greet = h < 12 ? 'Guten Morgen' : h < 18 ? 'Guten Tag' : 'Guten Abend';
+    const days = ['Sonntag','Montag','Dienstag','Mittwoch','Donnerstag','Freitag','Samstag'];
+    let note = '';
+    if (day === 1) note = ' · <strong>Montag:</strong> Wochenstart – Märkte und Trends checken.';
+    else if (day === 3) note = ' · <strong>Mittwoch:</strong> Fed-Protokolle und Wirtschaftsdaten beachten.';
+    else if (day === 5) note = ' · <strong>Freitag:</strong> Positionen vor dem Wochenende überprüfen.';
+    else if (day === 0 || day === 6) note = ' · <strong>Wochenende:</strong> Research und Planung.';
+    const el = document.getElementById('briefingText');
+    // ANPASSEN: Deinen Namen eintragen
+    if (el) el.innerHTML = greet + ', <strong>DEIN_NAME</strong>! ' + days[day] + note +
+      ' Starte mit deinen <a href="#eigene-tools" style="color:var(--accent-blue);font-weight:700;text-decoration:none;"><strong>eigenen Tools</strong></a> oder nutze die <a href="#manus-skills" style="color:var(--accent-purple);font-weight:700;text-decoration:none;"><strong>Manus Skills</strong></a> für KI-Analysen.';
+  }
+  updateBriefing();
+
+  // ===== DARK MODE TOGGLE =====
+  function toggleTheme() {
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    document.documentElement.setAttribute('data-theme', isDark ? 'light' : 'dark');
+    document.getElementById('themeBtn').textContent = isDark ? '🌙 Dark' : '☀️ Hell';
+    localStorage.setItem('theme', isDark ? 'light' : 'dark');
+  }
+  const savedTheme = localStorage.getItem('theme') || 'light';
+  document.documentElement.setAttribute('data-theme', savedTheme);
+  const btn = document.getElementById('themeBtn');
+  if (btn) btn.textContent = savedTheme === 'dark' ? '☀️ Hell' : '🌙 Dark';
+
+  // ===== AKTIVER NAV-LINK =====
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('nav a');
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(s => { if (window.scrollY >= s.offsetTop - 120) current = s.id; });
+    navLinks.forEach(a => {
+      a.classList.remove('active');
+      if (a.getAttribute('href') === '#' + current) a.classList.add('active');
+    });
+  });
+
+  // ===== WATCHLIST =====
+  function loadWatchlist() {
+    const items = JSON.parse(localStorage.getItem('watchlist') || '[]');
+    const grid = document.getElementById('watchlistGrid');
+    if (!grid) return;
+    grid.innerHTML = '';
+    items.forEach((sym, i) => {
+      const div = document.createElement('div');
+      div.className = 'watchlist-item';
+      div.innerHTML = `<a href="https://de.tradingview.com/chart/?symbol=${sym}" target="_blank">${sym}</a>
+        <button onclick="removeFromWatchlist(${i})" title="Entfernen">✕</button>`;
+      grid.appendChild(div);
+    });
+  }
+  function addToWatchlist() {
+    const input = document.getElementById('watchlistInput');
+    const sym = input.value.trim().toUpperCase();
+    if (!sym) return;
+    const items = JSON.parse(localStorage.getItem('watchlist') || '[]');
+    if (!items.includes(sym)) { items.push(sym); localStorage.setItem('watchlist', JSON.stringify(items)); }
+    input.value = '';
+    loadWatchlist();
+  }
+  function removeFromWatchlist(i) {
+    const items = JSON.parse(localStorage.getItem('watchlist') || '[]');
+    items.splice(i, 1);
+    localStorage.setItem('watchlist', JSON.stringify(items));
+    loadWatchlist();
+  }
+  loadWatchlist();
+
+  // ===== NOTIZEN =====
+  const notesArea = document.getElementById('notesArea');
+  const notesMeta = document.getElementById('notesMeta');
+  const today = new Date().toISOString().split('T')[0];
+  if (notesArea) {
+    notesArea.value = localStorage.getItem('notes_' + today) || '';
+    notesArea.addEventListener('input', () => {
+      localStorage.setItem('notes_' + today, notesArea.value);
+      if (notesMeta) notesMeta.textContent = 'Gespeichert um ' + new Date().toLocaleTimeString('de-DE');
+    });
+    const saved = localStorage.getItem('notes_' + today);
+    if (saved && notesMeta) notesMeta.textContent = 'Zuletzt gespeichert: heute';
+  }
+</script>
+
+</body>
+</html>
