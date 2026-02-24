@@ -523,16 +523,13 @@
       <span class="dot" id="marketDot"></span>
       <span id="marketStatus">Lädt...</span>
     </div>
-      <a href="https://www.interactivebrokers.com/en/trading/tws.php" target="_blank" class="quick-btn primary" title="TWS Download & Info – Starte TWS direkt über dein Desktop-Icon">🖥️ TWS starten</a>
   </div>
 </header>
 
 <!-- NAV -->
 <nav>
   <a href="#morning">☀️ Morning</a>
-  <a href="#pressespiegel">📰 Pressespiegel</a>
-  <a href="#manus-skills">🤖 Manus Skills</a>
-  <a href="#eigene-tools">🛠️ Eigene Tools</a>
+  <a href="#barchart-news">📰 Börsen-News</a>
   <a href="#aktien-etf">📈 Aktien &amp; ETFs</a>
   <a href="#optionen">⚙️ Optionen</a>
   <a href="#futures-cot">📦 Futures &amp; COT</a>
@@ -540,6 +537,8 @@
   <a href="#news-research">📰 News &amp; Research</a>
   <a href="#watchlist">👁️ Watchlist</a>
   <a href="#notizen">📝 Notizen</a>
+  <a href="#eigene-tools-bottom">🛠️ Eigene Tools</a>
+  <a href="#manus-skills-bottom">🤖 Manus Skills</a>
 </nav>
 
 <main>
@@ -552,12 +551,6 @@
       <a href="https://www.meine-geldseite.de" target="_blank" class="personal-btn">🌐 meine-geldseite.de</a>
       <a href="https://www.youtube.com/@meinegeldseite" target="_blank" class="personal-btn">▶️ YouTube Kanal</a>
       <a href="https://meine-geldseite.app.mentortools.com/app/" target="_blank" class="personal-btn">🎓 MentorTools Kursbereich</a>
-    </div>
-
-    <!-- TWS Hinweis -->
-    <div style="background:#fffbeb;border:1px solid #fde68a;border-radius:10px;padding:0.65rem 1rem;margin-bottom:1rem;font-size:0.78rem;color:#92400e;display:flex;align-items:center;gap:0.5rem;">
-      <span>💡</span>
-      <span><strong>TWS starten:</strong> Klicke auf dein Desktop-Verknüpfungssymbol <em>Trader Workstation</em> – oder nutze den Button oben für Download &amp; Info. Browser können lokale Programme aus Sicherheitsgründen nicht direkt starten.</span>
     </div>
 
     <!-- Briefing -->
@@ -575,7 +568,6 @@
     <!-- Quick Access -->
     <div class="quick-bar">
       <span class="quick-bar-label">⚡ Schnellzugriff</span>
-      <a href="https://www.interactivebrokers.com/en/trading/tws.php" target="_blank" class="quick-btn primary" title="TWS Download & Info">🖥️ TWS</a>
       <a href="https://de.tradingview.com" target="_blank" class="quick-btn">📊 TradingView</a>
       <a href="https://stockcharts.com/acp/" target="_blank" class="quick-btn">📉 StockCharts</a>
       <a href="https://menthorq.com/account/" target="_blank" class="quick-btn">🎯 MenthorQ</a>
@@ -585,44 +577,71 @@
       <a href="https://www.optionstrat.com" target="_blank" class="quick-btn">📐 OptionStrat</a>
       <a href="https://terminal.forecaster.biz" target="_blank" class="quick-btn">📅 Forecaster</a>
       <a href="https://traderfox.com" target="_blank" class="quick-btn">🦊 TraderFox</a>
+      <a href="https://www.barchart.com/news" target="_blank" class="quick-btn primary">📰 Barchart News</a>
     </div>
   </section>
 
-  <!-- ===== PRESSESPIEGEL ===== -->
-  <section id="pressespiegel" class="section">
+  <!-- ===== BARCHART NEWS ===== -->
+  <section id="barchart-news" class="section">
     <div class="section-header">
       <span class="section-icon">📰</span>
-      <span class="section-title">Morgen-Pressespiegel</span>
-      <span class="section-badge">Live Börsennachrichten</span>
+      <span class="section-title">Börsen-News</span>
+      <span class="section-badge">Barchart.com – Aktuelle Marktmeldungen</span>
     </div>
-    <div class="news-widget">
-      <div class="news-widget-header">
-        <div class="news-widget-title">
-          📰 Aktuelle Schlagzeilen
-          <span style="font-size:0.68rem;background:#fef3c7;border:1px solid #fde68a;color:#92400e;padding:0.15rem 0.5rem;border-radius:10px;font-weight:600;">LIVE</span>
-        </div>
+    <div style="background:var(--bg-secondary);border:1px solid var(--border);border-radius:14px;overflow:hidden;box-shadow:var(--shadow-sm);">
+      <div style="background:linear-gradient(135deg,#f0f9ff 0%,#e0f2fe 100%);border-bottom:1px solid var(--border);padding:1rem 1.5rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:0.75rem;">
         <div style="display:flex;align-items:center;gap:0.75rem;">
-          <span class="news-widget-meta" id="newsLastUpdate">Wird geladen...</span>
-          <button class="news-refresh-btn" onclick="loadAllNews()">🔄 Aktualisieren</button>
+          <span style="font-size:1.4rem;">📊</span>
+          <div>
+            <div style="font-size:0.88rem;font-weight:700;color:#0c4a6e;">Barchart News &amp; Market Updates</div>
+            <div style="font-size:0.72rem;color:#0369a1;">Professionelle Börsennachrichten, Marktkommentare und Trading-relevante Meldungen</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:0.6rem;flex-wrap:wrap;">
+          <a href="https://www.barchart.com/news" target="_blank" style="display:inline-flex;align-items:center;gap:0.4rem;background:#0284c7;color:white;border:none;border-radius:8px;padding:0.5rem 1.1rem;font-size:0.82rem;font-weight:600;text-decoration:none;transition:all 0.2s;">📰 Alle News öffnen →</a>
+          <a href="https://www.barchart.com/news/stocks" target="_blank" style="display:inline-flex;align-items:center;gap:0.4rem;background:white;color:#0284c7;border:1px solid #7dd3fc;border-radius:8px;padding:0.5rem 1rem;font-size:0.82rem;font-weight:600;text-decoration:none;transition:all 0.2s;">📈 Aktien-News</a>
+          <a href="https://www.barchart.com/news/etfs" target="_blank" style="display:inline-flex;align-items:center;gap:0.4rem;background:white;color:#0284c7;border:1px solid #7dd3fc;border-radius:8px;padding:0.5rem 1rem;font-size:0.82rem;font-weight:600;text-decoration:none;transition:all 0.2s;">🌐 ETF-News</a>
+          <a href="https://www.barchart.com/news/futures" target="_blank" style="display:inline-flex;align-items:center;gap:0.4rem;background:white;color:#0284c7;border:1px solid #7dd3fc;border-radius:8px;padding:0.5rem 1rem;font-size:0.82rem;font-weight:600;text-decoration:none;transition:all 0.2s;">📦 Futures-News</a>
+          <a href="https://www.barchart.com/news/options" target="_blank" style="display:inline-flex;align-items:center;gap:0.4rem;background:white;color:#0284c7;border:1px solid #7dd3fc;border-radius:8px;padding:0.5rem 1rem;font-size:0.82rem;font-weight:600;text-decoration:none;transition:all 0.2s;">⚙️ Options-News</a>
         </div>
       </div>
-      <div class="news-tabs">
-        <button class="news-tab active" onclick="switchTab('all', this)">🌐 Alle</button>
-        <button class="news-tab" onclick="switchTab('de', this)">🇩🇪 Deutsch</button>
-        <button class="news-tab" onclick="switchTab('en', this)">🇺🇸 International</button>
-        <button class="news-tab" onclick="switchTab('tagesschau', this)">📺 Tagesschau</button>
-        <button class="news-tab" onclick="switchTab('handelsblatt', this)">📊 Handelsblatt</button>
-        <button class="news-tab" onclick="switchTab('spiegel', this)">🔴 Spiegel</button>
-        <button class="news-tab" onclick="switchTab('bbc', this)">🇬🇧 BBC</button>
-      </div>
-      <div class="news-list" id="newsList">
-        <div class="news-loading"><span class="news-spinner"></span>Nachrichten werden geladen...</div>
+      <div style="padding:1.25rem 1.5rem;">
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:0.75rem;">
+          <a href="https://www.barchart.com/news" target="_blank" style="display:flex;align-items:center;gap:0.75rem;padding:0.85rem 1rem;background:var(--bg-primary);border:1px solid var(--border);border-radius:10px;text-decoration:none;color:inherit;transition:all 0.2s;" onmouseover="this.style.borderColor='#7dd3fc';this.style.background='#f0f9ff'" onmouseout="this.style.borderColor='';this.style.background='var(--bg-primary)'">
+            <span style="font-size:1.5rem;">🌐</span>
+            <div><div style="font-size:0.85rem;font-weight:700;color:var(--text-primary);">Top Stories</div><div style="font-size:0.72rem;color:var(--text-muted);">Die wichtigsten Marktmeldungen</div></div>
+          </a>
+          <a href="https://www.barchart.com/news/stocks" target="_blank" style="display:flex;align-items:center;gap:0.75rem;padding:0.85rem 1rem;background:var(--bg-primary);border:1px solid var(--border);border-radius:10px;text-decoration:none;color:inherit;transition:all 0.2s;" onmouseover="this.style.borderColor='#7dd3fc';this.style.background='#f0f9ff'" onmouseout="this.style.borderColor='';this.style.background='var(--bg-primary)'">
+            <span style="font-size:1.5rem;">📈</span>
+            <div><div style="font-size:0.85rem;font-weight:700;color:var(--text-primary);">Aktien &amp; Earnings</div><div style="font-size:0.72rem;color:var(--text-muted);">Quartalszahlen, Upgrades, Analysen</div></div>
+          </a>
+          <a href="https://www.barchart.com/news/etfs" target="_blank" style="display:flex;align-items:center;gap:0.75rem;padding:0.85rem 1rem;background:var(--bg-primary);border:1px solid var(--border);border-radius:10px;text-decoration:none;color:inherit;transition:all 0.2s;" onmouseover="this.style.borderColor='#7dd3fc';this.style.background='#f0f9ff'" onmouseout="this.style.borderColor='';this.style.background='var(--bg-primary)'">
+            <span style="font-size:1.5rem;">🌍</span>
+            <div><div style="font-size:0.85rem;font-weight:700;color:var(--text-primary);">ETF News</div><div style="font-size:0.72rem;color:var(--text-muted);">Flows, Sektor-Rotation, neue ETFs</div></div>
+          </a>
+          <a href="https://www.barchart.com/news/futures" target="_blank" style="display:flex;align-items:center;gap:0.75rem;padding:0.85rem 1rem;background:var(--bg-primary);border:1px solid var(--border);border-radius:10px;text-decoration:none;color:inherit;transition:all 0.2s;" onmouseover="this.style.borderColor='#7dd3fc';this.style.background='#f0f9ff'" onmouseout="this.style.borderColor='';this.style.background='var(--bg-primary)'">
+            <span style="font-size:1.5rem;">📦</span>
+            <div><div style="font-size:0.85rem;font-weight:700;color:var(--text-primary);">Futures &amp; Rohstoffe</div><div style="font-size:0.72rem;color:var(--text-muted);">Energie, Metalle, Agrar, Indizes</div></div>
+          </a>
+          <a href="https://www.barchart.com/news/options" target="_blank" style="display:flex;align-items:center;gap:0.75rem;padding:0.85rem 1rem;background:var(--bg-primary);border:1px solid var(--border);border-radius:10px;text-decoration:none;color:inherit;transition:all 0.2s;" onmouseover="this.style.borderColor='#7dd3fc';this.style.background='#f0f9ff'" onmouseout="this.style.borderColor='';this.style.background='var(--bg-primary)'">
+            <span style="font-size:1.5rem;">⚙️</span>
+            <div><div style="font-size:0.85rem;font-weight:700;color:var(--text-primary);">Options News</div><div style="font-size:0.72rem;color:var(--text-muted);">Unusual Activity, IV, Flows</div></div>
+          </a>
+          <a href="https://www.barchart.com/economy" target="_blank" style="display:flex;align-items:center;gap:0.75rem;padding:0.85rem 1rem;background:var(--bg-primary);border:1px solid var(--border);border-radius:10px;text-decoration:none;color:inherit;transition:all 0.2s;" onmouseover="this.style.borderColor='#7dd3fc';this.style.background='#f0f9ff'" onmouseout="this.style.borderColor='';this.style.background='var(--bg-primary)'">
+            <span style="font-size:1.5rem;">🏛️</span>
+            <div><div style="font-size:0.85rem;font-weight:700;color:var(--text-primary);">Wirtschaft &amp; Makro</div><div style="font-size:0.72rem;color:var(--text-muted);">Konjunktur, Fed, Zinsen</div></div>
+          </a>
+        </div>
+        <div style="margin-top:1rem;padding:0.75rem 1rem;background:#f0f9ff;border:1px solid #bae6fd;border-radius:8px;font-size:0.75rem;color:#0369a1;display:flex;align-items:center;gap:0.5rem;">
+          <span>💡</span>
+          <span>Klicke auf eine Kategorie oder den <strong>"Alle News öffnen"</strong>-Button, um direkt zu Barchart zu gelangen. Da Barchart keine externe Einbettung erlaubt, öffnet sich die Seite in einem neuen Tab.</span>
+        </div>
       </div>
     </div>
   </section>
 
   <!-- ===== MANUS SKILLS ===== -->
-  <section id="manus-skills" class="section">
+  <section id="manus-skills" style="display:none;">
     <div class="section-header">
       <span class="section-icon">🤖</span>
       <span class="section-title">Manus Skills – KI-Analysen auf Knopfdruck</span>
@@ -754,7 +773,7 @@
   </section>
 
   <!-- ===== EIGENE TOOLS ===== -->
-  <section id="eigene-tools" class="section">
+  <section id="eigene-tools" style="display:none;">
     <div class="section-header">
       <span class="section-icon">🛠️</span>
       <span class="section-title">Eigene Tools &amp; Dashboards</span>
@@ -1065,6 +1084,156 @@
         <div style="font-size: 0.73rem; color: var(--text-muted); margin-bottom: 0.4rem; font-weight: 600;">Notizen vom Vortag:</div>
         <div style="font-size: 0.82rem; color: var(--text-secondary); font-style: italic; background: var(--bg-primary); padding: 0.75rem; border-radius: 8px; border: 1px solid var(--border);" id="yesterdayNotes">Keine Notizen vom Vortag.</div>
       </div>
+    </div>
+  </section>
+
+  <!-- ===== EIGENE TOOLS (unten) ===== -->
+  <section id="eigene-tools-bottom" class="section">
+    <div class="section-header">
+      <span class="section-icon">🛠️</span>
+      <span class="section-title">Eigene Tools &amp; Dashboards</span>
+      <span class="section-badge">Persönliche Analysetools</span>
+    </div>
+    <div class="card-grid wide">
+
+      <a href="http://www.meine-geldseite.de/momentum" target="_blank" class="card hl-green">
+        <div class="card-top"><span class="card-icon">🚀</span><span class="card-tag tag-live">Live Tool</span></div>
+        <div class="card-title">ETF Momentum Ranking</div>
+        <div class="card-desc">Rangliste der ETFs nach Momentum-Performance über 1 Woche, 4 Wochen und 3 Monate. Identifiziert die stärksten Trends für Sektor-Rotation.</div>
+        <div class="card-footer"><span class="card-url">meine-geldseite.de/momentum</span><span class="card-arrow">→</span></div>
+      </a>
+
+      <a href="http://www.meine-geldseite.de/z-score" target="_blank" class="card hl-purple">
+        <div class="card-top"><span class="card-icon">📊</span><span class="card-tag tag-live">Live Tool</span></div>
+        <div class="card-title">Z-Score Dashboard</div>
+        <div class="card-desc">Signale bei Z-Score ≤ −2 (überverkauft) und ≥ +2 (überkauft) für ausgewählte ETFs. Mean-Reversion-Setups auf einen Blick.</div>
+        <div class="card-footer"><span class="card-url">meine-geldseite.de/z-score</span><span class="card-arrow">→</span></div>
+      </a>
+
+      <a href="http://www.meine-geldseite.de/probability-cone" target="_blank" class="card hl-orange">
+        <div class="card-top"><span class="card-icon">🔮</span><span class="card-tag tag-live">Live Tool</span></div>
+        <div class="card-title">Probability Cone</div>
+        <div class="card-desc">Wahrscheinlichkeitsbasierte Preisprojektion. Zeigt statistische Kurszielkorridore für Options-Strategien und Positionsplanung.</div>
+        <div class="card-footer"><span class="card-url">meine-geldseite.de/probability-cone</span><span class="card-arrow">→</span></div>
+      </a>
+
+      <a href="https://thblees.github.io/makro-dashboard/" target="_blank" class="card hl-blue">
+        <div class="card-top"><span class="card-icon">🌍</span><span class="card-tag tag-live">Live Tool</span></div>
+        <div class="card-title">Makro Dashboard</div>
+        <div class="card-desc">Persönliches Makro-Analyse-Dashboard mit Wirtschaftsindikatoren, Zentralbankdaten und Marktübersicht für USA, Eurozone und Japan.</div>
+        <div class="card-footer"><span class="card-url">thblees.github.io/makro-dashboard</span><span class="card-arrow">→</span></div>
+      </a>
+
+      <a href="https://thblees.github.io/var_rechner/" target="_blank" class="card hl-yellow">
+        <div class="card-top"><span class="card-icon">⚠️</span><span class="card-tag tag-live">Live Tool</span></div>
+        <div class="card-title">VaR Rechner</div>
+        <div class="card-desc">Value-at-Risk Berechnung für Aktien und ETFs. Verlustgrenzen bei 90%, 95%, 99% Konfidenz für 1 Tag, 1 Woche, 1 Monat und 1 Jahr.</div>
+        <div class="card-footer"><span class="card-url">thblees.github.io/var_rechner</span><span class="card-arrow">→</span></div>
+      </a>
+
+      <a href="https://thblees.github.io/cc-rechner/" target="_blank" class="card hl-teal">
+        <div class="card-top"><span class="card-icon">🧮</span><span class="card-tag tag-live">Live Tool</span></div>
+        <div class="card-title">Covered Call Rechner</div>
+        <div class="card-desc">Berechne Prämienrendite, Break-Even und annualisierte Rendite für Covered-Call-Strategien auf deine Positionen.</div>
+        <div class="card-footer"><span class="card-url">thblees.github.io/cc-rechner</span><span class="card-arrow">→</span></div>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- ===== MANUS SKILLS (unten) ===== -->
+  <section id="manus-skills-bottom" class="section">
+    <div class="section-header">
+      <span class="section-icon">🤖</span>
+      <span class="section-title">Manus Skills – KI-Analysen auf Knopfdruck</span>
+      <span class="section-badge">Direkt in Manus starten</span>
+    </div>
+    <div class="card-grid wide">
+
+      <div class="skill-card hl-purple">
+        <div class="card-top"><span class="card-icon">📦</span><span class="card-tag tag-manus">Manus Skill</span></div>
+        <div class="card-title">COT Analyse</div>
+        <div class="card-desc">Analysiert Commitment-of-Traders-Daten auf extreme Positionierungen von Commercials und Large Speculators. Identifiziert Futures-Setups mit historischen Erfolgsquoten und Open-Interest-Mustern.</div>
+        <a href="https://manus.im/app?prompt=Starte+den+COT+Analyzer+Skill+und+analysiere+aktuelle+COT+Daten+auf+extreme+Positionierungen+und+Trading+Setups" target="_blank" class="skill-btn">🚀 COT Analyse starten</a>
+      </div>
+
+      <div class="skill-card hl-purple">
+        <div class="card-top"><span class="card-icon">💡</span><span class="card-tag tag-manus">Manus Skill</span></div>
+        <div class="card-title">Investment Thesen Finder</div>
+        <div class="card-desc">Sucht systematisch nach handlungsfähigen Investment-Thesen basierend auf Makro-Trends, Demografie, Sektoren und regionalen Themen. Findet konkrete Instrumente (ETFs, Aktien, Futures).</div>
+        <a href="https://manus.im/app?prompt=Starte+den+Investment+Thesis+Finder+Skill+und+suche+nach+aktuellen+Investment+Thesen+und+Ideen" target="_blank" class="skill-btn">🚀 Thesen suchen</a>
+      </div>
+
+      <div class="skill-card hl-purple">
+        <div class="card-top"><span class="card-icon">🚀</span><span class="card-tag tag-manus">Manus Skill</span></div>
+        <div class="card-title">ETF Momentum Analyse</div>
+        <div class="card-desc">Analysiert und rankt globale Markt-ETFs nach Momentum-Performance über 1 Woche, 4 Wochen und 3 Monate. Identifiziert die stärksten Regionen und Sektoren für Sektor-Rotation.</div>
+        <a href="https://manus.im/app?prompt=Starte+den+ETF+Momentum+Trader+Skill+und+erstelle+ein+aktuelles+Momentum+Ranking+der+wichtigsten+ETFs" target="_blank" class="skill-btn">🚀 Momentum Ranking</a>
+      </div>
+
+      <div class="skill-card hl-purple">
+        <div class="card-top"><span class="card-icon">🌍</span><span class="card-tag tag-manus">Manus Skill</span></div>
+        <div class="card-title">Makro Zyklusanalyse</div>
+        <div class="card-desc">Umfassende makroökonomische Analyse für USA, Eurozone und Japan. Bestimmt die aktuelle Phase des Wirtschaftszyklus und generiert Asset-Allokations-Empfehlungen mit konkreten ETFs.</div>
+        <a href="https://manus.im/app?prompt=Starte+den+Macro+Cycle+Analyst+Skill+und+erstelle+eine+aktuelle+Makroanalyse+mit+Asset+Allokations+Empfehlungen" target="_blank" class="skill-btn">🚀 Makro Analyse</a>
+      </div>
+
+      <div class="skill-card hl-purple">
+        <div class="card-top"><span class="card-icon">⚙️</span><span class="card-tag tag-manus">Manus Skill</span></div>
+        <div class="card-title">Optionsexperte</div>
+        <div class="card-desc">Options-Strategie-Empfehlungen mit Market-Maker-Expertise. Analysiert Greeks, IV-Metriken, Gamma-Daten und empfiehlt optimale Strategien mit Risikoberechnung.</div>
+        <a href="https://manus.im/app?prompt=Starte+den+Optionsexperte+Skill+und+analysiere+aktuelle+Options+Setups+und+Strategien" target="_blank" class="skill-btn">🚀 Options Analyse</a>
+      </div>
+
+      <div class="skill-card hl-purple">
+        <div class="card-top"><span class="card-icon">🔄</span><span class="card-tag tag-manus">Manus Skill</span></div>
+        <div class="card-title">Sektor Rotation Detector</div>
+        <div class="card-desc">Erkennt Sektor-Rotations-Signale durch Analyse makroökonomischer Indikatoren. Identifiziert welche Sektoren in den nächsten 6–12 Monaten outperformen oder underperformen werden.</div>
+        <a href="https://manus.im/app?prompt=Starte+den+Sector+Rotation+Detector+Skill+und+analysiere+aktuelle+Sektor+Rotations+Signale" target="_blank" class="skill-btn">🚀 Sektor Rotation</a>
+      </div>
+
+      <div class="skill-card hl-purple">
+        <div class="card-top"><span class="card-icon">🎯</span><span class="card-tag tag-manus">Manus Skill</span></div>
+        <div class="card-title">Gamma Newsletter Analyst</div>
+        <div class="card-desc">Analysiert MenthorQ Gamma-Charts und erstellt kompakte Newsletter-Texte mit Trading-Empfehlungen (Einstieg, Stopp, Ziel) für einen 4-Wochen-Horizont.</div>
+        <a href="https://manus.im/app?prompt=Starte+den+Gamma+Newsletter+Analyst+Skill+und+erstelle+eine+Gamma+Analyse+mit+Trading+Empfehlungen" target="_blank" class="skill-btn">🚀 Gamma Analyse</a>
+      </div>
+
+      <div class="skill-card hl-purple">
+        <div class="card-top"><span class="card-icon">⚠️</span><span class="card-tag tag-manus">Manus Skill</span></div>
+        <div class="card-title">Risikomanager</div>
+        <div class="card-desc">Professionelle Risikoanalyse nach Hedgefonds-Standard. Prüft Investmentthesen auf makroökonomische Risiken, Piotroski F-Score, Altman Z-Score und agiert als Devil’s Advocate.</div>
+        <a href="https://manus.im/app?prompt=Starte+den+Risikomanager+Skill+und+analysiere+die+Risiken+meiner+aktuellen+Investmentthese" target="_blank" class="skill-btn">🚀 Risikoanalyse</a>
+      </div>
+
+      <div class="skill-card hl-purple">
+        <div class="card-top"><span class="card-icon">📊</span><span class="card-tag tag-manus">Manus Skill</span></div>
+        <div class="card-title">Investment Entscheider</div>
+        <div class="card-desc">Systematischer Entscheidungsrahmen für Long-, Short- oder Neutral-Positionen. Analysiert Makro-Faktoren, Multi-Timeframe-Trends, technische Struktur und Saisonalität.</div>
+        <a href="https://manus.im/app?prompt=Starte+den+Investment+Entscheider+Skill+und+hilf+mir+bei+einer+Investment+Entscheidung" target="_blank" class="skill-btn">🚀 Entscheidung treffen</a>
+      </div>
+
+      <div class="skill-card hl-purple">
+        <div class="card-top"><span class="card-icon">📈</span><span class="card-tag tag-manus">Manus Skill</span></div>
+        <div class="card-title">Aktienanalyst</div>
+        <div class="card-desc">Fundamentale Aktienanalyse für Privatinvestoren. Analysiert Bilanzen, GuV, Cashflow und wichtige Kennzahlen. Vergleicht mit Wettbewerbern und liefert Investmenteinschätzung.</div>
+        <a href="https://manus.im/app?prompt=Starte+den+Aktienanalyst+Skill+und+analysiere+eine+Aktie+fundamental" target="_blank" class="skill-btn">🚀 Aktie analysieren</a>
+      </div>
+
+      <div class="skill-card hl-purple">
+        <div class="card-top"><span class="card-icon">📉</span><span class="card-tag tag-manus">Manus Skill</span></div>
+        <div class="card-title">VaR Rechner (Skill)</div>
+        <div class="card-desc">Berechnet vollautomatisch Value-at-Risk für Aktien/ETFs. Erstellt Excel und HTML-Dashboard mit Verlustgrenzen bei 90%, 95%, 99% Konfidenz für verschiedene Zeiträume.</div>
+        <a href="https://manus.im/app?prompt=Starte+den+VaR+Rechner+Skill+und+berechne+den+Value+at+Risk+fuer+mein+Portfolio" target="_blank" class="skill-btn">🚀 VaR berechnen</a>
+      </div>
+
+      <div class="skill-card hl-purple">
+        <div class="card-top"><span class="card-icon">🌐</span><span class="card-tag tag-manus">Manus Skill</span></div>
+        <div class="card-title">Index Momentum Trader</div>
+        <div class="card-desc">Analysiert und rankt wichtige Marktindizes (US + Europa) nach Momentum. Vergleicht NYSE, NASDAQ, S&amp;P, DAX, Euro Stoxx 50 über 1 Woche, 4 Wochen und 3 Monate.</div>
+        <a href="https://manus.im/app?prompt=Starte+den+Index+Momentum+Trader+Skill+und+erstelle+ein+aktuelles+Index+Momentum+Ranking" target="_blank" class="skill-btn">🚀 Index Ranking</a>
+      </div>
+
     </div>
   </section>
 
