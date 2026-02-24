@@ -400,6 +400,99 @@
     }
     .watchlist-item button:hover { color: var(--accent-red); }
 
+    /* ===== PRESSESPIEGEL ===== */
+    .news-widget {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 0;
+      margin-bottom: 1.5rem;
+      box-shadow: var(--shadow-sm);
+      overflow: hidden;
+    }
+    .news-widget-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0.9rem 1.25rem;
+      border-bottom: 1px solid var(--border);
+      background: linear-gradient(135deg, #fef9f0 0%, #fef3e2 100%);
+    }
+    .news-widget-title {
+      display: flex; align-items: center; gap: 0.6rem;
+      font-size: 0.88rem; font-weight: 700; color: #92400e;
+    }
+    .news-widget-meta {
+      font-size: 0.7rem; color: var(--text-muted);
+    }
+    .news-tabs {
+      display: flex; gap: 0;
+      padding: 0 1.25rem;
+      border-bottom: 1px solid var(--border);
+      background: var(--bg-secondary);
+      overflow-x: auto;
+    }
+    .news-tab {
+      padding: 0.55rem 0.9rem;
+      font-size: 0.75rem; font-weight: 600;
+      color: var(--text-muted);
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      white-space: nowrap;
+      transition: all 0.2s;
+      background: none; border-top: none; border-left: none; border-right: none;
+    }
+    .news-tab:hover { color: var(--accent-blue); }
+    .news-tab.active { color: var(--accent-blue); border-bottom-color: var(--accent-blue); }
+    .news-list {
+      padding: 0.5rem 0;
+      max-height: 340px;
+      overflow-y: auto;
+    }
+    .news-item {
+      display: flex; align-items: flex-start; gap: 0.75rem;
+      padding: 0.65rem 1.25rem;
+      border-bottom: 1px solid var(--border);
+      transition: background 0.15s;
+      text-decoration: none; color: inherit;
+    }
+    .news-item:last-child { border-bottom: none; }
+    .news-item:hover { background: var(--bg-card-hover); }
+    .news-item-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--accent-blue); flex-shrink: 0; margin-top: 0.45rem;
+    }
+    .news-item-content { flex: 1; min-width: 0; }
+    .news-item-title {
+      font-size: 0.82rem; font-weight: 600; color: var(--text-primary);
+      line-height: 1.4; margin-bottom: 0.2rem;
+      display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+    }
+    .news-item-meta {
+      font-size: 0.68rem; color: var(--text-muted);
+      display: flex; gap: 0.5rem; align-items: center;
+    }
+    .news-item-source {
+      background: var(--bg-primary); border: 1px solid var(--border);
+      border-radius: 4px; padding: 0.1rem 0.4rem;
+      font-weight: 600; font-size: 0.65rem;
+    }
+    .news-loading {
+      padding: 2rem; text-align: center;
+      color: var(--text-muted); font-size: 0.82rem;
+    }
+    .news-spinner {
+      display: inline-block; width: 18px; height: 18px;
+      border: 2px solid var(--border); border-top-color: var(--accent-blue);
+      border-radius: 50%; animation: spin 0.8s linear infinite; margin-right: 0.5rem;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .news-refresh-btn {
+      background: none; border: 1px solid var(--border);
+      border-radius: 6px; padding: 0.25rem 0.6rem;
+      font-size: 0.72rem; color: var(--text-muted);
+      cursor: pointer; transition: all 0.2s;
+    }
+    .news-refresh-btn:hover { border-color: var(--accent-blue); color: var(--accent-blue); }
+
     /* ===== FOOTER ===== */
     footer {
       text-align: center; padding: 2rem;
@@ -437,6 +530,7 @@
 <!-- NAV -->
 <nav>
   <a href="#morning">☀️ Morning</a>
+  <a href="#pressespiegel">📰 Pressespiegel</a>
   <a href="#manus-skills">🤖 Manus Skills</a>
   <a href="#eigene-tools">🛠️ Eigene Tools</a>
   <a href="#aktien-etf">📈 Aktien &amp; ETFs</a>
@@ -491,6 +585,39 @@
       <a href="https://www.optionstrat.com" target="_blank" class="quick-btn">📐 OptionStrat</a>
       <a href="https://terminal.forecaster.biz" target="_blank" class="quick-btn">📅 Forecaster</a>
       <a href="https://traderfox.com" target="_blank" class="quick-btn">🦊 TraderFox</a>
+    </div>
+  </section>
+
+  <!-- ===== PRESSESPIEGEL ===== -->
+  <section id="pressespiegel" class="section">
+    <div class="section-header">
+      <span class="section-icon">📰</span>
+      <span class="section-title">Morgen-Pressespiegel</span>
+      <span class="section-badge">Live Börsennachrichten</span>
+    </div>
+    <div class="news-widget">
+      <div class="news-widget-header">
+        <div class="news-widget-title">
+          📰 Aktuelle Schlagzeilen
+          <span style="font-size:0.68rem;background:#fef3c7;border:1px solid #fde68a;color:#92400e;padding:0.15rem 0.5rem;border-radius:10px;font-weight:600;">LIVE</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:0.75rem;">
+          <span class="news-widget-meta" id="newsLastUpdate">Wird geladen...</span>
+          <button class="news-refresh-btn" onclick="loadAllNews()">🔄 Aktualisieren</button>
+        </div>
+      </div>
+      <div class="news-tabs">
+        <button class="news-tab active" onclick="switchTab('all', this)">🌐 Alle</button>
+        <button class="news-tab" onclick="switchTab('de', this)">🇩🇪 Deutsch</button>
+        <button class="news-tab" onclick="switchTab('en', this)">🇺🇸 International</button>
+        <button class="news-tab" onclick="switchTab('tagesschau', this)">📺 Tagesschau</button>
+        <button class="news-tab" onclick="switchTab('handelsblatt', this)">📊 Handelsblatt</button>
+        <button class="news-tab" onclick="switchTab('spiegel', this)">🔴 Spiegel</button>
+        <button class="news-tab" onclick="switchTab('bbc', this)">🇬🇧 BBC</button>
+      </div>
+      <div class="news-list" id="newsList">
+        <div class="news-loading"><span class="news-spinner"></span>Nachrichten werden geladen...</div>
+      </div>
     </div>
   </section>
 
@@ -1057,6 +1184,160 @@
   }
   setInterval(() => { const v = document.getElementById('notesArea').value; if (v) localStorage.setItem(todayKey(), v); }, 30000);
   loadNotes();
+
+  // ===== PRESSESPIEGEL =====
+  const NEWS_FEEDS = [
+    {
+      id: 'tagesschau',
+      name: 'Tagesschau Wirtschaft',
+      flag: '📺',
+      lang: 'de',
+      url: 'https://www.tagesschau.de/wirtschaft/index~rss2.xml',
+      color: '#2563eb'
+    },
+    {
+      id: 'handelsblatt',
+      name: 'Handelsblatt',
+      flag: '📊',
+      lang: 'de',
+      url: 'https://www.handelsblatt.com/contentexport/feed/top-themen',
+      color: '#16a34a'
+    },
+    {
+      id: 'spiegel',
+      name: 'Spiegel Wirtschaft',
+      flag: '🔴',
+      lang: 'de',
+      url: 'https://www.spiegel.de/wirtschaft/index.rss',
+      color: '#dc2626'
+    },
+    {
+      id: 'bbc',
+      name: 'BBC Business',
+      flag: '🇬🇧',
+      lang: 'en',
+      url: 'https://feeds.bbci.co.uk/news/business/rss.xml',
+      color: '#7c3aed'
+    },
+    {
+      id: 'ntv',
+      name: 'n-tv Wirtschaft',
+      flag: '📡',
+      lang: 'de',
+      url: 'https://www.n-tv.de/rss',
+      color: '#0891b2'
+    }
+  ];
+
+  let allNewsItems = [];
+  let currentTab = 'all';
+
+  async function fetchFeed(feed) {
+    // Use allorigins as CORS proxy
+    const proxyUrl = 'https://api.allorigins.win/get?url=' + encodeURIComponent(feed.url);
+    try {
+      const res = await fetch(proxyUrl);
+      const data = await res.json();
+      if (!data.contents) return [];
+      const parser = new DOMParser();
+      const xml = parser.parseFromString(data.contents, 'text/xml');
+      const items = xml.querySelectorAll('item');
+      const results = [];
+      items.forEach(item => {
+        const title = item.querySelector('title');
+        const link  = item.querySelector('link');
+        const pubDate = item.querySelector('pubDate');
+        const desc = item.querySelector('description');
+        if (title && title.textContent.trim()) {
+          results.push({
+            title: title.textContent.trim(),
+            link:  link ? (link.textContent.trim() || link.getAttribute('href') || '#') : '#',
+            date:  pubDate ? new Date(pubDate.textContent) : new Date(),
+            source: feed.name,
+            sourceId: feed.id,
+            lang: feed.lang,
+            color: feed.color,
+            flag: feed.flag
+          });
+        }
+      });
+      return results;
+    } catch(e) {
+      console.warn('Feed error:', feed.name, e);
+      return [];
+    }
+  }
+
+  function formatTimeAgo(date) {
+    const diff = Math.floor((Date.now() - date.getTime()) / 60000);
+    if (diff < 1)  return 'gerade eben';
+    if (diff < 60) return 'vor ' + diff + ' Min.';
+    const h = Math.floor(diff / 60);
+    if (h < 24)    return 'vor ' + h + ' Std.';
+    return date.toLocaleDateString('de-DE', {day:'2-digit', month:'2-digit'});
+  }
+
+  function renderNews(items) {
+    const list = document.getElementById('newsList');
+    if (!items.length) {
+      list.innerHTML = '<div class="news-loading">Keine Nachrichten verfügbar.</div>';
+      return;
+    }
+    list.innerHTML = items.map(item => `
+      <a href="${item.link}" target="_blank" class="news-item">
+        <div class="news-item-dot" style="background:${item.color}"></div>
+        <div class="news-item-content">
+          <div class="news-item-title">${item.title}</div>
+          <div class="news-item-meta">
+            <span class="news-item-source" style="color:${item.color}">${item.flag} ${item.source}</span>
+            <span>${formatTimeAgo(item.date)}</span>
+          </div>
+        </div>
+      </a>
+    `).join('');
+  }
+
+  function switchTab(tab, btn) {
+    currentTab = tab;
+    document.querySelectorAll('.news-tab').forEach(t => t.classList.remove('active'));
+    btn.classList.add('active');
+    let filtered;
+    if (tab === 'all')  filtered = allNewsItems;
+    else if (tab === 'de') filtered = allNewsItems.filter(i => i.lang === 'de');
+    else if (tab === 'en') filtered = allNewsItems.filter(i => i.lang === 'en');
+    else filtered = allNewsItems.filter(i => i.sourceId === tab);
+    renderNews(filtered);
+  }
+
+  async function loadAllNews() {
+    const list = document.getElementById('newsList');
+    list.innerHTML = '<div class="news-loading"><span class="news-spinner"></span>Nachrichten werden geladen...</div>';
+    document.getElementById('newsLastUpdate').textContent = 'Wird aktualisiert...';
+
+    const results = await Promise.allSettled(NEWS_FEEDS.map(f => fetchFeed(f)));
+    allNewsItems = [];
+    results.forEach(r => { if (r.status === 'fulfilled') allNewsItems.push(...r.value); });
+
+    // Sort by date descending
+    allNewsItems.sort((a, b) => b.date - a.date);
+
+    const now = new Date();
+    document.getElementById('newsLastUpdate').textContent =
+      'Zuletzt: ' + now.toLocaleTimeString('de-DE', {hour:'2-digit', minute:'2-digit'});
+
+    // Re-apply current tab filter
+    let filtered;
+    if (currentTab === 'all')  filtered = allNewsItems;
+    else if (currentTab === 'de') filtered = allNewsItems.filter(i => i.lang === 'de');
+    else if (currentTab === 'en') filtered = allNewsItems.filter(i => i.lang === 'en');
+    else filtered = allNewsItems.filter(i => i.sourceId === currentTab);
+    renderNews(filtered);
+  }
+
+  // Load on startup, refresh every 15 minutes
+  loadAllNews();
+  setInterval(loadAllNews, 15 * 60 * 1000);
+
 </script>
 </body>
 </html>
