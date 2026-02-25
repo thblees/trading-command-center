@@ -2,6 +2,86 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8" />
+  <style>
+    #pw-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: #0f1117;
+      z-index: 99999;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      font-family: 'Segoe UI', sans-serif;
+    }
+    #pw-overlay.active { display: flex; }
+    #pw-box {
+      background: #1a1d27;
+      border: 1px solid #3d4468;
+      border-radius: 16px;
+      padding: 40px 48px;
+      text-align: center;
+      max-width: 380px;
+      width: 90%;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.6);
+    }
+    #pw-box h2 { color: #e8eaf0; font-size: 1.4rem; margin-bottom: 6px; }
+    #pw-box p  { color: #a0a8c0; font-size: 0.9rem; margin-bottom: 24px; }
+    #pw-input {
+      width: 100%;
+      padding: 12px 16px;
+      border-radius: 8px;
+      border: 1px solid #3d4468;
+      background: #0f1117;
+      color: #e8eaf0;
+      font-size: 1.1rem;
+      text-align: center;
+      letter-spacing: 4px;
+      margin-bottom: 16px;
+      outline: none;
+    }
+    #pw-input:focus { border-color: #4d8ef0; }
+    #pw-btn {
+      width: 100%;
+      padding: 12px;
+      border-radius: 8px;
+      border: none;
+      background: #4d8ef0;
+      color: #fff;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    #pw-btn:hover { background: #3a7de0; }
+    #pw-error { color: #f87171; font-size: 0.85rem; margin-top: 10px; display: none; }
+  </style>
+  <script>
+    (function() {
+      var CORRECT = '130364';
+      var KEY = 'tcc_auth';
+      if (localStorage.getItem(KEY) !== 'ok') {
+        document.addEventListener('DOMContentLoaded', function() {
+          document.getElementById('pw-overlay').classList.add('active');
+          document.getElementById('pw-input').focus();
+        });
+      }
+    })();
+    function checkPassword() {
+      var val = document.getElementById('pw-input').value;
+      if (val === '130364') {
+        localStorage.setItem('tcc_auth', 'ok');
+        document.getElementById('pw-overlay').classList.remove('active');
+      } else {
+        var err = document.getElementById('pw-error');
+        err.style.display = 'block';
+        err.textContent = 'Falsches Passwort. Bitte erneut versuchen.';
+        document.getElementById('pw-input').value = '';
+        document.getElementById('pw-input').focus();
+      }
+    }
+    function pwKeydown(e) { if (e.key === 'Enter') checkPassword(); }
+  </script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Trading Command Center</title>
   <style>
@@ -575,6 +655,18 @@
   </style>
 </head>
 <body>
+
+<!-- ===== PASSWORT-OVERLAY ===== -->
+<div id="pw-overlay">
+  <div id="pw-box">
+    <h2>🔒 Trading Command Center</h2>
+    <p>Bitte Passwort eingeben um fortzufahren</p>
+    <input type="password" id="pw-input" placeholder="Passwort" onkeydown="pwKeydown(event)" autocomplete="current-password" />
+    <button id="pw-btn" onclick="checkPassword()">Einloggen</button>
+    <div id="pw-error"></div>
+  </div>
+</div>
+
 
 <!-- HEADER -->
 <header>
