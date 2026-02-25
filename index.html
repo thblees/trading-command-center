@@ -731,6 +731,7 @@
   <a href="#nuetzliche-links">🔗 Nützliche Links</a>
   <a href="#watchlist">👁️ Watchlist</a>
   <a href="#notizen">📝 Notizen</a>
+  <a href="#journal">📒 Journal</a>
 </nav>
 
 <main>
@@ -1745,6 +1746,191 @@
     </div>
   </section>
 
+
+  <!-- ===== TRADING JOURNAL ===== -->
+  <section id="journal" class="section">
+    <div class="section-header">
+      <span class="section-icon">📒</span>
+      <span class="section-title">Trading Journal</span>
+      <span class="section-badge">Trades, Setups, Auswertung</span>
+    </div>
+
+    <!-- JOURNAL TOOLBAR -->
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:0.75rem;margin-bottom:1rem;">
+      <div style="display:flex;gap:0.5rem;flex-wrap:wrap;">
+        <button onclick="openJournalModal()" style="display:inline-flex;align-items:center;gap:0.4rem;background:var(--accent-blue);color:white;border:none;border-radius:8px;padding:0.5rem 1.1rem;font-size:0.85rem;font-weight:600;cursor:pointer;transition:all 0.2s;">+ Neuer Trade</button>
+        <button onclick="exportJournalCSV()" style="display:inline-flex;align-items:center;gap:0.4rem;background:var(--accent-green);color:white;border:none;border-radius:8px;padding:0.5rem 1.1rem;font-size:0.85rem;font-weight:600;cursor:pointer;transition:all 0.2s;">&#x2193; CSV Export</button>
+        <button onclick="exportJournalExcel()" style="display:inline-flex;align-items:center;gap:0.4rem;background:#16a34a;color:white;border:none;border-radius:8px;padding:0.5rem 1.1rem;font-size:0.85rem;font-weight:600;cursor:pointer;transition:all 0.2s;">&#x1F4C5; Excel Export</button>
+      </div>
+      <div style="display:flex;gap:0.5rem;align-items:center;flex-wrap:wrap;">
+        <input type="text" id="journalSearch" placeholder="Suche nach Symbol, Setup..." oninput="renderJournalTable()" style="padding:0.4rem 0.85rem;border-radius:8px;border:1px solid var(--border);background:var(--bg-primary);color:var(--text-primary);font-size:0.82rem;outline:none;width:220px;" />
+        <select id="journalFilterDir" onchange="renderJournalTable()" style="padding:0.4rem 0.75rem;border-radius:8px;border:1px solid var(--border);background:var(--bg-primary);color:var(--text-primary);font-size:0.82rem;outline:none;">
+          <option value="">Alle Richtungen</option>
+          <option value="Long">Long</option>
+          <option value="Short">Short</option>
+        </select>
+        <select id="journalFilterResult" onchange="renderJournalTable()" style="padding:0.4rem 0.75rem;border-radius:8px;border:1px solid var(--border);background:var(--bg-primary);color:var(--text-primary);font-size:0.82rem;outline:none;">
+          <option value="">Alle Ergebnisse</option>
+          <option value="Win">Win</option>
+          <option value="Loss">Loss</option>
+          <option value="Breakeven">Breakeven</option>
+          <option value="Offen">Offen</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- JOURNAL STATS -->
+    <div id="journalStats" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:0.75rem;margin-bottom:1.25rem;"></div>
+
+    <!-- JOURNAL TABLE -->
+    <div style="background:var(--bg-secondary);border:1px solid var(--border);border-radius:12px;overflow:hidden;box-shadow:var(--shadow-sm);">
+      <div style="overflow-x:auto;">
+        <table id="journalTable" style="width:100%;border-collapse:collapse;font-size:0.8rem;">
+          <thead>
+            <tr style="background:var(--bg-primary);border-bottom:2px solid var(--border);">
+              <th style="padding:0.7rem 1rem;text-align:left;font-size:0.72rem;text-transform:uppercase;letter-spacing:0.05em;color:var(--text-muted);white-space:nowrap;">Datum</th>
+              <th style="padding:0.7rem 0.75rem;text-align:left;font-size:0.72rem;text-transform:uppercase;letter-spacing:0.05em;color:var(--text-muted);white-space:nowrap;">Symbol</th>
+              <th style="padding:0.7rem 0.75rem;text-align:left;font-size:0.72rem;text-transform:uppercase;letter-spacing:0.05em;color:var(--text-muted);white-space:nowrap;">Richtung</th>
+              <th style="padding:0.7rem 0.75rem;text-align:left;font-size:0.72rem;text-transform:uppercase;letter-spacing:0.05em;color:var(--text-muted);white-space:nowrap;">Setup</th>
+              <th style="padding:0.7rem 0.75rem;text-align:right;font-size:0.72rem;text-transform:uppercase;letter-spacing:0.05em;color:var(--text-muted);white-space:nowrap;">Einstieg</th>
+              <th style="padding:0.7rem 0.75rem;text-align:right;font-size:0.72rem;text-transform:uppercase;letter-spacing:0.05em;color:var(--text-muted);white-space:nowrap;">Kursziel</th>
+              <th style="padding:0.7rem 0.75rem;text-align:right;font-size:0.72rem;text-transform:uppercase;letter-spacing:0.05em;color:var(--text-muted);white-space:nowrap;">Stop Loss</th>
+              <th style="padding:0.7rem 0.75rem;text-align:right;font-size:0.72rem;text-transform:uppercase;letter-spacing:0.05em;color:var(--text-muted);white-space:nowrap;">Pos.-Größe</th>
+              <th style="padding:0.7rem 0.75rem;text-align:left;font-size:0.72rem;text-transform:uppercase;letter-spacing:0.05em;color:var(--text-muted);white-space:nowrap;">Ergebnis</th>
+              <th style="padding:0.7rem 0.75rem;text-align:right;font-size:0.72rem;text-transform:uppercase;letter-spacing:0.05em;color:var(--text-muted);white-space:nowrap;">P&amp;L</th>
+              <th style="padding:0.7rem 0.75rem;text-align:center;font-size:0.72rem;text-transform:uppercase;letter-spacing:0.05em;color:var(--text-muted);white-space:nowrap;">Chart</th>
+              <th style="padding:0.7rem 0.75rem;text-align:center;font-size:0.72rem;text-transform:uppercase;letter-spacing:0.05em;color:var(--text-muted);white-space:nowrap;">Aktionen</th>
+            </tr>
+          </thead>
+          <tbody id="journalTbody">
+            <tr><td colspan="12" style="padding:2.5rem;text-align:center;color:var(--text-muted);font-size:0.85rem;">Noch keine Trades eingetragen. Klicke auf &ldquo;+ Neuer Trade&rdquo; um zu starten.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div style="margin-top:0.6rem;font-size:0.72rem;color:var(--text-muted);">Einträge werden lokal im Browser gespeichert. Nutze den Export-Button um eine Sicherungskopie in Google Drive abzulegen.</div>
+  </section>
+
+  <!-- JOURNAL MODAL -->
+  <div id="journalModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:9999;align-items:center;justify-content:center;padding:1rem;">
+    <div style="background:var(--bg-secondary);border:1px solid var(--border);border-radius:16px;padding:2rem;max-width:680px;width:100%;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,0.4);">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;">
+        <h3 id="journalModalTitle" style="font-size:1.05rem;font-weight:700;color:var(--text-primary);">Neuer Trade</h3>
+        <button onclick="closeJournalModal()" style="background:none;border:none;font-size:1.4rem;cursor:pointer;color:var(--text-muted);line-height:1;">&times;</button>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+
+        <!-- Datum -->
+        <div>
+          <label style="font-size:0.75rem;font-weight:600;color:var(--text-secondary);display:block;margin-bottom:0.3rem;">Datum *</label>
+          <input type="date" id="jDate" style="width:100%;padding:0.5rem 0.75rem;border-radius:8px;border:1px solid var(--border);background:var(--bg-primary);color:var(--text-primary);font-size:0.85rem;outline:none;" />
+        </div>
+
+        <!-- Symbol -->
+        <div>
+          <label style="font-size:0.75rem;font-weight:600;color:var(--text-secondary);display:block;margin-bottom:0.3rem;">Symbol / Instrument *</label>
+          <input type="text" id="jSymbol" placeholder="z.B. SPY, AAPL, ES" style="width:100%;padding:0.5rem 0.75rem;border-radius:8px;border:1px solid var(--border);background:var(--bg-primary);color:var(--text-primary);font-size:0.85rem;outline:none;" />
+        </div>
+
+        <!-- Richtung -->
+        <div>
+          <label style="font-size:0.75rem;font-weight:600;color:var(--text-secondary);display:block;margin-bottom:0.3rem;">Richtung *</label>
+          <select id="jDirection" style="width:100%;padding:0.5rem 0.75rem;border-radius:8px;border:1px solid var(--border);background:var(--bg-primary);color:var(--text-primary);font-size:0.85rem;outline:none;">
+            <option value="Long">Long</option>
+            <option value="Short">Short</option>
+          </select>
+        </div>
+
+        <!-- Setup -->
+        <div>
+          <label style="font-size:0.75rem;font-weight:600;color:var(--text-secondary);display:block;margin-bottom:0.3rem;">Setup / Strategie</label>
+          <input type="text" id="jSetup" placeholder="z.B. Breakout, DWHI, Momentum" style="width:100%;padding:0.5rem 0.75rem;border-radius:8px;border:1px solid var(--border);background:var(--bg-primary);color:var(--text-primary);font-size:0.85rem;outline:none;" />
+        </div>
+
+        <!-- Einstieg -->
+        <div>
+          <label style="font-size:0.75rem;font-weight:600;color:var(--text-secondary);display:block;margin-bottom:0.3rem;">Einstiegskurs</label>
+          <input type="number" id="jEntry" step="0.01" placeholder="0.00" style="width:100%;padding:0.5rem 0.75rem;border-radius:8px;border:1px solid var(--border);background:var(--bg-primary);color:var(--text-primary);font-size:0.85rem;outline:none;" />
+        </div>
+
+        <!-- Kursziel -->
+        <div>
+          <label style="font-size:0.75rem;font-weight:600;color:var(--text-secondary);display:block;margin-bottom:0.3rem;">Kursziel</label>
+          <input type="number" id="jTarget" step="0.01" placeholder="0.00" style="width:100%;padding:0.5rem 0.75rem;border-radius:8px;border:1px solid var(--border);background:var(--bg-primary);color:var(--text-primary);font-size:0.85rem;outline:none;" />
+        </div>
+
+        <!-- Stop Loss -->
+        <div>
+          <label style="font-size:0.75rem;font-weight:600;color:var(--text-secondary);display:block;margin-bottom:0.3rem;">Stop Loss</label>
+          <input type="number" id="jStop" step="0.01" placeholder="0.00" style="width:100%;padding:0.5rem 0.75rem;border-radius:8px;border:1px solid var(--border);background:var(--bg-primary);color:var(--text-primary);font-size:0.85rem;outline:none;" />
+        </div>
+
+        <!-- Positionsgröße -->
+        <div>
+          <label style="font-size:0.75rem;font-weight:600;color:var(--text-secondary);display:block;margin-bottom:0.3rem;">Positionsgröße (Stk / Kontrakte)</label>
+          <input type="number" id="jSize" step="1" placeholder="0" style="width:100%;padding:0.5rem 0.75rem;border-radius:8px;border:1px solid var(--border);background:var(--bg-primary);color:var(--text-primary);font-size:0.85rem;outline:none;" />
+        </div>
+
+        <!-- Ergebnis -->
+        <div>
+          <label style="font-size:0.75rem;font-weight:600;color:var(--text-secondary);display:block;margin-bottom:0.3rem;">Ergebnis</label>
+          <select id="jResult" style="width:100%;padding:0.5rem 0.75rem;border-radius:8px;border:1px solid var(--border);background:var(--bg-primary);color:var(--text-primary);font-size:0.85rem;outline:none;">
+            <option value="Offen">Offen</option>
+            <option value="Win">Win</option>
+            <option value="Loss">Loss</option>
+            <option value="Breakeven">Breakeven</option>
+          </select>
+        </div>
+
+        <!-- P&L -->
+        <div>
+          <label style="font-size:0.75rem;font-weight:600;color:var(--text-secondary);display:block;margin-bottom:0.3rem;">P&amp;L (€ / $)</label>
+          <input type="number" id="jPnl" step="0.01" placeholder="0.00" style="width:100%;padding:0.5rem 0.75rem;border-radius:8px;border:1px solid var(--border);background:var(--bg-primary);color:var(--text-primary);font-size:0.85rem;outline:none;" />
+        </div>
+
+      </div>
+
+      <!-- Gedanken / Begründung -->
+      <div style="margin-top:1rem;">
+        <label style="font-size:0.75rem;font-weight:600;color:var(--text-secondary);display:block;margin-bottom:0.3rem;">Gedanken &amp; Begründung</label>
+        <textarea id="jNotes" rows="3" placeholder="Warum dieser Trade? Was hat das Setup ausgelöst? Marktlage, Kontext..." style="width:100%;padding:0.6rem 0.75rem;border-radius:8px;border:1px solid var(--border);background:var(--bg-primary);color:var(--text-primary);font-size:0.83rem;outline:none;resize:vertical;font-family:inherit;"></textarea>
+      </div>
+
+      <!-- Lektionen / Learnings -->
+      <div style="margin-top:0.75rem;">
+        <label style="font-size:0.75rem;font-weight:600;color:var(--text-secondary);display:block;margin-bottom:0.3rem;">Lektionen &amp; Learnings</label>
+        <textarea id="jLessons" rows="2" placeholder="Was habe ich gelernt? Was würde ich beim nächsten Mal anders machen?" style="width:100%;padding:0.6rem 0.75rem;border-radius:8px;border:1px solid var(--border);background:var(--bg-primary);color:var(--text-primary);font-size:0.83rem;outline:none;resize:vertical;font-family:inherit;"></textarea>
+      </div>
+
+      <!-- Chart Upload -->
+      <div style="margin-top:0.75rem;">
+        <label style="font-size:0.75rem;font-weight:600;color:var(--text-secondary);display:block;margin-bottom:0.3rem;">Chart (Bild anhängen)</label>
+        <div id="jChartDropzone" onclick="document.getElementById('jChartFile').click()" style="border:2px dashed var(--border);border-radius:10px;padding:1.25rem;text-align:center;cursor:pointer;transition:all 0.2s;background:var(--bg-primary);">
+          <div style="font-size:1.5rem;margin-bottom:0.3rem;">&#x1F4F7;</div>
+          <div style="font-size:0.8rem;color:var(--text-muted);">Klicken oder Bild hierher ziehen (PNG, JPG, max. 5 MB)</div>
+          <div id="jChartPreviewName" style="font-size:0.75rem;color:var(--accent-blue);margin-top:0.3rem;"></div>
+        </div>
+        <input type="file" id="jChartFile" accept="image/*" style="display:none;" onchange="handleChartUpload(event)" />
+        <div id="jChartPreviewWrap" style="margin-top:0.5rem;display:none;">
+          <img id="jChartPreviewImg" style="max-width:100%;border-radius:8px;border:1px solid var(--border);" />
+          <button onclick="clearChartUpload()" style="margin-top:0.3rem;background:none;border:1px solid var(--border);border-radius:6px;padding:0.25rem 0.6rem;font-size:0.75rem;color:var(--text-muted);cursor:pointer;">&#x2715; Bild entfernen</button>
+        </div>
+      </div>
+
+      <!-- Buttons -->
+      <div style="display:flex;gap:0.75rem;margin-top:1.5rem;justify-content:flex-end;">
+        <button onclick="closeJournalModal()" style="padding:0.55rem 1.2rem;border-radius:8px;border:1px solid var(--border);background:var(--bg-primary);color:var(--text-secondary);font-size:0.85rem;font-weight:600;cursor:pointer;">Abbrechen</button>
+        <button onclick="saveJournalEntry()" style="padding:0.55rem 1.4rem;border-radius:8px;border:none;background:var(--accent-blue);color:white;font-size:0.85rem;font-weight:600;cursor:pointer;">&#x1F4BE; Speichern</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHART LIGHTBOX -->
+  <div id="chartLightbox" onclick="this.style.display='none'" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:99999;align-items:center;justify-content:center;cursor:zoom-out;">
+    <img id="chartLightboxImg" style="max-width:92vw;max-height:88vh;border-radius:10px;box-shadow:0 8px 40px rgba(0,0,0,0.6);" />
+  </div>
+
 </main>
 
 <footer>
@@ -2014,6 +2200,282 @@
   // Load on startup, refresh every 15 minutes
   loadAllNews();
   setInterval(loadAllNews, 15 * 60 * 1000);
+
+  // ===== TRADING JOURNAL =====
+  const JOURNAL_KEY = 'tcc_journal_v1';
+  let journalEntries = [];
+  let journalEditId = null;
+  let journalChartData = null; // base64 image
+
+  function loadJournal() {
+    try { journalEntries = JSON.parse(localStorage.getItem(JOURNAL_KEY) || '[]'); } catch(e) { journalEntries = []; }
+    renderJournalTable();
+    renderJournalStats();
+  }
+
+  function saveJournal() {
+    localStorage.setItem(JOURNAL_KEY, JSON.stringify(journalEntries));
+  }
+
+  function openJournalModal(id) {
+    journalEditId = id || null;
+    journalChartData = null;
+    const modal = document.getElementById('journalModal');
+    modal.style.display = 'flex';
+    document.getElementById('journalModalTitle').textContent = id ? 'Trade bearbeiten' : 'Neuer Trade';
+    // Reset form
+    const today = new Date().toISOString().slice(0,10);
+    document.getElementById('jDate').value = today;
+    document.getElementById('jSymbol').value = '';
+    document.getElementById('jDirection').value = 'Long';
+    document.getElementById('jSetup').value = '';
+    document.getElementById('jEntry').value = '';
+    document.getElementById('jTarget').value = '';
+    document.getElementById('jStop').value = '';
+    document.getElementById('jSize').value = '';
+    document.getElementById('jResult').value = 'Offen';
+    document.getElementById('jPnl').value = '';
+    document.getElementById('jNotes').value = '';
+    document.getElementById('jLessons').value = '';
+    document.getElementById('jChartPreviewWrap').style.display = 'none';
+    document.getElementById('jChartPreviewName').textContent = '';
+    // Fill if editing
+    if (id) {
+      const e = journalEntries.find(x => x.id === id);
+      if (e) {
+        document.getElementById('jDate').value = e.date || today;
+        document.getElementById('jSymbol').value = e.symbol || '';
+        document.getElementById('jDirection').value = e.direction || 'Long';
+        document.getElementById('jSetup').value = e.setup || '';
+        document.getElementById('jEntry').value = e.entry || '';
+        document.getElementById('jTarget').value = e.target || '';
+        document.getElementById('jStop').value = e.stop || '';
+        document.getElementById('jSize').value = e.size || '';
+        document.getElementById('jResult').value = e.result || 'Offen';
+        document.getElementById('jPnl').value = e.pnl || '';
+        document.getElementById('jNotes').value = e.notes || '';
+        document.getElementById('jLessons').value = e.lessons || '';
+        if (e.chart) {
+          journalChartData = e.chart;
+          document.getElementById('jChartPreviewImg').src = e.chart;
+          document.getElementById('jChartPreviewWrap').style.display = 'block';
+          document.getElementById('jChartPreviewName').textContent = '✓ Chart geladen';
+        }
+      }
+    }
+  }
+
+  function closeJournalModal() {
+    document.getElementById('journalModal').style.display = 'none';
+    journalEditId = null;
+    journalChartData = null;
+  }
+
+  function handleChartUpload(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    if (file.size > 5 * 1024 * 1024) { alert('Bild zu groß (max. 5 MB)'); return; }
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      journalChartData = e.target.result;
+      document.getElementById('jChartPreviewImg').src = journalChartData;
+      document.getElementById('jChartPreviewWrap').style.display = 'block';
+      document.getElementById('jChartPreviewName').textContent = '✓ ' + file.name;
+    };
+    reader.readAsDataURL(file);
+  }
+
+  function clearChartUpload() {
+    journalChartData = null;
+    document.getElementById('jChartPreviewWrap').style.display = 'none';
+    document.getElementById('jChartPreviewName').textContent = '';
+    document.getElementById('jChartFile').value = '';
+  }
+
+  // Drag & drop on dropzone
+  document.addEventListener('DOMContentLoaded', function() {
+    const dz = document.getElementById('jChartDropzone');
+    if (!dz) return;
+    dz.addEventListener('dragover', e => { e.preventDefault(); dz.style.borderColor = 'var(--accent-blue)'; });
+    dz.addEventListener('dragleave', () => { dz.style.borderColor = 'var(--border)'; });
+    dz.addEventListener('drop', e => {
+      e.preventDefault();
+      dz.style.borderColor = 'var(--border)';
+      const file = e.dataTransfer.files[0];
+      if (file && file.type.startsWith('image/')) {
+        const fakeEvent = { target: { files: [file] } };
+        handleChartUpload(fakeEvent);
+      }
+    });
+  });
+
+  function saveJournalEntry() {
+    const date   = document.getElementById('jDate').value;
+    const symbol = document.getElementById('jSymbol').value.trim().toUpperCase();
+    if (!date || !symbol) { alert('Bitte Datum und Symbol ausfüllen.'); return; }
+    const entry = {
+      id:        journalEditId || Date.now().toString(),
+      date:      date,
+      symbol:    symbol,
+      direction: document.getElementById('jDirection').value,
+      setup:     document.getElementById('jSetup').value.trim(),
+      entry:     parseFloat(document.getElementById('jEntry').value) || '',
+      target:    parseFloat(document.getElementById('jTarget').value) || '',
+      stop:      parseFloat(document.getElementById('jStop').value) || '',
+      size:      parseFloat(document.getElementById('jSize').value) || '',
+      result:    document.getElementById('jResult').value,
+      pnl:       parseFloat(document.getElementById('jPnl').value) || '',
+      notes:     document.getElementById('jNotes').value.trim(),
+      lessons:   document.getElementById('jLessons').value.trim(),
+      chart:     journalChartData || null
+    };
+    if (journalEditId) {
+      const idx = journalEntries.findIndex(x => x.id === journalEditId);
+      if (idx >= 0) journalEntries[idx] = entry;
+    } else {
+      journalEntries.unshift(entry);
+    }
+    saveJournal();
+    renderJournalTable();
+    renderJournalStats();
+    closeJournalModal();
+  }
+
+  function deleteJournalEntry(id) {
+    if (!confirm('Diesen Trade wirklich löschen?')) return;
+    journalEntries = journalEntries.filter(x => x.id !== id);
+    saveJournal();
+    renderJournalTable();
+    renderJournalStats();
+  }
+
+  function renderJournalTable() {
+    const search = (document.getElementById('journalSearch').value || '').toLowerCase();
+    const filterDir = document.getElementById('journalFilterDir').value;
+    const filterResult = document.getElementById('journalFilterResult').value;
+    let entries = journalEntries.filter(e => {
+      if (filterDir && e.direction !== filterDir) return false;
+      if (filterResult && e.result !== filterResult) return false;
+      if (search && !((e.symbol||'').toLowerCase().includes(search) || (e.setup||'').toLowerCase().includes(search) || (e.notes||'').toLowerCase().includes(search))) return false;
+      return true;
+    });
+    const tbody = document.getElementById('journalTbody');
+    if (!entries.length) {
+      tbody.innerHTML = '<tr><td colspan="12" style="padding:2.5rem;text-align:center;color:var(--text-muted);font-size:0.85rem;">Keine Einträge gefunden.</td></tr>';
+      return;
+    }
+    tbody.innerHTML = entries.map((e, i) => {
+      const dirColor = e.direction === 'Long' ? '#16a34a' : '#dc2626';
+      const dirBg    = e.direction === 'Long' ? '#f0fdf4' : '#fef2f2';
+      const resColor = e.result === 'Win' ? '#16a34a' : e.result === 'Loss' ? '#dc2626' : e.result === 'Breakeven' ? '#d97706' : '#6b7280';
+      const resBg    = e.result === 'Win' ? '#f0fdf4' : e.result === 'Loss' ? '#fef2f2' : e.result === 'Breakeven' ? '#fffbeb' : 'var(--bg-primary)';
+      const pnlColor = e.pnl > 0 ? '#16a34a' : e.pnl < 0 ? '#dc2626' : 'var(--text-secondary)';
+      const pnlStr   = e.pnl !== '' ? (e.pnl > 0 ? '+' : '') + Number(e.pnl).toLocaleString('de-DE', {minimumFractionDigits:2,maximumFractionDigits:2}) : '–';
+      const rowBg    = i % 2 === 0 ? 'var(--bg-secondary)' : 'var(--bg-primary)';
+      const chartBtn = e.chart
+        ? `<button onclick="showChartLightbox('${e.id}')" title="Chart anzeigen" style="background:none;border:1px solid var(--border);border-radius:6px;padding:0.2rem 0.5rem;cursor:pointer;font-size:0.8rem;color:var(--accent-blue);">📷</button>`
+        : '<span style="color:var(--text-muted);font-size:0.75rem;">–</span>';
+      const tooltip = (e.notes || e.lessons) ? `title="${(e.notes||'').replace(/"/g,"'").slice(0,120)}"` : '';
+      return `<tr style="background:${rowBg};border-bottom:1px solid var(--border);" ${tooltip}>
+        <td style="padding:0.6rem 1rem;white-space:nowrap;color:var(--text-secondary);">${e.date}</td>
+        <td style="padding:0.6rem 0.75rem;font-weight:700;color:var(--text-primary);">${e.symbol}</td>
+        <td style="padding:0.6rem 0.75rem;">
+          <span style="background:${dirBg};color:${dirColor};border-radius:6px;padding:0.15rem 0.5rem;font-size:0.72rem;font-weight:700;">${e.direction}</span>
+        </td>
+        <td style="padding:0.6rem 0.75rem;color:var(--text-secondary);max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${e.setup||'–'}</td>
+        <td style="padding:0.6rem 0.75rem;text-align:right;color:var(--text-primary);">${e.entry !== '' ? Number(e.entry).toLocaleString('de-DE',{minimumFractionDigits:2,maximumFractionDigits:2}) : '–'}</td>
+        <td style="padding:0.6rem 0.75rem;text-align:right;color:var(--text-secondary);">${e.target !== '' ? Number(e.target).toLocaleString('de-DE',{minimumFractionDigits:2,maximumFractionDigits:2}) : '–'}</td>
+        <td style="padding:0.6rem 0.75rem;text-align:right;color:var(--text-secondary);">${e.stop !== '' ? Number(e.stop).toLocaleString('de-DE',{minimumFractionDigits:2,maximumFractionDigits:2}) : '–'}</td>
+        <td style="padding:0.6rem 0.75rem;text-align:right;color:var(--text-secondary);">${e.size !== '' ? e.size : '–'}</td>
+        <td style="padding:0.6rem 0.75rem;">
+          <span style="background:${resBg};color:${resColor};border-radius:6px;padding:0.15rem 0.5rem;font-size:0.72rem;font-weight:700;">${e.result}</span>
+        </td>
+        <td style="padding:0.6rem 0.75rem;text-align:right;font-weight:700;color:${pnlColor};">${pnlStr}</td>
+        <td style="padding:0.6rem 0.75rem;text-align:center;">${chartBtn}</td>
+        <td style="padding:0.6rem 0.75rem;text-align:center;white-space:nowrap;">
+          <button onclick="openJournalModal('${e.id}')" title="Bearbeiten" style="background:none;border:1px solid var(--border);border-radius:6px;padding:0.2rem 0.5rem;cursor:pointer;font-size:0.8rem;margin-right:0.25rem;">✏️</button>
+          <button onclick="deleteJournalEntry('${e.id}')" title="Löschen" style="background:none;border:1px solid #fca5a5;border-radius:6px;padding:0.2rem 0.5rem;cursor:pointer;font-size:0.8rem;color:#dc2626;">🗑️</button>
+        </td>
+      </tr>`;
+    }).join('');
+  }
+
+  function showChartLightbox(id) {
+    const e = journalEntries.find(x => x.id === id);
+    if (!e || !e.chart) return;
+    const lb = document.getElementById('chartLightbox');
+    document.getElementById('chartLightboxImg').src = e.chart;
+    lb.style.display = 'flex';
+  }
+
+  function renderJournalStats() {
+    const closed = journalEntries.filter(e => e.result !== 'Offen');
+    const wins   = journalEntries.filter(e => e.result === 'Win').length;
+    const losses = journalEntries.filter(e => e.result === 'Loss').length;
+    const wr     = closed.length ? Math.round((wins / closed.length) * 100) : 0;
+    const totalPnl = journalEntries.reduce((s, e) => s + (parseFloat(e.pnl) || 0), 0);
+    const pnlColor = totalPnl >= 0 ? '#16a34a' : '#dc2626';
+    const stats = [
+      { label: 'Trades gesamt', value: journalEntries.length, color: 'var(--accent-blue)' },
+      { label: 'Wins', value: wins, color: '#16a34a' },
+      { label: 'Losses', value: losses, color: '#dc2626' },
+      { label: 'Win-Rate', value: wr + '%', color: wr >= 50 ? '#16a34a' : '#dc2626' },
+      { label: 'Gesamt P&L', value: (totalPnl >= 0 ? '+' : '') + totalPnl.toLocaleString('de-DE', {minimumFractionDigits:2,maximumFractionDigits:2}), color: pnlColor },
+      { label: 'Offene Trades', value: journalEntries.filter(e => e.result === 'Offen').length, color: '#d97706' }
+    ];
+    document.getElementById('journalStats').innerHTML = stats.map(s =>
+      `<div style="background:var(--bg-secondary);border:1px solid var(--border);border-radius:10px;padding:0.85rem 1rem;box-shadow:var(--shadow-sm);">
+        <div style="font-size:0.68rem;text-transform:uppercase;letter-spacing:0.06em;color:var(--text-muted);font-weight:700;margin-bottom:0.25rem;">${s.label}</div>
+        <div style="font-size:1.3rem;font-weight:800;color:${s.color};">${s.value}</div>
+      </div>`
+    ).join('');
+  }
+
+  function exportJournalCSV() {
+    if (!journalEntries.length) { alert('Keine Einträge zum Exportieren.'); return; }
+    const headers = ['Datum','Symbol','Richtung','Setup','Einstieg','Kursziel','Stop Loss','Pos.-Größe','Ergebnis','P&L','Gedanken','Lektionen'];
+    const rows = journalEntries.map(e => [
+      e.date, e.symbol, e.direction, e.setup,
+      e.entry, e.target, e.stop, e.size,
+      e.result, e.pnl, e.notes, e.lessons
+    ].map(v => '"' + String(v||'').replace(/"/g,'""') + '"'));
+    const csv = [headers.join(';'), ...rows.map(r => r.join(';'))].join('\n');
+    const blob = new Blob(['\uFEFF' + csv], {type:'text/csv;charset=utf-8;'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = 'trading-journal-' + new Date().toISOString().slice(0,10) + '.csv';
+    a.click(); URL.revokeObjectURL(url);
+  }
+
+  function exportJournalExcel() {
+    if (!journalEntries.length) { alert('Keine Einträge zum Exportieren.'); return; }
+    // Build HTML table for Excel
+    const headers = ['Datum','Symbol','Richtung','Setup','Einstieg','Kursziel','Stop Loss','Pos.-Größe','Ergebnis','P&L','Gedanken','Lektionen'];
+    const rows = journalEntries.map(e => [
+      e.date, e.symbol, e.direction, e.setup,
+      e.entry, e.target, e.stop, e.size,
+      e.result, e.pnl, e.notes, e.lessons
+    ]);
+    let html = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel"><head><meta charset="UTF-8"></head><body><table>';
+    html += '<tr>' + headers.map(h => `<th style="background:#1e3a8a;color:white;font-weight:bold;">${h}</th>`).join('') + '</tr>';
+    rows.forEach((row, i) => {
+      const bg = i % 2 === 0 ? '#ffffff' : '#f0f4ff';
+      html += '<tr>' + row.map(v => `<td style="background:${bg};">${v||''}</td>`).join('') + '</tr>';
+    });
+    html += '</table></body></html>';
+    const blob = new Blob([html], {type:'application/vnd.ms-excel;charset=utf-8;'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = 'trading-journal-' + new Date().toISOString().slice(0,10) + '.xls';
+    a.click(); URL.revokeObjectURL(url);
+  }
+
+  // Close modal on backdrop click
+  document.getElementById('journalModal').addEventListener('click', function(e) {
+    if (e.target === this) closeJournalModal();
+  });
+
+  loadJournal();
 
   // ===== DARK MODE TOGGLE =====
   function toggleTheme() {
