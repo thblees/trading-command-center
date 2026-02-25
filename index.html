@@ -1864,28 +1864,72 @@
   }
 
   async function loadVix() {
-    try {
-      const r = await fetch('https://query1.finance.yahoo.com/v8/finance/chart/%5EVIX?interval=1d&range=1d', {
-        headers: { 'User-Agent': 'Mozilla/5.0' }
-      });
-      if (!r.ok) throw new Error('HTTP ' + r.status);
-      const d = await r.json();
-      const vix = d?.chart?.result?.[0]?.meta?.regularMarketPrice;
-      if (vix) {
-        const el = document.getElementById('vixValue');
-        if (el) {
-          el.textContent = vix.toFixed(2);
-          el.className = 'vix-value ' + (vix < 15 ? 'vix-low' : vix < 25 ? 'vix-mid' : 'vix-high');
-        }
-        document.getElementById('vixWidget').title = `VIX: ${vix.toFixed(2)} – ${vix < 15 ? 'Niedrige Volatilität' : vix < 25 ? 'Moderate Volatilität' : 'Hohe Volatilität'}`;
+    // Mehrere Quellen versuchen - Fallback-Kette
+    const sources = [
+      // Quelle 1: corsproxy.io
+      async () => {
+        const r = await fetch('https://corsproxy.io/?url=https://query1.finance.yahoo.com/v8/finance/chart/%5EVIX?interval=1d%26range=1d');
+        const d = await r.json();
+        return d?.chart?.result?.[0]?.meta?.regularMarketPrice;
+      },
+      // Quelle 2: Yahoo query2
+      async () => {
+        const r = await fetch('https://query2.finance.yahoo.com/v8/finance/chart/%5EVIX?interval=1d&range=1d&nocors=1');
+        const d = await r.json();
+        return d?.chart?.result?.[0]?.meta?.regularMarketPrice;
+      },
+      // Quelle 3: Barchart öffentliche Quote-Seite (JSON-Endpunkt)
+      async () => {
+        const r = await fetch('https://finance.yahoo.com/quote/%5EVIX/', {mode: 'no-cors'});
+        throw new Error('no-cors fallback');
       }
-    } catch(e) {
-      const el = document.getElementById('vixValue');
-      if (el) el.textContent = 'n/a';
+    ];
+    for (const src of sources) {
+      try {
+        const vix = await src();
+        if (vix && !isNaN(vix)) {
+          const el = document.getElementById('vixValue');
+          if (el) {
+            el.textContent = parseFloat(vix).toFixed(2);
+            el.className = 'vix-value ' + (vix < 15 ? 'vix-low' : vix < 25 ? 'vix-mid' : 'vix-high');
+          }
+          const label = vix < 15 ? 'Niedrige Volatilität' : vix < 25 ? 'Moderate Volatilität' : 'Hohe Volatilität';
+          const w = document.getElementById('vixWidget');
+          if (w) w.title = `VIX: ${parseFloat(vix).toFixed(2)} – ${label}`;
+          return;
+        }
+      } catch(e) { /* nächste Quelle versuchen */ }
     }
+    const el = document.getElementById('vixValue');
+    if (el) el.textContent = 'n/a';
   }
 
   async function loadFearGreed() {
+    // CNN Fear & Greed Index (Aktienmarkt) – primäre Quelle
+    try {
+      const r = await fetch('https://production.dataviz.cnn.io/index/fearandgreed/graphdata', {
+        headers: {
+          'Referer': 'https://edition.cnn.com/',
+          'Accept': 'application/json'
+        }
+      });
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      const d = await r.json();
+      const score = Math.round(d?.fear_and_greed?.score);
+      const rating = d?.fear_and_greed?.rating;
+      if (!isNaN(score)) {
+        const scoreEl = document.getElementById('fngScore');
+        if (scoreEl) {
+          scoreEl.textContent = score + ' – ' + getFngLabel(rating);
+          scoreEl.className = 'fng-score ' + getFngClass(score);
+        }
+        updateFngGauge(score);
+        const w = document.getElementById('fngWidget');
+        if (w) w.title = `CNN Fear & Greed Index: ${score} (${getFngLabel(rating)})`;
+        return;
+      }
+    } catch(e) { /* Fallback */ }
+    // Fallback: alternative.me (Krypto-Index, als Notlösung)
     try {
       const r = await fetch('https://api.alternative.me/fng/?limit=1');
       if (!r.ok) throw new Error('HTTP ' + r.status);
@@ -1895,11 +1939,10 @@
       if (!isNaN(score)) {
         const scoreEl = document.getElementById('fngScore');
         if (scoreEl) {
-          scoreEl.textContent = score + ' – ' + getFngLabel(rating);
+          scoreEl.textContent = score + ' – ' + getFngLabel(rating) + '*';
           scoreEl.className = 'fng-score ' + getFngClass(score);
         }
         updateFngGauge(score);
-        document.getElementById('fngWidget').title = `Fear & Greed Index: ${score} (${getFngLabel(rating)})`;
       }
     } catch(e) {
       const el = document.getElementById('fngScore');
