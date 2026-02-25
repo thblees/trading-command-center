@@ -1739,6 +1739,19 @@
         <button class="notes-save-btn" onclick="saveNotes()">💾 Speichern</button>
         <span class="notes-saved-msg" id="notesSavedMsg">✓ Gespeichert</span>
       </div>
+
+      <!-- NOTIZEN BILD-UPLOAD -->
+      <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border);">
+        <div style="font-size: 0.73rem; color: var(--text-muted); margin-bottom: 0.5rem; font-weight: 600;">📷 Bilder zur Notiz (Charts, Screenshots)</div>
+        <div id="notesImgDropzone" onclick="document.getElementById('notesImgFile').click()"
+          style="border: 2px dashed var(--border); border-radius: 10px; padding: 1rem; text-align: center; cursor: pointer; transition: all 0.2s; background: var(--bg-primary);">
+          <div style="font-size: 1.3rem; margin-bottom: 0.2rem;">📎</div>
+          <div style="font-size: 0.78rem; color: var(--text-muted);">Klicken oder Bild hierher ziehen (PNG, JPG, max. 5 MB)</div>
+        </div>
+        <input type="file" id="notesImgFile" accept="image/*" multiple style="display:none;" onchange="handleNotesImgUpload(event)" />
+        <div id="notesImgGallery" style="display:flex; flex-wrap:wrap; gap:0.6rem; margin-top:0.75rem;"></div>
+      </div>
+
       <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border);">
         <div style="font-size: 0.73rem; color: var(--text-muted); margin-bottom: 0.4rem; font-weight: 600;">Notizen vom Vortag:</div>
         <div style="font-size: 0.82rem; color: var(--text-secondary); font-style: italic; background: var(--bg-primary); padding: 0.75rem; border-radius: 8px; border: 1px solid var(--border);" id="yesterdayNotes">Keine Notizen vom Vortag.</div>
@@ -2047,6 +2060,80 @@
   }
   setInterval(() => { const v = document.getElementById('notesArea').value; if (v) localStorage.setItem(todayKey(), v); }, 30000);
   loadNotes();
+
+  // ===== NOTIZEN BILD-UPLOAD =====
+  const notesImgKey = () => 'tcc_notes_imgs_' + new Date().toISOString().slice(0,10);
+  let notesImages = []; // array of {id, data, name}
+
+  function loadNotesImages() {
+    try { notesImages = JSON.parse(localStorage.getItem(notesImgKey()) || '[]'); } catch(e) { notesImages = []; }
+    renderNotesGallery();
+  }
+
+  function saveNotesImages() {
+    localStorage.setItem(notesImgKey(), JSON.stringify(notesImages));
+  }
+
+  function handleNotesImgUpload(event) {
+    const files = Array.from(event.target.files);
+    files.forEach(file => {
+      if (!file.type.startsWith('image/')) return;
+      if (file.size > 5 * 1024 * 1024) { alert('Bild "' + file.name + '" zu groß (max. 5 MB)'); return; }
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        notesImages.push({ id: Date.now() + Math.random().toString(36).slice(2), data: e.target.result, name: file.name });
+        saveNotesImages();
+        renderNotesGallery();
+      };
+      reader.readAsDataURL(file);
+    });
+    event.target.value = '';
+  }
+
+  function removeNotesImage(id) {
+    notesImages = notesImages.filter(img => img.id !== id);
+    saveNotesImages();
+    renderNotesGallery();
+  }
+
+  function renderNotesGallery() {
+    const gallery = document.getElementById('notesImgGallery');
+    if (!gallery) return;
+    if (!notesImages.length) { gallery.innerHTML = ''; return; }
+    gallery.innerHTML = notesImages.map(img => `
+      <div style="position:relative;display:inline-block;">
+        <img src="${img.data}" title="${img.name}" onclick="openNotesImgLightbox('${img.id}')"
+          style="width:120px;height:90px;object-fit:cover;border-radius:8px;border:1px solid var(--border);cursor:zoom-in;transition:transform 0.15s;"
+          onmouseover="this.style.transform='scale(1.04)'" onmouseout="this.style.transform='scale(1)'" />
+        <button onclick="removeNotesImage('${img.id}')"
+          style="position:absolute;top:3px;right:3px;background:rgba(0,0,0,0.6);color:white;border:none;border-radius:50%;width:20px;height:20px;font-size:0.7rem;cursor:pointer;line-height:1;display:flex;align-items:center;justify-content:center;">×</button>
+      </div>
+    `).join('');
+  }
+
+  function openNotesImgLightbox(id) {
+    const img = notesImages.find(x => x.id === id);
+    if (!img) return;
+    const lb = document.getElementById('chartLightbox');
+    document.getElementById('chartLightboxImg').src = img.data;
+    lb.style.display = 'flex';
+  }
+
+  // Drag & drop for notes dropzone
+  (function() {
+    const dz = document.getElementById('notesImgDropzone');
+    if (!dz) return;
+    dz.addEventListener('dragover', e => { e.preventDefault(); dz.style.borderColor = 'var(--accent-blue)'; dz.style.background = 'var(--accent-blue-light)'; });
+    dz.addEventListener('dragleave', () => { dz.style.borderColor = 'var(--border)'; dz.style.background = 'var(--bg-primary)'; });
+    dz.addEventListener('drop', e => {
+      e.preventDefault();
+      dz.style.borderColor = 'var(--border)'; dz.style.background = 'var(--bg-primary)';
+      const fakeEvent = { target: { files: Array.from(e.dataTransfer.files), value: '' }, preventDefault: ()=>{} };
+      handleNotesImgUpload(fakeEvent);
+    });
+  })();
+
+  loadNotesImages();
 
   // ===== PRESSESPIEGEL =====
   const NEWS_FEEDS = [
