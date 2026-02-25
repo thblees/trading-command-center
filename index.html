@@ -129,6 +129,41 @@
     }
     @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
 
+    /* VIX + Fear & Greed Header Widgets */
+    .header-widget {
+      display: flex; align-items: center; gap: 0.4rem;
+      background: var(--bg-primary);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 0.3rem 0.8rem;
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+      font-weight: 500;
+      cursor: default;
+    }
+    .vix-value { font-weight: 700; font-size: 0.85rem; }
+    .vix-low { color: #16a34a; }
+    .vix-mid { color: #d97706; }
+    .vix-high { color: #dc2626; }
+
+    /* Fear & Greed Tacho */
+    .fng-widget {
+      display: flex; align-items: center; gap: 0.5rem;
+      background: var(--bg-primary);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 0.25rem 0.75rem;
+      cursor: default;
+    }
+    .fng-gauge { position: relative; width: 44px; height: 24px; }
+    .fng-label { font-size: 0.72rem; font-weight: 600; color: var(--text-secondary); }
+    .fng-score { font-size: 0.85rem; font-weight: 800; }
+    .fng-extreme-fear { color: #dc2626; }
+    .fng-fear { color: #f97316; }
+    .fng-neutral { color: #d97706; }
+    .fng-greed { color: #65a30d; }
+    .fng-extreme-greed { color: #16a34a; }
+
     /* ===== NAV ===== */
     nav {
       background: var(--bg-secondary);
@@ -548,6 +583,33 @@
     <div class="header-time" id="headerTime"></div>
   </div>
   <div class="header-right" style="display:flex;align-items:center;gap:0.75rem;">
+
+    <!-- VIX WIDGET -->
+    <div class="header-widget" id="vixWidget" title="CBOE Volatility Index – aktueller Stand">
+      <span style="font-size:0.72rem;color:var(--text-muted);">VIX</span>
+      <span class="vix-value" id="vixValue">–</span>
+    </div>
+
+    <!-- FEAR & GREED TACHO -->
+    <div class="fng-widget" id="fngWidget" title="CNN Fear & Greed Index">
+      <svg class="fng-gauge" viewBox="0 0 44 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- Halbkreis Hintergrund -->
+        <path d="M4 22 A18 18 0 0 1 40 22" stroke="#e5e7eb" stroke-width="4" stroke-linecap="round" fill="none"/>
+        <!-- Farbiger Bogen (wird per JS gesetzt) -->
+        <path id="fngArc" d="M4 22 A18 18 0 0 1 40 22" stroke="#d97706" stroke-width="4" stroke-linecap="round" fill="none"
+          stroke-dasharray="57" stroke-dashoffset="28"/>
+        <!-- Zeiger -->
+        <line id="fngNeedle" x1="22" y1="22" x2="22" y2="6" stroke="#374151" stroke-width="1.5" stroke-linecap="round"
+          transform-origin="22 22"/>
+        <!-- Mittelpunkt -->
+        <circle cx="22" cy="22" r="2.5" fill="#374151"/>
+      </svg>
+      <div style="display:flex;flex-direction:column;line-height:1.2;">
+        <span class="fng-label">Fear &amp; Greed</span>
+        <span class="fng-score" id="fngScore">–</span>
+      </div>
+    </div>
+
     <div class="market-pill">
       <span class="dot" id="marketDot"></span>
       <span id="marketStatus">Lädt...</span>
@@ -1701,6 +1763,101 @@
   sortScript.onload = initSortable;
   sortScript.onerror = function() { console.log('SortableJS nicht geladen – Drag & Drop deaktiviert.'); };
   document.head.appendChild(sortScript);
+
+  // ===== VIX + FEAR & GREED HEADER WIDGETS =====
+
+  function getFngClass(score) {
+    if (score <= 24) return 'fng-extreme-fear';
+    if (score <= 44) return 'fng-fear';
+    if (score <= 55) return 'fng-neutral';
+    if (score <= 74) return 'fng-greed';
+    return 'fng-extreme-greed';
+  }
+  function getFngColor(score) {
+    if (score <= 24) return '#dc2626';
+    if (score <= 44) return '#f97316';
+    if (score <= 55) return '#d97706';
+    if (score <= 74) return '#65a30d';
+    return '#16a34a';
+  }
+  function getFngLabel(rating) {
+    const map = {
+      'Extreme Fear': 'Extreme Angst',
+      'Fear': 'Angst',
+      'Neutral': 'Neutral',
+      'Greed': 'Gier',
+      'Extreme Greed': 'Extreme Gier'
+    };
+    return map[rating] || rating;
+  }
+
+  function updateFngGauge(score) {
+    // Zeiger: -90° (links, 0) bis +90° (rechts, 100)
+    const angle = (score / 100) * 180 - 90;
+    const needle = document.getElementById('fngNeedle');
+    if (needle) needle.setAttribute('transform', `rotate(${angle}, 22, 22)`);
+
+    // Bogen-Farbe
+    const arc = document.getElementById('fngArc');
+    if (arc) {
+      const color = getFngColor(score);
+      arc.setAttribute('stroke', color);
+      // Dashoffset: 57 = voller Halbkreis-Umfang, proportional füllen
+      const filled = (score / 100) * 57;
+      arc.setAttribute('stroke-dashoffset', (57 - filled).toFixed(1));
+    }
+  }
+
+  async function loadVix() {
+    try {
+      const r = await fetch('https://query1.finance.yahoo.com/v8/finance/chart/%5EVIX?interval=1d&range=1d', {
+        headers: { 'User-Agent': 'Mozilla/5.0' }
+      });
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      const d = await r.json();
+      const vix = d?.chart?.result?.[0]?.meta?.regularMarketPrice;
+      if (vix) {
+        const el = document.getElementById('vixValue');
+        if (el) {
+          el.textContent = vix.toFixed(2);
+          el.className = 'vix-value ' + (vix < 15 ? 'vix-low' : vix < 25 ? 'vix-mid' : 'vix-high');
+        }
+        document.getElementById('vixWidget').title = `VIX: ${vix.toFixed(2)} – ${vix < 15 ? 'Niedrige Volatilität' : vix < 25 ? 'Moderate Volatilität' : 'Hohe Volatilität'}`;
+      }
+    } catch(e) {
+      const el = document.getElementById('vixValue');
+      if (el) el.textContent = 'n/a';
+    }
+  }
+
+  async function loadFearGreed() {
+    try {
+      const r = await fetch('https://api.alternative.me/fng/?limit=1');
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      const d = await r.json();
+      const score = parseInt(d?.data?.[0]?.value);
+      const rating = d?.data?.[0]?.value_classification;
+      if (!isNaN(score)) {
+        const scoreEl = document.getElementById('fngScore');
+        if (scoreEl) {
+          scoreEl.textContent = score + ' – ' + getFngLabel(rating);
+          scoreEl.className = 'fng-score ' + getFngClass(score);
+        }
+        updateFngGauge(score);
+        document.getElementById('fngWidget').title = `Fear & Greed Index: ${score} (${getFngLabel(rating)})`;
+      }
+    } catch(e) {
+      const el = document.getElementById('fngScore');
+      if (el) el.textContent = 'n/a';
+    }
+  }
+
+  // Beim Laden starten
+  loadVix();
+  loadFearGreed();
+  // Alle 5 Minuten aktualisieren
+  setInterval(loadVix, 5 * 60 * 1000);
+  setInterval(loadFearGreed, 5 * 60 * 1000);
 
 </script>
 
