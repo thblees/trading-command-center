@@ -1649,6 +1649,96 @@
     }
   })();
 
+
+  // ===== DRAG & DROP MIT SORTABLEJS =====
+  // Kacheln innerhalb jeder Sektion verschiebbar
+  // Reihenfolge wird im Browser gespeichert
+
+  function initSortable() {
+    const grids = document.querySelectorAll('.card-grid');
+    grids.forEach((grid, gridIndex) => {
+      // Eindeutige ID für jedes Grid vergeben
+      if (!grid.id) grid.id = 'grid-' + gridIndex;
+
+      // Gespeicherte Reihenfolge wiederherstellen
+      const saved = localStorage.getItem('sortable-' + grid.id);
+      if (saved) {
+        try {
+          const order = JSON.parse(saved);
+          const items = Array.from(grid.children);
+          order.forEach(key => {
+            const el = items.find(i => i.dataset.sortKey === key);
+            if (el) grid.appendChild(el);
+          });
+        } catch(e) {}
+      }
+
+      // SortableJS initialisieren
+      if (typeof Sortable !== 'undefined') {
+        Sortable.create(grid, {
+          animation: 180,
+          ghostClass: 'sortable-ghost',
+          chosenClass: 'sortable-chosen',
+          dragClass: 'sortable-drag',
+          handle: '.card, .skill-card',
+          onEnd: function() {
+            // Neue Reihenfolge speichern
+            const keys = Array.from(grid.children).map((el, i) => {
+              if (!el.dataset.sortKey) el.dataset.sortKey = grid.id + '-' + i;
+              return el.dataset.sortKey;
+            });
+            localStorage.setItem('sortable-' + grid.id, JSON.stringify(keys));
+          }
+        });
+      }
+    });
+
+    // Sort-Keys initial vergeben
+    document.querySelectorAll('.card-grid > *, .card-grid.wide > *').forEach((el, i) => {
+      if (!el.dataset.sortKey) {
+        const parent = el.parentElement;
+        el.dataset.sortKey = (parent.id || 'g') + '-' + i;
+      }
+    });
+  }
+
+  // SortableJS dynamisch laden
+  const sortScript = document.createElement('script');
+  sortScript.src = 'https://cdn.jsdelivr.net/npm/sortablejs@1.15.2/Sortable.min.js';
+  sortScript.onload = initSortable;
+  sortScript.onerror = function() { console.log('SortableJS nicht geladen – Drag & Drop deaktiviert.'); };
+  document.head.appendChild(sortScript);
+
 </script>
+
+<style>
+  /* Drag & Drop Styles */
+  .card-grid .card,
+  .card-grid .skill-card {
+    cursor: grab;
+  }
+  .card-grid .card:active,
+  .card-grid .skill-card:active {
+    cursor: grabbing;
+  }
+  .sortable-ghost {
+    opacity: 0.4;
+    background: #dbeafe !important;
+    border: 2px dashed #3b82f6 !important;
+  }
+  [data-theme="dark"] .sortable-ghost {
+    background: #1e3a5f !important;
+  }
+  .sortable-chosen {
+    box-shadow: 0 8px 25px rgba(59,130,246,0.35) !important;
+    transform: scale(1.02);
+    z-index: 999;
+  }
+  .sortable-drag {
+    opacity: 0.9;
+    box-shadow: 0 12px 30px rgba(0,0,0,0.2) !important;
+  }
+</style>
+
 </body>
 </html>
