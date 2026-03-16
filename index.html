@@ -2790,23 +2790,47 @@
   async function loadVix() {
     // Mehrere Quellen versuchen - Fallback-Kette
     const sources = [
-      // Quelle 1: corsproxy.io
+      // Quelle 1: market-data.json (GitHub Actions Cache – zuverlässig, kein CORS)
       async () => {
-        const r = await fetch('https://corsproxy.io/?url=https://query1.finance.yahoo.com/v8/finance/chart/%5EVIX?interval=1d%26range=1d');
+        const r = await fetch('./market-data.json?_=' + Date.now());
+        const d = await r.json();
+        const vix = d?.vix?.value;
+        if (vix && !isNaN(vix)) {
+          // Zeige Aktualisierungszeit an
+          const updated = d?.lastUpdated ? new Date(d.lastUpdated) : null;
+          const w = document.getElementById('vixWidget');
+          if (w && updated) {
+            const mins = Math.round((Date.now() - updated.getTime()) / 60000);
+            const timeStr = mins < 60 ? `vor ${mins} Min.` : `vor ${Math.round(mins/60)} Std.`;
+            w.dataset.updatedAt = timeStr;
+          }
+        }
+        return vix;
+      },
+      // Quelle 2: Yahoo Finance v8 direkt (query1)
+      async () => {
+        const r = await fetch('https://query1.finance.yahoo.com/v8/finance/chart/%5EVIX?interval=1d&range=1d', {
+          headers: { 'Accept': 'application/json' }
+        });
         const d = await r.json();
         return d?.chart?.result?.[0]?.meta?.regularMarketPrice;
       },
-      // Quelle 2: Yahoo query2
+      // Quelle 3: Yahoo Finance v8 (query2)
       async () => {
-        const r = await fetch('https://query2.finance.yahoo.com/v8/finance/chart/%5EVIX?interval=1d&range=1d&nocors=1');
+        const r = await fetch('https://query2.finance.yahoo.com/v8/finance/chart/%5EVIX?interval=1d&range=1d', {
+          headers: { 'Accept': 'application/json' }
+        });
         const d = await r.json();
         return d?.chart?.result?.[0]?.meta?.regularMarketPrice;
       },
-      // Quelle 3: Barchart öffentliche Quote-Seite (JSON-Endpunkt)
+      // Quelle 4: allorigins.win Proxy
       async () => {
-        const r = await fetch('https://finance.yahoo.com/quote/%5EVIX/', {mode: 'no-cors'});
-        throw new Error('no-cors fallback');
-      }
+        const target = encodeURIComponent('https://query1.finance.yahoo.com/v8/finance/chart/%5EVIX?interval=1d&range=1d');
+        const r = await fetch(`https://api.allorigins.win/get?url=${target}`);
+        const outer = await r.json();
+        const d = JSON.parse(outer.contents);
+        return d?.chart?.result?.[0]?.meta?.regularMarketPrice;
+      },
     ];
     for (const src of sources) {
       try {
@@ -2819,7 +2843,10 @@
           }
           const label = vix < 15 ? 'Niedrige Volatilität' : vix < 25 ? 'Moderate Volatilität' : 'Hohe Volatilität';
           const w = document.getElementById('vixWidget');
-          if (w) w.title = `VIX: ${parseFloat(vix).toFixed(2)} – ${label}`;
+          if (w) {
+            const timeInfo = w.dataset.updatedAt ? ` (${w.dataset.updatedAt})` : '';
+            w.title = `VIX: ${parseFloat(vix).toFixed(2)} – ${label}${timeInfo}`;
+          }
           return;
         }
       } catch(e) { /* nächste Quelle versuchen */ }
