@@ -1,0 +1,116 @@
+name: Update Market Data
+
+on:
+  schedule:
+    # Alle 15 Minuten während US-Handelszeiten (Mo-Fr, 14:30-22:00 UTC = 9:30-17:00 ET)
+    - cron: '*/15 14-21 * * 1-5'
+    # Stündlich außerhalb der Handelszeiten (für Overnight-Daten)
+    - cron: '0 0-13,22-23 * * 1-5'
+    # Samstag/Sonntag einmal täglich
+    - cron: '0 8 * * 0,6'
+  workflow_dispatch:  # Manueller Trigger
+
+jobs:
+  update-vix:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Fetch VIX and market data
+        run: |
+          python3 << 'EOF'
+          import json
+          import urllib.request
+          import urllib.error
+          from datetime import datetime, timezone
+
+          def fetch_vix():
+              """Holt VIX-Daten von Yahoo Finance (server-seitig, kein CORS-Problem)"""
+              headers = {
+                  'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+                  'Accept': 'application/json',
+                  'Accept-Language': 'en-US,en;q=0.9',
+              }
+              
+              urls = [
+                  'https://query1.finance.yahoo.com/v8/finance/chart/%5EVIX?interval=1d&range=1d',
+                  'https://query2.finance.yahoo.com/v8/finance/chart/%5EVIX?interval=1d&range=1d',
+              ]
+              
+              for url in urls:
+                  try:
+                      req = urllib.request.Request(url, headers=headers)
+                      with urllib.request.urlopen(req, timeout=15) as response:
+                          data = json.loads(response.read().decode())
+                          meta = data['chart']['result'][0]['meta']
+                          return {
+                              'value': meta['regularMarketPrice'],
+                              'previousClose': meta.get('chartPreviousClose', meta.get('regularMarketPreviousClose')),
+                              'dayHigh': meta.get('regularMarketDayHigh'),
+                              'dayLow': meta.get('regularMarketDayLow'),
+                              'fiftyTwoWeekHigh': meta.get('fiftyTwoWeekHigh'),
+                              'fiftyTwoWeekLow': meta.get('fiftyTwoWeekLow'),
+                          }
+                  except Exception as e:
+                      print(f"Fehler bei {url}: {e}")
+                      continue
+              return None
+
+          def fetch_sp500():
+              """Holt S&P 500 Daten"""
+              headers = {
+                  'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+                  'Accept': 'application/json',
+              }
+              try:
+                  url = 'https://query1.finance.yahoo.com/v8/finance/chart/%5EGSPC?interval=1d&range=1d'
+                  req = urllib.request.Request(url, headers=headers)
+                  with urllib.request.urlopen(req, timeout=15) as response:
+                      data = json.loads(response.read().decode())
+                      meta = data['chart']['result'][0]['meta']
+                      return {
+                          'value': meta['regularMarketPrice'],
+                          'previousClose': meta.get('chartPreviousClose', meta.get('regularMarketPreviousClose')),
+                          'change': meta['regularMarketPrice'] - meta.get('chartPreviousClose', meta.get('regularMarketPreviousClose', meta['regularMarketPrice'])),
+                          'changePercent': ((meta['regularMarketPrice'] - meta.get('chartPreviousClose', meta.get('regularMarketPreviousClose', meta['regularMarketPrice']))) / meta.get('chartPreviousClose', meta.get('regularMarketPreviousClose', meta['regularMarketPrice']))) * 100 if meta.get('chartPreviousClose') or meta.get('regularMarketPreviousClose') else 0,
+                      }
+              except Exception as e:
+                  print(f"S&P 500 Fehler: {e}")
+                  return None
+
+          # Daten abrufen
+          now = datetime.now(timezone.utc)
+          vix_data = fetch_vix()
+          sp500_data = fetch_sp500()
+
+          result = {
+              'lastUpdated': now.isoformat(),
+              'lastUpdatedUnix': int(now.timestamp()),
+              'vix': vix_data,
+              'sp500': sp500_data,
+          }
+
+          print(f"VIX: {vix_data}")
+          print(f"S&P 500: {sp500_data}")
+
+          with open('market-data.json', 'w') as f:
+              json.dump(result, f, indent=2)
+
+          print("market-data.json erfolgreich erstellt")
+          EOF
+
+      - name: Commit and push market data
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add market-data.json
+          if git diff --staged --quiet; then
+            echo "Keine Änderungen - Daten unverändert"
+          else
+            git commit -m "chore: update market data $(date -u '+%Y-%m-%d %H:%M UTC')"
+            git push
+          fi
