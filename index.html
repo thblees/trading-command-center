@@ -412,6 +412,26 @@
     }
     .skill-btn:hover { background: #6d28d9; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(124,58,237,0.3); }
 
+    .skill-btn-row {
+      display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center;
+      margin-top: 0.25rem;
+    }
+    .skill-btn-row .skill-btn { margin-top: 0; }
+    .skill-btn-copy {
+      display: inline-flex; align-items: center; gap: 0.35rem;
+      background: white;
+      color: var(--accent-purple);
+      border: 1px solid #c4b5fd;
+      border-radius: 8px;
+      padding: 0.5rem 0.85rem;
+      font-size: 0.78rem; font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: inherit;
+    }
+    .skill-btn-copy:hover { background: #f5f3ff; border-color: var(--accent-purple); transform: translateY(-1px); }
+    .skill-btn-copy.copied { background: #dcfce7; color: #166534; border-color: #86efac; }
+
     /* ===== PERSONAL LINKS BAR ===== */
     .personal-bar {
       background: linear-gradient(135deg, #fdf2f8 0%, #fce7f3 100%);
@@ -724,7 +744,7 @@
   <a href="#makro">🌍 Makro</a>
   <a href="#eigene-tools-bottom">🛠️ Eigene Tools</a>
   <a href="#makro-research">🌐 Makro-Research</a>
-  <a href="#manus-skills-bottom">🤖 Manus Skills</a>
+  <a href="#claude-skills-bottom">🤖 Claude Skills</a>
   <a href="#ki-chatbots">💬 KI-Chatbots</a>
   <a href="#youtube">📺 YouTube</a>
   <a href="#podcasts">🎙️ Podcasts</a>
@@ -875,133 +895,103 @@
 
 
 
-  <!-- ===== MANUS SKILLS ===== -->
-  <section id="manus-skills" style="display:none;">
+  <!-- ===== CLAUDE SKILLS ===== -->
+  <section id="claude-skills" style="display:none;">
     <div class="section-header">
       <span class="section-icon">🤖</span>
-      <span class="section-title">Manus Skills – KI-Analysen auf Knopfdruck</span>
-      <span class="section-badge">Direkt in Manus starten</span>
+      <span class="section-title">Claude Skills – KI-Analysen auf Knopfdruck</span>
+      <span class="section-badge">Direkt in Claude starten</span>
     </div>
     <div class="card-grid wide">
 
       <div class="skill-card hl-purple">
         <div class="card-top">
           <span class="card-icon">📦</span>
-          <span class="card-tag tag-manus">Manus Skill</span>
+          <span class="card-tag tag-manus">Claude Skill</span>
         </div>
         <div class="card-title">COT Analyse</div>
         <div class="card-desc">Analysiert Commitment-of-Traders-Daten auf extreme Positionierungen von Commercials und Large Speculators. Identifiziert Futures-Setups mit historischen Erfolgsquoten und Open-Interest-Mustern.</div>
-        <a href="https://manus.im/app?prompt=Starte+den+COT+Analyzer+Skill+und+analysiere+aktuelle+COT+Daten+auf+extreme+Positionierungen+und+Trading+Setups" target="_blank" class="skill-btn">🚀 COT Analyse starten</a>
+        <div class="skill-btn-row"><a href="https://claude.ai/new?q=Nutze+den+cot-experte+Skill+und+analysiere+aktuelle+COT+Daten+auf+extreme+Positionierungen+und+Trading+Setups." target="_blank" class="skill-btn">🚀 COT Analyse starten</a><button class="skill-btn-copy" onclick="copyCoworkPrompt(this)" title="Prompt in Zwischenablage kopieren – dann in Cowork einfügen">📋 Für Cowork kopieren</button></div>
       </div>
 
       <div class="skill-card hl-purple">
         <div class="card-top">
           <span class="card-icon">💡</span>
-          <span class="card-tag tag-manus">Manus Skill</span>
+          <span class="card-tag tag-manus">Claude Skill</span>
         </div>
         <div class="card-title">Investment Thesen Finder</div>
         <div class="card-desc">Sucht systematisch nach handlungsfähigen Investment-Thesen basierend auf Makro-Trends, Demografie, Sektoren und regionalen Themen. Findet konkrete Instrumente (ETFs, Aktien, Futures).</div>
-        <a href="https://manus.im/app?prompt=Starte+den+Investment+Thesis+Finder+Skill+und+suche+nach+aktuellen+Investment+Thesen+und+Ideen" target="_blank" class="skill-btn">🚀 Thesen suchen</a>
-      </div>
-
-      <div class="skill-card hl-purple">
-        <div class="card-top">
-          <span class="card-icon">🚀</span>
-          <span class="card-tag tag-manus">Manus Skill</span>
-        </div>
-        <div class="card-title">ETF Momentum Analyse</div>
-        <div class="card-desc">Analysiert und rankt globale Markt-ETFs nach Momentum-Performance über 1 Woche, 4 Wochen und 3 Monate. Identifiziert die stärksten Regionen und Sektoren für Sektor-Rotation.</div>
-        <a href="https://manus.im/app?prompt=Starte+den+ETF+Momentum+Trader+Skill+und+erstelle+ein+aktuelles+Momentum+Ranking+der+wichtigsten+ETFs" target="_blank" class="skill-btn">🚀 Momentum Ranking</a>
+        <div class="skill-btn-row"><a href="https://claude.ai/new?q=Nutze+den+investment-thesis-finder+Skill+und+suche+nach+aktuellen+Investment+Thesen+und+Ideen." target="_blank" class="skill-btn">🚀 Thesen suchen</a><button class="skill-btn-copy" onclick="copyCoworkPrompt(this)" title="Prompt in Zwischenablage kopieren – dann in Cowork einfügen">📋 Für Cowork kopieren</button></div>
       </div>
 
       <div class="skill-card hl-purple">
         <div class="card-top">
           <span class="card-icon">🌍</span>
-          <span class="card-tag tag-manus">Manus Skill</span>
+          <span class="card-tag tag-manus">Claude Skill</span>
         </div>
         <div class="card-title">Makro Zyklusanalyse</div>
         <div class="card-desc">Umfassende makroökonomische Analyse für USA, Eurozone und Japan. Bestimmt die aktuelle Phase des Wirtschaftszyklus und generiert Asset-Allokations-Empfehlungen mit konkreten ETFs.</div>
-        <a href="https://manus.im/app?prompt=Starte+den+Macro+Cycle+Analyst+Skill+und+erstelle+eine+aktuelle+Makroanalyse+mit+Asset+Allokations+Empfehlungen" target="_blank" class="skill-btn">🚀 Makro Analyse</a>
+        <div class="skill-btn-row"><a href="https://claude.ai/new?q=Nutze+den+makroanalyse-experte+Skill+und+erstelle+eine+aktuelle+Makroanalyse+mit+Asset+Allokations+Empfehlungen." target="_blank" class="skill-btn">🚀 Makro Analyse</a><button class="skill-btn-copy" onclick="copyCoworkPrompt(this)" title="Prompt in Zwischenablage kopieren – dann in Cowork einfügen">📋 Für Cowork kopieren</button></div>
       </div>
 
       <div class="skill-card hl-purple">
         <div class="card-top">
           <span class="card-icon">⚙️</span>
-          <span class="card-tag tag-manus">Manus Skill</span>
+          <span class="card-tag tag-manus">Claude Skill</span>
         </div>
         <div class="card-title">Optionsexperte</div>
         <div class="card-desc">Options-Strategie-Empfehlungen mit Market-Maker-Expertise. Analysiert Greeks, IV-Metriken, Gamma-Daten und empfiehlt optimale Strategien mit Risikoberechnung.</div>
-        <a href="https://manus.im/app?prompt=Starte+den+Optionsexperte+Skill+und+analysiere+aktuelle+Options+Setups+und+Strategien" target="_blank" class="skill-btn">🚀 Options Analyse</a>
-      </div>
-
-      <div class="skill-card hl-purple">
-        <div class="card-top">
-          <span class="card-icon">🔄</span>
-          <span class="card-tag tag-manus">Manus Skill</span>
-        </div>
-        <div class="card-title">Sektor Rotation Detector</div>
-        <div class="card-desc">Erkennt Sektor-Rotations-Signale durch Analyse makroökonomischer Indikatoren. Identifiziert welche Sektoren in den nächsten 6–12 Monaten outperformen oder underperformen werden.</div>
-        <a href="https://manus.im/app?prompt=Starte+den+Sector+Rotation+Detector+Skill+und+analysiere+aktuelle+Sektor+Rotations+Signale" target="_blank" class="skill-btn">🚀 Sektor Rotation</a>
+        <div class="skill-btn-row"><a href="https://claude.ai/new?q=Nutze+den+optionsexperte+Skill+und+analysiere+aktuelle+Options+Setups+und+Strategien." target="_blank" class="skill-btn">🚀 Options Analyse</a><button class="skill-btn-copy" onclick="copyCoworkPrompt(this)" title="Prompt in Zwischenablage kopieren – dann in Cowork einfügen">📋 Für Cowork kopieren</button></div>
       </div>
 
       <div class="skill-card hl-purple">
         <div class="card-top">
           <span class="card-icon">🎯</span>
-          <span class="card-tag tag-manus">Manus Skill</span>
+          <span class="card-tag tag-manus">Claude Skill</span>
         </div>
         <div class="card-title">Gamma Newsletter Analyst</div>
         <div class="card-desc">Analysiert MenthorQ Gamma-Charts und erstellt kompakte Newsletter-Texte mit Trading-Empfehlungen (Einstieg, Stopp, Ziel) für einen 4-Wochen-Horizont.</div>
-        <a href="https://manus.im/app?prompt=Starte+den+Gamma+Newsletter+Analyst+Skill+und+erstelle+eine+Gamma+Analyse+mit+Trading+Empfehlungen" target="_blank" class="skill-btn">🚀 Gamma Analyse</a>
+        <div class="skill-btn-row"><a href="https://claude.ai/new?q=Nutze+den+gamma-newsletter-analyst+Skill+und+erstelle+eine+Gamma+Analyse+mit+Trading+Empfehlungen." target="_blank" class="skill-btn">🚀 Gamma Analyse</a><button class="skill-btn-copy" onclick="copyCoworkPrompt(this)" title="Prompt in Zwischenablage kopieren – dann in Cowork einfügen">📋 Für Cowork kopieren</button></div>
       </div>
 
       <div class="skill-card hl-purple">
         <div class="card-top">
           <span class="card-icon">⚠️</span>
-          <span class="card-tag tag-manus">Manus Skill</span>
+          <span class="card-tag tag-manus">Claude Skill</span>
         </div>
         <div class="card-title">Risikomanager</div>
         <div class="card-desc">Professionelle Risikoanalyse nach Hedgefonds-Standard. Prüft Investmentthesen auf makroökonomische Risiken, Piotroski F-Score, Altman Z-Score und agiert als Devil's Advocate.</div>
-        <a href="https://manus.im/app?prompt=Starte+den+Risikomanager+Skill+und+analysiere+die+Risiken+meiner+aktuellen+Investmentthese" target="_blank" class="skill-btn">🚀 Risikoanalyse</a>
+        <div class="skill-btn-row"><a href="https://claude.ai/new?q=Nutze+den+risikomanager+Skill+und+analysiere+die+Risiken+meiner+aktuellen+Investmentthese." target="_blank" class="skill-btn">🚀 Risikoanalyse</a><button class="skill-btn-copy" onclick="copyCoworkPrompt(this)" title="Prompt in Zwischenablage kopieren – dann in Cowork einfügen">📋 Für Cowork kopieren</button></div>
       </div>
 
       <div class="skill-card hl-purple">
         <div class="card-top">
           <span class="card-icon">📊</span>
-          <span class="card-tag tag-manus">Manus Skill</span>
+          <span class="card-tag tag-manus">Claude Skill</span>
         </div>
         <div class="card-title">Investment Entscheider</div>
         <div class="card-desc">Systematischer Entscheidungsrahmen für Long-, Short- oder Neutral-Positionen. Analysiert Makro-Faktoren, Multi-Timeframe-Trends, technische Struktur und Saisonalität.</div>
-        <a href="https://manus.im/app?prompt=Starte+den+Investment+Entscheider+Skill+und+hilf+mir+bei+einer+Investment+Entscheidung" target="_blank" class="skill-btn">🚀 Entscheidung treffen</a>
+        <div class="skill-btn-row"><a href="https://claude.ai/new?q=Nutze+den+investment-entscheider+Skill+und+hilf+mir+bei+einer+Investment+Entscheidung." target="_blank" class="skill-btn">🚀 Entscheidung treffen</a><button class="skill-btn-copy" onclick="copyCoworkPrompt(this)" title="Prompt in Zwischenablage kopieren – dann in Cowork einfügen">📋 Für Cowork kopieren</button></div>
       </div>
 
       <div class="skill-card hl-purple">
         <div class="card-top">
           <span class="card-icon">📈</span>
-          <span class="card-tag tag-manus">Manus Skill</span>
+          <span class="card-tag tag-manus">Claude Skill</span>
         </div>
         <div class="card-title">Aktienanalyst</div>
         <div class="card-desc">Fundamentale Aktienanalyse für Privatinvestoren. Analysiert Bilanzen, GuV, Cashflow und wichtige Kennzahlen. Vergleicht mit Wettbewerbern und liefert Investmenteinschätzung.</div>
-        <a href="https://manus.im/app?prompt=Starte+den+Aktienanalyst+Skill+und+analysiere+eine+Aktie+fundamental" target="_blank" class="skill-btn">🚀 Aktie analysieren</a>
+        <div class="skill-btn-row"><a href="https://claude.ai/new?q=Nutze+den+aktienanalyst+Skill+und+analysiere+eine+Aktie+fundamental." target="_blank" class="skill-btn">🚀 Aktie analysieren</a><button class="skill-btn-copy" onclick="copyCoworkPrompt(this)" title="Prompt in Zwischenablage kopieren – dann in Cowork einfügen">📋 Für Cowork kopieren</button></div>
       </div>
 
       <div class="skill-card hl-purple">
         <div class="card-top">
           <span class="card-icon">📉</span>
-          <span class="card-tag tag-manus">Manus Skill</span>
+          <span class="card-tag tag-manus">Claude Skill</span>
         </div>
         <div class="card-title">VaR Rechner (Skill)</div>
         <div class="card-desc">Berechnet vollautomatisch Value-at-Risk für Aktien/ETFs. Erstellt Excel und HTML-Dashboard mit Verlustgrenzen bei 90%, 95%, 99% Konfidenz für verschiedene Zeiträume.</div>
-        <a href="https://manus.im/app?prompt=Starte+den+VaR+Rechner+Skill+und+berechne+den+Value+at+Risk+fuer+mein+Portfolio" target="_blank" class="skill-btn">🚀 VaR berechnen</a>
-      </div>
-
-      <div class="skill-card hl-purple">
-        <div class="card-top">
-          <span class="card-icon">🌐</span>
-          <span class="card-tag tag-manus">Manus Skill</span>
-        </div>
-        <div class="card-title">Index Momentum Trader</div>
-        <div class="card-desc">Analysiert und rankt wichtige Marktindizes (US + Europa) nach Momentum. Vergleicht NYSE, NASDAQ, S&P, DAX, Euro Stoxx 50 über 1 Woche, 4 Wochen und 3 Monate.</div>
-        <a href="https://manus.im/app?prompt=Starte+den+Index+Momentum+Trader+Skill+und+erstelle+ein+aktuelles+Index+Momentum+Ranking" target="_blank" class="skill-btn">🚀 Index Ranking</a>
+        <div class="skill-btn-row"><a href="https://claude.ai/new?q=Nutze+den+var-rechner+Skill+und+berechne+den+Value+at+Risk+fuer+mein+Portfolio." target="_blank" class="skill-btn">🚀 VaR berechnen</a><button class="skill-btn-copy" onclick="copyCoworkPrompt(this)" title="Prompt in Zwischenablage kopieren – dann in Cowork einfügen">📋 Für Cowork kopieren</button></div>
       </div>
 
     </div>
@@ -1056,18 +1046,6 @@
         <div class="card-title">Covered Call Rechner</div>
         <div class="card-desc">Berechne Prämienrendite, Break-Even und annualisierte Rendite für Covered-Call-Strategien auf deine Positionen.</div>
         <div class="card-footer"><span class="card-url">thblees.github.io/cc-rechner</span><span class="card-arrow">→</span></div>
-      </a>
-      <a href="https://pmcc-rechne-lmprpvsk.manus.space" target="_blank" class="card hl-blue">
-        <div class="card-top"><span class="card-icon">📐</span><span class="card-tag tag-live">Live Tool</span></div>
-        <div class="card-title">PMCC-Rechner</div>
-        <div class="card-desc">Poor Man's Covered Call Rechner mit Payoff-Diagramm, Rollungs-Szenarien, Position Greeks, PMCC-Checkliste und Live IV-Ampel beim Ticker-Abruf.</div>
-        <div class="card-footer"><span class="card-url">pmcc-rechne-lmprpvsk.manus.space</span><span class="card-arrow">→</span></div>
-      </a>
-      <a href="https://volaportf-ywydl3wd.manus.space" target="_blank" class="card hl-teal">
-        <div class="card-top"><span class="card-icon">📊</span><span class="card-tag tag-live">Live Tool</span></div>
-        <div class="card-title">Volatility Portfolio Calculator</div>
-        <div class="card-desc">Berechne volatilitätsangepasste Portfolio-Gewichtungen automatisch. Ruft echte Kursdaten von Yahoo Finance ab und zeigt dir, wie viel Kapital du in jedes Asset investieren solltest.</div>
-        <div class="card-footer"><span class="card-url">volaportf-ywydl3wd.manus.space</span><span class="card-arrow">→</span></div>
       </a>
 
     </div>
@@ -1199,12 +1177,12 @@
         <div class="card-footer"><span class="card-url">OneDrive → TRADING/DWHI Webinar</span><span class="card-arrow">→</span></div>
       </a>
 
-      <a href="https://manus.im/app?prompt=Starte+den+DWHI+Wochencheck+Skill+und+analysiere+meine+aktuellen+DWHI+Optionspositionen+fuer+die+kommende+Woche" target="_blank" class="card hl-purple">
-        <div class="card-top"><span class="card-icon">📅</span><span class="card-tag tag-manus">Manus Skill</span></div>
+      <div class="skill-card hl-purple">
+        <div class="card-top"><span class="card-icon">📅</span><span class="card-tag tag-manus">Claude Skill</span></div>
         <div class="card-title">DWHI Wochencheck (KI)</div>
-        <div class="card-desc">Manus KI-Skill für den DWHI Wochencheck. Screenshot deiner Positionen hochladen und sofort konkrete Handlungsempfehlungen für die Woche erhalten: Puts/Calls, Hedges, Grid-Alarme.</div>
-        <div class="card-footer"><span class="card-url">manus.im → DWHI Skill</span><span class="card-arrow">→</span></div>
-      </a>
+        <div class="card-desc">Claude KI-Skill für den DWHI Wochencheck. Screenshot deiner Positionen hochladen und sofort konkrete Handlungsempfehlungen für die Woche erhalten: Puts/Calls, Hedges, Grid-Alarme.</div>
+        <div class="skill-btn-row"><a href="https://claude.ai/new?q=Nutze+den+dhwi-wochencheck+Skill+und+analysiere+meine+aktuellen+DHWI+Optionspositionen+fuer+die+kommende+Woche." target="_blank" class="skill-btn">🚀 Wochencheck starten</a><button class="skill-btn-copy" onclick="copyCoworkPrompt(this)" title="Prompt in Zwischenablage kopieren – dann in Cowork einfügen">📋 Für Cowork kopieren</button></div>
+      </div>
 
       <a href="https://thblees.github.io/csp-rechner/" target="_blank" class="card hl-teal">
         <div class="card-top"><span class="card-icon">💰</span><span class="card-tag tag-live">Live Tool</span></div>
@@ -1369,19 +1347,6 @@
         <div class="card-footer"><span class="card-url">thblees.github.io/csp-rechner</span><span class="card-arrow">→</span></div>
       </a>
 
-      <a href="https://pmcc-rechne-lmprpvsk.manus.space" target="_blank" class="card hl-blue">
-        <div class="card-top"><span class="card-icon">📐</span><span class="card-tag tag-live">Live Tool</span></div>
-        <div class="card-title">PMCC-Rechner</div>
-        <div class="card-desc">Poor Man's Covered Call Rechner mit Payoff-Diagramm, Rollungs-Szenarien, Position Greeks, PMCC-Checkliste und Live IV-Ampel beim Ticker-Abruf.</div>
-        <div class="card-footer"><span class="card-url">pmcc-rechne-lmprpvsk.manus.space</span><span class="card-arrow">→</span></div>
-      </a>
-      <a href="https://volaportf-ywydl3wd.manus.space" target="_blank" class="card hl-teal">
-        <div class="card-top"><span class="card-icon">📊</span><span class="card-tag tag-live">Live Tool</span></div>
-        <div class="card-title">Volatility Portfolio Calculator</div>
-        <div class="card-desc">Berechne volatilitätsangepasste Portfolio-Gewichtungen automatisch. Ruft echte Kursdaten von Yahoo Finance ab und zeigt dir, wie viel Kapital du in jedes Asset investieren solltest.</div>
-        <div class="card-footer"><span class="card-url">volaportf-ywydl3wd.manus.space</span><span class="card-arrow">→</span></div>
-      </a>
-
       <a href="https://thblees.github.io/DWHI-dashboard/" target="_blank" class="card hl-purple">
         <div class="card-top"><span class="card-icon">📈</span><span class="card-tag tag-live">Live Tool</span></div>
         <div class="card-title">DWHI-Trades</div>
@@ -1451,10 +1416,10 @@
       </a>
 
       <div class="skill-card hl-purple" style="grid-column: 1 / -1;">
-        <div class="card-top"><span class="card-icon">🌐</span><span class="card-tag tag-manus">Manus Skill</span></div>
+        <div class="card-top"><span class="card-icon">🌐</span><span class="card-tag tag-manus">Claude Skill</span></div>
         <div class="card-title">🤖 Makro-Research Scanner – KI-Analyse auf Knopfdruck</div>
-        <div class="card-desc">Lass Manus alle Quellen dieses Bereichs automatisch durchforsten: UBS, Deutsche Bank, Julius Bär, BofA und Voronoi werden auf aktuelle Themen gescannt. Der Skill bewertet die Relevanz für deutsche Privatanleger und schlägt die 3–5 vielversprechendsten Investment-Ideen mit konkreten ETFs und Aktien vor.</div>
-        <a href="https://manus.im/app?prompt=Starte+den+Makro-Research+Skill+und+durchforste+die+aktuellen+Research-Berichte+von+UBS%2C+Deutsche+Bank%2C+Julius+B%C3%A4r+und+BofA+auf+spannende+Investment-Themen+f%C3%BCr+deutsche+Privatanleger" target="_blank" class="skill-btn" style="margin-top:12px;">🚀 Makro-Research jetzt starten</a>
+        <div class="card-desc">Lass Claude alle Quellen dieses Bereichs automatisch durchforsten: UBS, Deutsche Bank, Julius Bär, BofA und Voronoi werden auf aktuelle Themen gescannt. Der Skill bewertet die Relevanz für deutsche Privatanleger und schlägt die 3–5 vielversprechendsten Investment-Ideen mit konkreten ETFs und Aktien vor.</div>
+        <div class="skill-btn-row"><a href="https://claude.ai/new?q=Nutze+den+makroanalyse-experte+Skill+und+durchforste+die+aktuellen+Research-Berichte+von+UBS%2C+Deutsche+Bank%2C+Julius+B%C3%A4r+und+BofA+auf+spannende+Investment-Themen+f%C3%BCr+deutsche+Privatanleger." target="_blank" class="skill-btn" style="margin-top:12px;">🚀 Makro-Research jetzt starten</a><button class="skill-btn-copy" onclick="copyCoworkPrompt(this)" title="Prompt in Zwischenablage kopieren – dann in Cowork einfügen">📋 Für Cowork kopieren</button></div>
       </div>
 
     </div>
@@ -1493,117 +1458,97 @@
     </div>
   </section>
 
-  <!-- ===== MANUS SKILLS (unten) ===== -->
-  <section id="manus-skills-bottom" class="section">
+  <!-- ===== CLAUDE SKILLS (unten) ===== -->
+  <section id="claude-skills-bottom" class="section">
     <div class="section-header">
       <span class="section-icon">🤖</span>
-      <span class="section-title">Manus Skills – KI-Analysen auf Knopfdruck</span>
-      <span class="section-badge">Direkt in Manus starten</span>
+      <span class="section-title">Claude Skills – KI-Analysen auf Knopfdruck</span>
+      <span class="section-badge">Direkt in Claude starten</span>
     </div>
     <div class="card-grid wide">
 
       <div class="skill-card hl-purple">
-        <div class="card-top"><span class="card-icon">📦</span><span class="card-tag tag-manus">Manus Skill</span></div>
+        <div class="card-top"><span class="card-icon">📦</span><span class="card-tag tag-manus">Claude Skill</span></div>
         <div class="card-title">COT Analyse</div>
         <div class="card-desc">Analysiert Commitment-of-Traders-Daten auf extreme Positionierungen von Commercials und Large Speculators. Identifiziert Futures-Setups mit historischen Erfolgsquoten und Open-Interest-Mustern.</div>
-        <a href="https://manus.im/app?prompt=Starte+den+COT+Analyzer+Skill+und+analysiere+aktuelle+COT+Daten+auf+extreme+Positionierungen+und+Trading+Setups" target="_blank" class="skill-btn">🚀 COT Analyse starten</a>
+        <div class="skill-btn-row"><a href="https://claude.ai/new?q=Nutze+den+cot-experte+Skill+und+analysiere+aktuelle+COT+Daten+auf+extreme+Positionierungen+und+Trading+Setups." target="_blank" class="skill-btn">🚀 COT Analyse starten</a><button class="skill-btn-copy" onclick="copyCoworkPrompt(this)" title="Prompt in Zwischenablage kopieren – dann in Cowork einfügen">📋 Für Cowork kopieren</button></div>
       </div>
 
       <div class="skill-card hl-purple">
-        <div class="card-top"><span class="card-icon">💡</span><span class="card-tag tag-manus">Manus Skill</span></div>
+        <div class="card-top"><span class="card-icon">💡</span><span class="card-tag tag-manus">Claude Skill</span></div>
         <div class="card-title">Investment Thesen Finder</div>
         <div class="card-desc">Sucht systematisch nach handlungsfähigen Investment-Thesen basierend auf Makro-Trends, Demografie, Sektoren und regionalen Themen. Findet konkrete Instrumente (ETFs, Aktien, Futures).</div>
-        <a href="https://manus.im/app?prompt=Starte+den+Investment+Thesis+Finder+Skill+und+suche+nach+aktuellen+Investment+Thesen+und+Ideen" target="_blank" class="skill-btn">🚀 Thesen suchen</a>
+        <div class="skill-btn-row"><a href="https://claude.ai/new?q=Nutze+den+investment-thesis-finder+Skill+und+suche+nach+aktuellen+Investment+Thesen+und+Ideen." target="_blank" class="skill-btn">🚀 Thesen suchen</a><button class="skill-btn-copy" onclick="copyCoworkPrompt(this)" title="Prompt in Zwischenablage kopieren – dann in Cowork einfügen">📋 Für Cowork kopieren</button></div>
       </div>
 
       <div class="skill-card hl-purple">
-        <div class="card-top"><span class="card-icon">🚀</span><span class="card-tag tag-manus">Manus Skill</span></div>
-        <div class="card-title">ETF Momentum Analyse</div>
-        <div class="card-desc">Analysiert und rankt globale Markt-ETFs nach Momentum-Performance über 1 Woche, 4 Wochen und 3 Monate. Identifiziert die stärksten Regionen und Sektoren für Sektor-Rotation.</div>
-        <a href="https://manus.im/app?prompt=Starte+den+ETF+Momentum+Trader+Skill+und+erstelle+ein+aktuelles+Momentum+Ranking+der+wichtigsten+ETFs" target="_blank" class="skill-btn">🚀 Momentum Ranking</a>
-      </div>
-
-      <div class="skill-card hl-purple">
-        <div class="card-top"><span class="card-icon">🌍</span><span class="card-tag tag-manus">Manus Skill</span></div>
+        <div class="card-top"><span class="card-icon">🌍</span><span class="card-tag tag-manus">Claude Skill</span></div>
         <div class="card-title">Makro Zyklusanalyse</div>
         <div class="card-desc">Umfassende makroökonomische Analyse für USA, Eurozone und Japan. Bestimmt die aktuelle Phase des Wirtschaftszyklus und generiert Asset-Allokations-Empfehlungen mit konkreten ETFs.</div>
-        <a href="https://manus.im/app?prompt=Starte+den+Macro+Cycle+Analyst+Skill+und+erstelle+eine+aktuelle+Makroanalyse+mit+Asset+Allokations+Empfehlungen" target="_blank" class="skill-btn">🚀 Makro Analyse</a>
+        <div class="skill-btn-row"><a href="https://claude.ai/new?q=Nutze+den+makroanalyse-experte+Skill+und+erstelle+eine+aktuelle+Makroanalyse+mit+Asset+Allokations+Empfehlungen." target="_blank" class="skill-btn">🚀 Makro Analyse</a><button class="skill-btn-copy" onclick="copyCoworkPrompt(this)" title="Prompt in Zwischenablage kopieren – dann in Cowork einfügen">📋 Für Cowork kopieren</button></div>
       </div>
 
       <div class="skill-card hl-purple">
-        <div class="card-top"><span class="card-icon">⚙️</span><span class="card-tag tag-manus">Manus Skill</span></div>
+        <div class="card-top"><span class="card-icon">⚙️</span><span class="card-tag tag-manus">Claude Skill</span></div>
         <div class="card-title">Optionsexperte</div>
         <div class="card-desc">Options-Strategie-Empfehlungen mit Market-Maker-Expertise. Analysiert Greeks, IV-Metriken, Gamma-Daten und empfiehlt optimale Strategien mit Risikoberechnung.</div>
-        <a href="https://manus.im/app?prompt=Starte+den+Optionsexperte+Skill+und+analysiere+aktuelle+Options+Setups+und+Strategien" target="_blank" class="skill-btn">🚀 Options Analyse</a>
+        <div class="skill-btn-row"><a href="https://claude.ai/new?q=Nutze+den+optionsexperte+Skill+und+analysiere+aktuelle+Options+Setups+und+Strategien." target="_blank" class="skill-btn">🚀 Options Analyse</a><button class="skill-btn-copy" onclick="copyCoworkPrompt(this)" title="Prompt in Zwischenablage kopieren – dann in Cowork einfügen">📋 Für Cowork kopieren</button></div>
       </div>
 
       <div class="skill-card hl-purple">
-        <div class="card-top"><span class="card-icon">🔄</span><span class="card-tag tag-manus">Manus Skill</span></div>
-        <div class="card-title">Sektor Rotation Detector</div>
-        <div class="card-desc">Erkennt Sektor-Rotations-Signale durch Analyse makroökonomischer Indikatoren. Identifiziert welche Sektoren in den nächsten 6–12 Monaten outperformen oder underperformen werden.</div>
-        <a href="https://manus.im/app?prompt=Starte+den+Sector+Rotation+Detector+Skill+und+analysiere+aktuelle+Sektor+Rotations+Signale" target="_blank" class="skill-btn">🚀 Sektor Rotation</a>
-      </div>
-
-      <div class="skill-card hl-purple">
-        <div class="card-top"><span class="card-icon">🎯</span><span class="card-tag tag-manus">Manus Skill</span></div>
+        <div class="card-top"><span class="card-icon">🎯</span><span class="card-tag tag-manus">Claude Skill</span></div>
         <div class="card-title">Gamma Newsletter Analyst</div>
         <div class="card-desc">Analysiert MenthorQ Gamma-Charts und erstellt kompakte Newsletter-Texte mit Trading-Empfehlungen (Einstieg, Stopp, Ziel) für einen 4-Wochen-Horizont.</div>
-        <a href="https://manus.im/app?prompt=Starte+den+Gamma+Newsletter+Analyst+Skill+und+erstelle+eine+Gamma+Analyse+mit+Trading+Empfehlungen" target="_blank" class="skill-btn">🚀 Gamma Analyse</a>
+        <div class="skill-btn-row"><a href="https://claude.ai/new?q=Nutze+den+gamma-newsletter-analyst+Skill+und+erstelle+eine+Gamma+Analyse+mit+Trading+Empfehlungen." target="_blank" class="skill-btn">🚀 Gamma Analyse</a><button class="skill-btn-copy" onclick="copyCoworkPrompt(this)" title="Prompt in Zwischenablage kopieren – dann in Cowork einfügen">📋 Für Cowork kopieren</button></div>
       </div>
 
       <div class="skill-card hl-purple">
-        <div class="card-top"><span class="card-icon">⚠️</span><span class="card-tag tag-manus">Manus Skill</span></div>
+        <div class="card-top"><span class="card-icon">⚠️</span><span class="card-tag tag-manus">Claude Skill</span></div>
         <div class="card-title">Risikomanager</div>
         <div class="card-desc">Professionelle Risikoanalyse nach Hedgefonds-Standard. Prüft Investmentthesen auf makroökonomische Risiken, Piotroski F-Score, Altman Z-Score und agiert als Devil’s Advocate.</div>
-        <a href="https://manus.im/app?prompt=Starte+den+Risikomanager+Skill+und+analysiere+die+Risiken+meiner+aktuellen+Investmentthese" target="_blank" class="skill-btn">🚀 Risikoanalyse</a>
+        <div class="skill-btn-row"><a href="https://claude.ai/new?q=Nutze+den+risikomanager+Skill+und+analysiere+die+Risiken+meiner+aktuellen+Investmentthese." target="_blank" class="skill-btn">🚀 Risikoanalyse</a><button class="skill-btn-copy" onclick="copyCoworkPrompt(this)" title="Prompt in Zwischenablage kopieren – dann in Cowork einfügen">📋 Für Cowork kopieren</button></div>
       </div>
 
       <div class="skill-card hl-purple">
-        <div class="card-top"><span class="card-icon">📊</span><span class="card-tag tag-manus">Manus Skill</span></div>
+        <div class="card-top"><span class="card-icon">📊</span><span class="card-tag tag-manus">Claude Skill</span></div>
         <div class="card-title">Investment Entscheider</div>
         <div class="card-desc">Systematischer Entscheidungsrahmen für Long-, Short- oder Neutral-Positionen. Analysiert Makro-Faktoren, Multi-Timeframe-Trends, technische Struktur und Saisonalität.</div>
-        <a href="https://manus.im/app?prompt=Starte+den+Investment+Entscheider+Skill+und+hilf+mir+bei+einer+Investment+Entscheidung" target="_blank" class="skill-btn">🚀 Entscheidung treffen</a>
+        <div class="skill-btn-row"><a href="https://claude.ai/new?q=Nutze+den+investment-entscheider+Skill+und+hilf+mir+bei+einer+Investment+Entscheidung." target="_blank" class="skill-btn">🚀 Entscheidung treffen</a><button class="skill-btn-copy" onclick="copyCoworkPrompt(this)" title="Prompt in Zwischenablage kopieren – dann in Cowork einfügen">📋 Für Cowork kopieren</button></div>
       </div>
 
       <div class="skill-card hl-purple">
-        <div class="card-top"><span class="card-icon">📈</span><span class="card-tag tag-manus">Manus Skill</span></div>
+        <div class="card-top"><span class="card-icon">📈</span><span class="card-tag tag-manus">Claude Skill</span></div>
         <div class="card-title">Aktienanalyst</div>
         <div class="card-desc">Fundamentale Aktienanalyse für Privatinvestoren. Analysiert Bilanzen, GuV, Cashflow und wichtige Kennzahlen. Vergleicht mit Wettbewerbern und liefert Investmenteinschätzung.</div>
-        <a href="https://manus.im/app?prompt=Starte+den+Aktienanalyst+Skill+und+analysiere+eine+Aktie+fundamental" target="_blank" class="skill-btn">🚀 Aktie analysieren</a>
+        <div class="skill-btn-row"><a href="https://claude.ai/new?q=Nutze+den+aktienanalyst+Skill+und+analysiere+eine+Aktie+fundamental." target="_blank" class="skill-btn">🚀 Aktie analysieren</a><button class="skill-btn-copy" onclick="copyCoworkPrompt(this)" title="Prompt in Zwischenablage kopieren – dann in Cowork einfügen">📋 Für Cowork kopieren</button></div>
       </div>
 
       <div class="skill-card hl-purple">
-        <div class="card-top"><span class="card-icon">📉</span><span class="card-tag tag-manus">Manus Skill</span></div>
+        <div class="card-top"><span class="card-icon">📉</span><span class="card-tag tag-manus">Claude Skill</span></div>
         <div class="card-title">VaR Rechner (Skill)</div>
         <div class="card-desc">Berechnet vollautomatisch Value-at-Risk für Aktien/ETFs. Erstellt Excel und HTML-Dashboard mit Verlustgrenzen bei 90%, 95%, 99% Konfidenz für verschiedene Zeiträume.</div>
-        <a href="https://manus.im/app?prompt=Starte+den+VaR+Rechner+Skill+und+berechne+den+Value+at+Risk+fuer+mein+Portfolio" target="_blank" class="skill-btn">🚀 VaR berechnen</a>
+        <div class="skill-btn-row"><a href="https://claude.ai/new?q=Nutze+den+var-rechner+Skill+und+berechne+den+Value+at+Risk+fuer+mein+Portfolio." target="_blank" class="skill-btn">🚀 VaR berechnen</a><button class="skill-btn-copy" onclick="copyCoworkPrompt(this)" title="Prompt in Zwischenablage kopieren – dann in Cowork einfügen">📋 Für Cowork kopieren</button></div>
       </div>
 
       <div class="skill-card hl-purple">
-        <div class="card-top"><span class="card-icon">〰️</span><span class="card-tag tag-manus">Manus Skill</span></div>
+        <div class="card-top"><span class="card-icon">〰️</span><span class="card-tag tag-manus">Claude Skill</span></div>
         <div class="card-title">Elliott Wave Chart-Analyse</div>
         <div class="card-desc">Lade einen Chart mit eingezeichneter Wellenzählung hoch. Der KI-Experte prüft ob die Zählung nach Prechter &amp; Miner korrekt ist, berechnet Fibonacci-Ziele und gibt konkrete Handlungsempfehlungen: Einstieg, Stopp, Kursziel und CRV.</div>
-        <a href="https://manus.im/app?prompt=Starte+den+Elliott+Wave+Experten+Skill+und+analysiere+den+Chart+den+ich+dir+hochlade.+Pruefe+ob+die+eingezeichnete+Wellenzaehlung+nach+Prechter+und+Miner+korrekt+ist%2C+berechne+Fibonacci+Ziele+und+gib+mir+konkrete+Handlungsempfehlungen+mit+Einstieg%2C+Stopp+und+Kursziel." target="_blank" class="skill-btn">🚀 Chart analysieren</a>
-      </div>
-      <div class="skill-card hl-purple">
-        <div class="card-top"><span class="card-icon">🌐</span><span class="card-tag tag-manus">Manus Skill</span></div>
-        <div class="card-title">Index Momentum Trader</div>
-        <div class="card-desc">Analysiert und rankt wichtige Marktindizes (US + Europa) nach Momentum. Vergleicht NYSE, NASDAQ, S&amp;P, DAX, Euro Stoxx 50 über 1 Woche, 4 Wochen und 3 Monate.</div>
-        <a href="https://manus.im/app?prompt=Starte+den+Index+Momentum+Trader+Skill+und+erstelle+ein+aktuelles+Index+Momentum+Ranking" target="_blank" class="skill-btn">🚀 Index Ranking</a>
+        <div class="skill-btn-row"><a href="https://claude.ai/new?q=Nutze+den+elliott-wave-experte+Skill+und+analysiere+den+Chart+den+ich+dir+hochlade.+Pruefe+ob+die+eingezeichnete+Wellenzaehlung+nach+Prechter+und+Miner+korrekt+ist%2C+berechne+Fibonacci+Ziele+und+gib+mir+konkrete+Handlungsempfehlungen+mit+Einstieg%2C+Stopp+und+Kursziel." target="_blank" class="skill-btn">🚀 Chart analysieren</a><button class="skill-btn-copy" onclick="copyCoworkPrompt(this)" title="Prompt in Zwischenablage kopieren – dann in Cowork einfügen">📋 Für Cowork kopieren</button></div>
       </div>
 
       <div class="skill-card hl-purple">
-        <div class="card-top"><span class="card-icon">🌐</span><span class="card-tag tag-manus">Manus Skill</span></div>
+        <div class="card-top"><span class="card-icon">🌐</span><span class="card-tag tag-manus">Claude Skill</span></div>
         <div class="card-title">Makro-Research Scanner</div>
         <div class="card-desc">Durchforstet die Quellen aus dem Makro-Research-Bereich (UBS, Deutsche Bank, Julius Bär, BofA, Voronoi) und schlägt die 3–5 relevantesten Investment-Themen für deutsche Privatanleger vor – mit konkreten ETFs und Aktien.</div>
-        <a href="https://manus.im/app?prompt=Starte+den+Makro-Research+Skill+und+durchforste+die+aktuellen+Research-Berichte+von+UBS%2C+Deutsche+Bank%2C+Julius+B%C3%A4r+und+BofA+auf+spannende+Investment-Themen+f%C3%BCr+deutsche+Privatanleger" target="_blank" class="skill-btn">🚀 Makro-Research starten</a>
+        <div class="skill-btn-row"><a href="https://claude.ai/new?q=Nutze+den+makroanalyse-experte+Skill+und+durchforste+die+aktuellen+Research-Berichte+von+UBS%2C+Deutsche+Bank%2C+Julius+B%C3%A4r+und+BofA+auf+spannende+Investment-Themen+f%C3%BCr+deutsche+Privatanleger." target="_blank" class="skill-btn">🚀 Makro-Research starten</a><button class="skill-btn-copy" onclick="copyCoworkPrompt(this)" title="Prompt in Zwischenablage kopieren – dann in Cowork einfügen">📋 Für Cowork kopieren</button></div>
       </div>
 
       <div class="skill-card hl-orange">
-        <div class="card-top"><span class="card-icon">📅</span><span class="card-tag tag-manus">Manus Skill</span></div>
+        <div class="card-top"><span class="card-icon">📅</span><span class="card-tag tag-manus">Claude Skill</span></div>
         <div class="card-title">DWHI Wochencheck</div>
         <div class="card-desc">Analysiert Screenshots deiner offenen DWHI-Positionen (TWS/Broker) und gibt konkrete, handlungsfertige Anweisungen für die kommende Woche: welche Puts/Calls zu öffnen oder schließen sind, ob Hedges fehlen und an welchen Grid-Levels Alarme gesetzt werden sollen.</div>
-        <a href="https://manus.im/app?prompt=Starte+den+DWHI+Wochencheck+Skill+und+analysiere+meine+aktuellen+DWHI+Optionspositionen+fuer+die+kommende+Woche" target="_blank" class="skill-btn">🚀 DWHI Wochencheck starten</a>
+        <div class="skill-btn-row"><a href="https://claude.ai/new?q=Nutze+den+dhwi-wochencheck+Skill+und+analysiere+meine+aktuellen+DHWI+Optionspositionen+fuer+die+kommende+Woche." target="_blank" class="skill-btn">🚀 DWHI Wochencheck starten</a><button class="skill-btn-copy" onclick="copyCoworkPrompt(this)" title="Prompt in Zwischenablage kopieren – dann in Cowork einfügen">📋 Für Cowork kopieren</button></div>
       </div>
 
     </div>
@@ -2037,6 +1982,33 @@
 
   // ===== BRIEFING =====
   function updateBriefing() {
+    // ===== COWORK CLIPBOARD COPY =====
+    window.copyCoworkPrompt = function(btn) {
+      const link = btn.previousElementSibling;
+      if (!link || !link.href) return;
+      let prompt = '';
+      try {
+        const url = new URL(link.href);
+        prompt = url.searchParams.get('q') || '';
+      } catch(e) { return; }
+      if (!prompt) return;
+      navigator.clipboard.writeText(prompt).then(() => {
+        const orig = btn.innerHTML;
+        btn.classList.add('copied');
+        btn.innerHTML = '✅ In Cowork einfügen';
+        setTimeout(() => { btn.classList.remove('copied'); btn.innerHTML = orig; }, 2000);
+      }).catch(() => {
+        // Fallback für ältere Browser
+        const ta = document.createElement('textarea');
+        ta.value = prompt; document.body.appendChild(ta);
+        ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
+        const orig = btn.innerHTML;
+        btn.classList.add('copied');
+        btn.innerHTML = '✅ In Cowork einfügen';
+        setTimeout(() => { btn.classList.remove('copied'); btn.innerHTML = orig; }, 2000);
+      });
+    };
+
     const now = new Date();
     const h = now.getHours(), day = now.getDay();
     const days = ['Sonntag','Montag','Dienstag','Mittwoch','Donnerstag','Freitag','Samstag'];
@@ -2047,7 +2019,7 @@
     else if (day === 0 || day === 6) note = ' · <strong>Wochenende:</strong> Ruhiger Tag für Research und Planung.';
     document.getElementById('briefingText').innerHTML =
       greet + ', <strong>thblees</strong>! ' + days[day] + note +
-      ' Starte mit deinen <a href="#eigene-tools-bottom" style="color:var(--accent-blue);font-weight:700;text-decoration:none;"><strong>eigenen Tools</strong></a> oder nutze die <a href="#manus-skills-bottom" style="color:var(--accent-purple);font-weight:700;text-decoration:none;"><strong>Manus Skills</strong></a> für KI-Analysen.';
+      ' Starte mit deinen <a href="#eigene-tools-bottom" style="color:var(--accent-blue);font-weight:700;text-decoration:none;"><strong>eigenen Tools</strong></a> oder nutze die <a href="#claude-skills-bottom" style="color:var(--accent-purple);font-weight:700;text-decoration:none;"><strong>Claude Skills</strong></a> für KI-Analysen.';
   }
   updateBriefing();
 
