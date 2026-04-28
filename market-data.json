@@ -1,13 +1,13 @@
 {
-  "lastUpdated": "2026-04-28T02:58:17.681940+00:00",
-  "lastUpdatedUnix": 1777345097,
+  "lastUpdated": "2026-04-28T06:11:23.115886+00:00",
+  "lastUpdatedUnix": 1777356683,
   "vix": {
     "value": 18.02,
     "previousClose": 18.71,
-    "dayHigh": 19.27,
-    "dayLow": 18.02,
+    "dayHigh": 0.0,
+    "dayLow": 0.0,
     "fiftyTwoWeekHigh": 35.3,
-    "fiftyTwoWeekLow": 13.38
+    "fiftyTwoWeekLow": 0.0
   },
   "sp500": {
     "value": 7173.91,
