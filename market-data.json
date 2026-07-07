@@ -1,11 +1,11 @@
 {
-  "lastUpdated": "2026-07-07T03:26:48.670184+00:00",
-  "lastUpdatedUnix": 1783394808,
+  "lastUpdated": "2026-07-07T07:38:36.757270+00:00",
+  "lastUpdatedUnix": 1783409916,
   "vix": {
-    "value": 15.57,
-    "previousClose": 16.15,
-    "dayHigh": 16.5,
-    "dayLow": 15.56,
+    "value": 15.84,
+    "previousClose": 15.57,
+    "dayHigh": 15.87,
+    "dayLow": 15.84,
     "fiftyTwoWeekHigh": 35.3,
     "fiftyTwoWeekLow": 13.38
   },
