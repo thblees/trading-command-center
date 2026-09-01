@@ -1,18 +1,18 @@
 {
-  "lastUpdated": "2026-09-01T13:09:39.520126+00:00",
-  "lastUpdatedUnix": 1788268179,
+  "lastUpdated": "2026-09-01T17:39:26.313243+00:00",
+  "lastUpdatedUnix": 1788284366,
   "vix": {
-    "value": 15.89,
-    "previousClose": 14.43,
-    "dayHigh": 15.97,
+    "value": 16.08,
+    "previousClose": 14.92,
+    "dayHigh": 16.13,
     "dayLow": 14.95,
     "fiftyTwoWeekHigh": 35.3,
     "fiftyTwoWeekLow": 13.38
   },
   "sp500": {
-    "value": 7686.14,
-    "previousClose": 7711.76,
-    "change": -25.61999999999989,
-    "changePercent": -0.33221988236148287
+    "value": 7636.5,
+    "previousClose": 7686.14,
+    "change": -49.64000000000033,
+    "changePercent": -0.6458378327743226
   }
 }
